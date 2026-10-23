@@ -1,0 +1,35 @@
+name: Propor funcionalidade
+description: Sugerir uma funcionalidade para o Feneme.
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Necessidade / problema
+      description: Que necessidade do usuário essa funcionalidade atende?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução proposta
+      description: Explique o comportamento esperado.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceitação
+      description: Liste condições objetivas para considerar a funcionalidade concluída.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Observações
+    validations:
+      required: false

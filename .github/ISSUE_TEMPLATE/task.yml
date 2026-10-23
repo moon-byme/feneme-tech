@@ -1,0 +1,35 @@
+name: Tarefa técnica
+description: Registrar uma atividade técnica, de documentação ou infraestrutura.
+title: "[TASK] "
+labels: ["task"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objetivo
+      description: O que precisa ser feito?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Atividades previstas
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceitação
+      description: Como será verificado que a tarefa foi concluída?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidências / links
+      description: Adicione links para Jira, PRs, documentação ou logs, se disponíveis.
+    validations:
+      required: false
