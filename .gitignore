@@ -1,0 +1,25 @@
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+*.sqlite3
+db.sqlite3
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*.log
+.venv/
+venv/
+.pytest_cache/
+
+# Node / Vite
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# IDE / sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
