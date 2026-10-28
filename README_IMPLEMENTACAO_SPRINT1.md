@@ -136,3 +136,20 @@ Exemplo de atribuição:
 - O CORS está limitado por padrão a `localhost:5173`; ajuste `CORS_ALLOWED_ORIGINS` conforme o ambiente.
 - O armazenamento de token no `sessionStorage` é uma simplificação para o MVP acadêmico; para produção, avalie uma arquitetura com cookies `HttpOnly`, `Secure` e proteção CSRF.
 - O código precisa ser executado e revisado no ambiente da equipe. Um pacote gerado não substitui evidência de CI, revisão por PR ou aceite de QA.
+
+## FT-54 / US-02 — Login como Motorista
+
+**O que mudou**
+
+- Back-end: sem alteração de lógica. O login (`POST /api/auth/login/`) já era compartilhado entre os perfis. Foram criados testes em `backend/accounts/tests.py` cobrindo CT-13 (login válido do Motorista e claim `role`), CT-14 (senha errada, usuário inexistente e conta inativa com a mesma mensagem e sem tokens), bloqueio das operações do Gestor para o Motorista (403, sem alterar dados), acesso cruzado entre dois Motoristas e sessão inválida (sem token, token malformado, expirado, adulterado e refresh usado como access).
+- Front-end: o login aceita Gestor e Motorista, com textos neutros ("Entrar"). O Motorista vê uma área mínima (`src/components/MotoristaHome.tsx`) que não consulta `/deliveries/` nem `/drivers/`; a listagem das entregas atribuídas é a US-10 (FT-58). Um 401 com sessão ativa encerra a sessão e mostra "Sua sessão expirou. Entre novamente.". Na leitura do `sessionStorage`, uma sessão cujo token esteja expirado ou com `role` diferente do usuário salvo é descartada.
+
+**Como testar**
+
+```powershell
+cd backend
+python manage.py test accounts
+python manage.py create_feneme_user --username motorista_demo --role MOTORISTA
+```
+
+Depois, com back-end e front-end em execução, entre com a conta Motorista: a tela "Área do Motorista" deve aparecer. Com senha errada, a mensagem "Não foi possível realizar o login. Verifique usuário e senha." aparece e nenhuma sessão é criada.
