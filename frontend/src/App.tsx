@@ -1,15 +1,37 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { api, ApiError } from "./api";
-import type { AuthUser, Delivery, DriverOption } from "./types";
+import MotoristaHome from "./components/MotoristaHome";
+import type { AuthUser, Delivery, DriverOption, UserRole } from "./types";
 
 type Session = { access: string; refresh: string; user: AuthUser };
 const SESSION_KEY = "feneme-session";
+const ROLES: UserRole[] = ["GESTOR", "MOTORISTA"];
+const SESSION_EXPIRED = "Sua sessão expirou. Entre novamente.";
+
+function isKnownRole(role: unknown): role is UserRole {
+  return ROLES.includes(role as UserRole);
+}
+
+// Checagem apenas de interface: a assinatura do token é validada pelo back-end.
+function tokenMatchesUser(access: string, user: AuthUser): boolean {
+  try {
+    const payload = access.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const claims = JSON.parse(atob(payload)) as { role?: unknown; exp?: unknown };
+    return claims.role === user.role && typeof claims.exp === "number" && claims.exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
+}
 
 function readSession(): Session | null {
   try {
     const raw = sessionStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as Session) : null;
+    if (!raw) return null;
+    const session = JSON.parse(raw) as Session;
+    if (isKnownRole(session.user?.role) && tokenMatchesUser(session.access, session.user)) return session;
+    sessionStorage.removeItem(SESSION_KEY);
+    return null;
   } catch {
     return null;
   }
@@ -29,25 +51,43 @@ function App() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
+  const logout = useCallback((message = "") => {
+    sessionStorage.removeItem(SESSION_KEY);
+    setSession(null);
+    setDeliveries([]);
+    setDrivers([]);
+    setError(message);
+    setNotice("");
+  }, []);
+
+  // 401 com sessão ativa: token inválido ou expirado, volta ao login.
+  const handleApiError = useCallback((e: unknown, fallback: string) => {
+    if (e instanceof ApiError && e.status === 401) {
+      logout(SESSION_EXPIRED);
+      return;
+    }
+    setError(e instanceof ApiError ? e.message : fallback);
+  }, [logout]);
+
   const loadDeliveries = useCallback(async (token: string) => {
     setLoading(true);
     try {
       setDeliveries(await api.listDeliveries(token));
       setError("");
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Erro ao consultar entregas.");
+      handleApiError(e, "Erro ao consultar entregas.");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [handleApiError]);
 
   const loadDrivers = useCallback(async (token: string) => {
     try {
       setDrivers(await api.listDrivers(token));
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Erro ao consultar motoristas.");
+      handleApiError(e, "Erro ao consultar motoristas.");
     }
-  }, []);
+  }, [handleApiError]);
 
   useEffect(() => {
     if (session?.user.role === "GESTOR") {
@@ -63,8 +103,8 @@ function App() {
     setNotice("");
     try {
       const response = await api.login(username.trim(), password);
-      if (response.user.role !== "GESTOR") {
-        setError("Esta interface da Sprint 1 é destinada ao perfil Gestor. Use uma conta Gestor.");
+      if (!isKnownRole(response.user?.role)) {
+        setError("Não foi possível realizar o login.");
         return;
       }
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(response));
@@ -72,19 +112,11 @@ function App() {
       setPassword("");
       setNotice("Login realizado com sucesso.");
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Não foi possível realizar o login.");
+      // Mensagem genérica: não indica se o usuário existe (CT-14).
+      setError(e instanceof ApiError && e.status !== 401 ? e.message : "Não foi possível realizar o login. Verifique usuário e senha.");
     } finally {
       setLoading(false);
     }
-  }
-
-  function logout() {
-    sessionStorage.removeItem(SESSION_KEY);
-    setSession(null);
-    setDeliveries([]);
-    setDrivers([]);
-    setError("");
-    setNotice("");
   }
 
   async function handleCreateDelivery(event: FormEvent<HTMLFormElement>) {
@@ -105,7 +137,7 @@ function App() {
       setNotice("Entrega cadastrada com sucesso.");
       await loadDeliveries(session.access);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Não foi possível cadastrar a entrega.");
+      handleApiError(e, "Não foi possível cadastrar a entrega.");
     } finally {
       setLoading(false);
     }
@@ -127,7 +159,7 @@ function App() {
       setNotice(`Motorista atribuído à entrega #${deliveryId}.`);
       await loadDeliveries(session.access);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Não foi possível atribuir o motorista.");
+      handleApiError(e, "Não foi possível atribuir o motorista.");
     } finally {
       setLoading(false);
     }
@@ -140,7 +172,7 @@ function App() {
           <div className="brand-mark" aria-hidden="true">F</div>
           <p className="eyebrow">GESTÃO LOGÍSTICA</p>
           <h1>Bem-vindo ao Feneme</h1>
-          <p className="muted">Entre com uma conta autorizada de Gestor para organizar as entregas.</p>
+          <p className="muted">Entre com sua conta Feneme.</p>
           <form onSubmit={handleLogin} className="stack">
             <label>
               Usuário
@@ -152,12 +184,16 @@ function App() {
             </label>
             {error && <p className="message error" role="alert">{error}</p>}
             {notice && <p className="message success" role="status">{notice}</p>}
-            <button disabled={loading} type="submit">{loading ? "Entrando..." : "Entrar como Gestor"}</button>
+            <button disabled={loading} type="submit">{loading ? "Entrando..." : "Entrar"}</button>
           </form>
           <p className="footnote">As contas são criadas pela administração do sistema. Não há cadastro público.</p>
         </section>
       </main>
     );
+  }
+
+  if (session.user.role === "MOTORISTA") {
+    return <MotoristaHome user={session.user} onLogout={() => logout()} />;
   }
 
   return (
@@ -170,7 +206,7 @@ function App() {
         <div className="user-area">
           <span className="role-chip">Gestor</span>
           <span className="username">{session.user.username}</span>
-          <button className="button-secondary" onClick={logout} type="button">Sair</button>
+          <button className="button-secondary" onClick={() => logout()} type="button">Sair</button>
         </div>
       </header>
 
