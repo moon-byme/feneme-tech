@@ -81,6 +81,10 @@ Todos os integrantes também poderão participar do desenvolvimento e das revis�
 
 O desenvolvimento será realizado em sprints, utilizando o GitHub para versionamento do código e Jira para gerenciamento das atividades. A equipe seguirá os critérios estabelecidos no Plano de Qualidade, Plano de Testes e Definition of Done (DoD) para acompanhar e validar as entregas.
 
+## Executar localmente
+
+O Django serve a interface React compilada e a API em `http://localhost:8000`, usando PostgreSQL local. Veja a preparação do ambiente, a criação de contas e o comando `iniciar.ps1` no [guia de implementação](README_IMPLEMENTACAO_SPRINT1.md).
+
 ## Status
 
 Projeto em fase inicial de definição e organização da Release 1.

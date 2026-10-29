@@ -50,6 +50,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-components
     if: ${{ needs.detect-components.outputs.backend == 'true' }}
+    env:
+      DB_NAME: feneme
+      DB_USER: feneme
+      DB_PASSWORD: feneme_ci_only
+      DB_HOST: localhost
+      DB_PORT: "5432"
     defaults:
       run:
         working-directory: backend
@@ -75,6 +81,14 @@ jobs:
             echo "::error::Django was detected, but no requirements.txt was found in backend/ or the repository root."
             exit 1
           fi
+
+      - name: Set up local PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql
+          sudo systemctl start postgresql
+          sudo -u postgres psql -v ON_ERROR_STOP=1 -c "CREATE ROLE feneme LOGIN CREATEDB PASSWORD 'feneme_ci_only';"
+          sudo -u postgres createdb --owner=feneme feneme
 
       - name: Django system check
         run: python manage.py check

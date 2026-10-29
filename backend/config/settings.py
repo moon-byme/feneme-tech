@@ -1,7 +1,14 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIST = BASE_DIR.parent / "frontend" / "dist"
+
+# Load the root .env regardless of the current working directory.
+# Explicit environment variables (including CI settings) take precedence.
+load_dotenv(BASE_DIR.parent / ".env", override=False)
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-local-development-key-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes"}
@@ -36,7 +43,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = "config.urls"
 TEMPLATES = [{
     "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [],
+    "DIRS": [FRONTEND_DIST],
     "APP_DIRS": True,
     "OPTIONS": {
         "context_processors": [
@@ -48,21 +55,15 @@ TEMPLATES = [{
 }]
 WSGI_APPLICATION = "config.wsgi.application"
 
-if os.getenv("DB_NAME"):
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "feneme"),
-        "USER": os.getenv("DB_USER", "feneme"),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-        "CONN_MAX_AGE": 60,
-    }}
-else:
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }}
+DATABASES = {"default": {
+    "ENGINE": "django.db.backends.postgresql",
+    "NAME": os.getenv("DB_NAME", "feneme"),
+    "USER": os.getenv("DB_USER", "feneme"),
+    "PASSWORD": os.getenv("DB_PASSWORD", ""),
+    "HOST": os.getenv("DB_HOST", "localhost"),
+    "PORT": os.getenv("DB_PORT", "5432"),
+    "CONN_MAX_AGE": 60,
+}}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -75,7 +76,8 @@ LANGUAGE_CODE = "pt-br"
 TIME_ZONE = "America/Sao_Paulo"
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [FRONTEND_DIST] if FRONTEND_DIST.is_dir() else []
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
