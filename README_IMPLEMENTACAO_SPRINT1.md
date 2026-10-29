@@ -1,13 +1,15 @@
 # Feneme — implementação dos requisitos da Sprint 1
 
-Este repositório contém a implementação inicial dos requisitos FT-43, FT-44, FT-55 e FT-45 do Feneme, com interface React servida pelo Django e persistência em PostgreSQL local.
+Este repositório contém a implementação dos requisitos FT-43, FT-44, FT-55, FT-45, FT-54 e FT-58 do Feneme, com interface React servida pelo Django e persistência em PostgreSQL local.
 
 ## Requisitos incluídos
 
 - **FT-43 / US-01:** login com credenciais e retorno do perfil do usuário.
+- **FT-54 / US-02:** login compartilhado com reconhecimento do perfil Motorista.
 - **FT-44 / US-03:** cadastro de entrega com origem, destino e descrição da carga.
 - **FT-55 / US-04:** listagem das entregas persistidas, com estado vazio.
 - **FT-45 / US-05:** atribuição de uma entrega existente a uma conta com perfil Motorista.
+- **FT-58 / US-10:** consulta das entregas atribuídas ao Motorista autenticado, com isolamento entre contas.
 
 A API valida as permissões no servidor. A interface consulta a lista de Motoristas cadastrados para que o Gestor possa selecioná-los sem precisar memorizar IDs. Não existe endpoint de cadastro público. As contas são criadas por um administrador do Django ou pelo comando administrativo documentado abaixo.
 
@@ -154,9 +156,9 @@ Todas as respostas de erro seguem o formato JSON do Django REST Framework.
 - `POST /api/auth/login/` — recebe `username` e `password`; retorna `access`, `refresh` e `user` (`id`, `username`, `role`).
 - `POST /api/auth/refresh/` — renova o access token.
 - `GET /api/drivers/` — lista contas ativas com perfil Motorista; somente Gestor autenticado.
-- `GET /api/deliveries/` — lista entregas; somente Gestor autenticado.
+- `GET /api/deliveries/` — Gestor consulta todas as entregas; Motorista consulta somente as atribuídas à própria conta. Requer autenticação e perfil válido.
 - `POST /api/deliveries/` — cria entrega; somente Gestor autenticado. Campos obrigatórios: `origin`, `destination`, `cargo_description`.
-- `GET /api/deliveries/{id}/` — consulta uma entrega específica; somente Gestor autenticado.
+- `GET /api/deliveries/{id}/` — Gestor consulta qualquer entrega; Motorista consulta somente uma entrega atribuída à própria conta. Para o Motorista, entregas de outro Motorista, sem atribuição ou inexistentes retornam o mesmo `404`.
 - `POST /api/deliveries/{id}/assign-driver/` — recebe `driver_id`; somente Gestor autenticado. O usuário precisa existir e ter perfil `MOTORISTA`.
 
 Exemplo de cadastro:
@@ -183,8 +185,8 @@ Exemplo de atribuição:
 - O identificador é gerado pelo banco de dados.
 - Não existe cadastro separado de carga nem de veículo.
 - Não foram incluídos atualização de status pelo Motorista, recomendações de rota, Open-Meteo, histórico, edição ou exclusão, pois pertencem a outras histórias.
-- O projeto existente menciona a integração Open-Meteo; ela não é necessária para estes quatro requisitos e foi deixada fora deste escopo.
-- Os testes automatizados cobrem login, bloqueio de acesso sem autenticação/sem perfil Gestor, cadastro, listagem e atribuição válida/inválida.
+- O projeto existente menciona a integração Open-Meteo; ela não é necessária para estes requisitos e foi deixada fora deste escopo.
+- Os testes automatizados cobrem login, bloqueio de acesso sem autenticação, permissões por perfil, cadastro, isolamento da consulta por Motorista e atribuição válida/inválida.
 
 ## Segurança e limitações
 
@@ -199,7 +201,7 @@ Exemplo de atribuição:
 **O que mudou**
 
 - Back-end: sem alteração de lógica. O login (`POST /api/auth/login/`) já era compartilhado entre os perfis. Foram criados testes em `backend/accounts/tests.py` cobrindo CT-13 (login válido do Motorista e claim `role`), CT-14 (senha errada, usuário inexistente e conta inativa com a mesma mensagem e sem tokens), bloqueio das operações do Gestor para o Motorista (403, sem alterar dados), acesso cruzado entre dois Motoristas e sessão inválida (sem token, token malformado, expirado, adulterado e refresh usado como access).
-- Front-end: o login aceita Gestor e Motorista, com textos neutros ("Entrar"). O Motorista vê uma área mínima (`src/components/MotoristaHome.tsx`) que não consulta `/deliveries/` nem `/drivers/`; a listagem das entregas atribuídas é a US-10 (FT-58). Um 401 com sessão ativa encerra a sessão e mostra "Sua sessão expirou. Entre novamente.". Na leitura do `sessionStorage`, uma sessão cujo token esteja expirado ou com `role` diferente do usuário salvo é descartada.
+- Front-end: o login aceita Gestor e Motorista, com textos neutros ("Entrar"). A área inicial do Motorista (`src/components/MotoristaHome.tsx`) foi ampliada pela FT-58 para consultar suas entregas, conforme a seção abaixo. Um 401 com sessão ativa encerra a sessão e mostra "Sua sessão expirou. Entre novamente.". Na leitura do `sessionStorage`, uma sessão cujo token esteja expirado ou com `role` diferente do usuário salvo é descartada.
 
 **Como testar**
 
@@ -210,3 +212,27 @@ python manage.py create_feneme_user --username motorista_demo --role MOTORISTA
 ```
 
 Depois, com back-end e front-end em execução, entre com a conta Motorista: a tela "Área do Motorista" deve aparecer. Com senha errada, a mensagem "Não foi possível realizar o login. Verifique usuário e senha." aparece e nenhuma sessão é criada.
+
+## FT-58 / US-10 — Consultar entregas como Motorista
+
+O filtro é aplicado no servidor usando a conta autenticada e seu perfil atual no banco. Parâmetros enviados pelo cliente não permitem consultar entregas de outro Motorista. A consulta individual usa o mesmo filtro da listagem: uma entrega fora da responsabilidade do Motorista retorna `404`, sem expor os dados da carga ou indicar se o registro existe. Contas sem perfil ou com perfil desconhecido recebem `403`.
+
+O Gestor continua consultando todas as entregas e sendo o único perfil autorizado a cadastrar e atribuir. Ao reatribuir uma entrega, ela deixa de aparecer nas consultas do Motorista anterior e passa a aparecer nas do novo responsável.
+
+A tela do Motorista mostra identificador, origem, destino, descrição da carga e status, além dos estados de carregamento, erro e lista vazia. O botão **Atualizar** refaz a consulta; não há atualização automática em segundo plano. A tela não consulta a lista de Motoristas e não oferece cadastro, atribuição ou alteração de status. Uma resposta `401` encerra a sessão e pede novo login.
+
+Para validar automaticamente, execute a partir da raiz do projeto:
+
+```powershell
+.\backend\.venv\Scripts\python.exe backend/manage.py test --noinput
+```
+
+Os testes de `deliveries/test_ft58.py` cobrem isolamento da listagem e dos detalhes, entregas sem atribuição, tentativa de alterar o filtro por parâmetros, requisições HEAD, bloqueio de escrita, reatribuição, acesso do Gestor e contas com perfil ausente, desconhecido ou alterado após a emissão do token. Os testes de autenticação existentes foram atualizados para permitir a consulta própria e exigir `404` no acesso cruzado.
+
+Para testar pela interface:
+
+1. Recompile com `npm.cmd run build` na pasta `frontend`, ou reinicie usando `.\iniciar.ps1` na raiz.
+2. Entre como Gestor, cadastre entregas e atribua uma delas a `motorista_demo`.
+3. Saia e entre como `motorista_demo`: somente as entregas atribuídas a essa conta devem aparecer.
+4. Para verificar o isolamento, crie outra conta Motorista e atribua outra entrega a ela. Essa entrega não deve aparecer para `motorista_demo`.
+5. Reatribua uma entrega como Gestor e, ao voltar à conta do Motorista anterior, clique em **Atualizar**: a entrega deve desaparecer da lista.

@@ -49,8 +49,8 @@ export const api = {
       body: JSON.stringify({ username, password }),
     });
   },
-  listDeliveries(token: string) {
-    return request<Delivery[]>("/deliveries/", token);
+  listDeliveries(token: string, signal?: AbortSignal) {
+    return request<Delivery[]>("/deliveries/", token, { signal });
   },
   listDrivers(token: string) {
     return request<DriverOption[]>("/drivers/", token);

@@ -112,8 +112,6 @@ class MotoristaPermissionTests(FenemeAuthTestMixin, APITestCase):
         self.login_as("motorista_teste")
         detail_url = f"{self.deliveries_url}{self.delivery.id}/"
         cases = [
-            ("get", self.deliveries_url, None),
-            ("get", detail_url, None),
             ("post", self.deliveries_url, {
                 "origin": "Campina Grande - PB",
                 "destination": "Patos - PB",
@@ -126,6 +124,12 @@ class MotoristaPermissionTests(FenemeAuthTestMixin, APITestCase):
             with self.subTest(method=method, url=url):
                 self.assert_motorista_is_forbidden(method, url, payload)
 
+        own_detail = self.client.get(detail_url)
+        self.assertEqual(own_detail.status_code, status.HTTP_200_OK)
+        own_list = self.client.get(self.deliveries_url)
+        self.assertEqual(own_list.status_code, status.HTTP_200_OK)
+        self.assertEqual([item["id"] for item in own_list.data], [self.delivery.id])
+
         self.assertEqual(Delivery.objects.count(), 1)
         self.delivery.refresh_from_db()
         self.assertEqual(self.delivery.assigned_driver, self.driver)
@@ -134,15 +138,18 @@ class MotoristaPermissionTests(FenemeAuthTestMixin, APITestCase):
         """Acesso cruzado (FT-29): outro Motorista não lê nem reatribui a entrega de um colega."""
         self.login_as("motorista_teste_2")
         detail_url = f"{self.deliveries_url}{self.delivery.id}/"
-        cases = [
-            ("get", detail_url, None),
-            ("post", f"{detail_url}assign-driver/", {"driver_id": self.other_driver.id}),
-        ]
-        for method, url, payload in cases:
-            with self.subTest(method=method, url=url):
-                response = getattr(self.client, method)(url, payload, format="json")
-                self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.data)
-                self.assert_no_sensitive_data(response, user=self.other_driver, password=PASSWORD)
+        response = self.client.get(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assert_no_sensitive_data(response, user=self.other_driver, password=PASSWORD)
+        listing = self.client.get(self.deliveries_url)
+        self.assertEqual(listing.status_code, status.HTTP_200_OK)
+        self.assertEqual(listing.data, [])
+
+        response = self.client.post(
+            f"{detail_url}assign-driver/", {"driver_id": self.other_driver.id}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assert_no_sensitive_data(response, user=self.other_driver, password=PASSWORD)
 
         self.delivery.refresh_from_db()
         self.assertEqual(self.delivery.assigned_driver, self.driver)

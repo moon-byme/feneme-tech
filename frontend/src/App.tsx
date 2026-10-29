@@ -193,7 +193,7 @@ function App() {
   }
 
   if (session.user.role === "MOTORISTA") {
-    return <MotoristaHome user={session.user} onLogout={() => logout()} />;
+    return <MotoristaHome key={session.user.id} user={session.user} token={session.access} onLogout={logout} />;
   }
 
   return (
