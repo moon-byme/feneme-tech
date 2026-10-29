@@ -1,0 +1,251 @@
+{
+  "tarefa": "FT-69",
+  "metrica": "Q-01",
+  "plano_referencia": "FT-10",
+  "release": 1,
+  "sprint": 1,
+  "consolidado_em": "2026-10-29T19:51:57.263262-03:00",
+  "data_execucoes": "2026-10-29",
+  "natureza": "Consolidação documental de resultados já observados nas saídas de terminal e relatórios exibidos nesta conversa.",
+  "testes_reexecutados_nesta_organizacao": false,
+  "originais": {
+    "arquivos_presentes_antes_da_organizacao": 0,
+    "recuperados_do_git": false,
+    "situacao": "As pastas 20261029-193103-403744 e 20261029-193644-890042 estavam vazias. Os arquivos originais não constam do histórico Git consultado. As transcrições não são logs integrais originais; capturas e hashes originais não foram recriados."
+  },
+  "q01_original_r1": {
+    "ct": [
+      "CT-01",
+      "CT-02",
+      "CT-03",
+      "CT-04",
+      "CT-05"
+    ],
+    "planejados": 5,
+    "executados": 5,
+    "aprovados": 5,
+    "reprovados": 0,
+    "execucao_percentual": 100,
+    "aprovacao_percentual": 100
+  },
+  "controle_ampliado_r1": {
+    "ct": [
+      "CT-01",
+      "CT-02",
+      "CT-03",
+      "CT-04",
+      "CT-05",
+      "CT-13",
+      "CT-14",
+      "CT-15",
+      "CT-16",
+      "CT-17"
+    ],
+    "planejados": 10,
+    "executados": 10,
+    "aprovados": 10,
+    "reprovados": 0,
+    "execucao_percentual": 100,
+    "aprovacao_percentual": 100,
+    "status_universo": "provisório; aprovação formal de PO/QA pendente"
+  },
+  "suite_api": {
+    "metodos_executados": 33,
+    "aprovados": 33,
+    "resultado": "aprovado",
+    "inicio_registrado": "2026-10-29T19:36:44.890042-03:00",
+    "duracao_testes_segundos": 40.86,
+    "banco_temporario": "test_feneme",
+    "python": "3.14.5",
+    "django": "5.2.18",
+    "banco": "PostgreSQL",
+    "evidencia": "registros/execucao-api-transcricao.txt"
+  },
+  "build_frontend": {
+    "resultado": "aprovado",
+    "comando": "npm.cmd run build",
+    "pasta": "frontend",
+    "vite": "6.4.5",
+    "evidencia": "registros/build-frontend-transcricao.txt"
+  },
+  "interface": {
+    "verificacoes_aprovadas": 11,
+    "metodos_de_conferencia": 1,
+    "adicional_a_suite_api": true,
+    "resultado": "aprovado",
+    "navegador": "Chrome/156.0.8078.48",
+    "tipo": "automatizada, em modo headless",
+    "evidencia": "registros/interface-transcricao.txt",
+    "capturas_originais_disponiveis": false
+  },
+  "casos": [
+    {
+      "ct": "CT-01",
+      "grupo": "Original R1",
+      "cenario": "Login válido do Gestor",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 200, tokens, perfil GESTOR e consulta autenticada.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_login_returns_role"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-02",
+      "grupo": "Original R1",
+      "cenario": "Senha incorreta do Gestor",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 401, mensagem genérica e ausência de tokens.",
+      "metodos": [
+        "accounts.tests.MotoristaLoginTests.test_invalid_credentials_are_rejected_without_tokens"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-03",
+      "grupo": "Original R1",
+      "cenario": "Cadastrar entrega válida",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 201, dados persistidos, autor e status PENDENTE.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_gestor_can_create_and_list_delivery"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-04",
+      "grupo": "Original R1",
+      "cenario": "Cadastrar sem campos obrigatórios",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 400, erros por campo ausente ou em branco e nenhuma gravação.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_missing_required_fields_are_rejected"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-05",
+      "grupo": "Original R1",
+      "cenario": "Atribuir Motorista a uma entrega",
+      "resultado": "aprovado",
+      "verificacoes": "Atribuição persistida; lista e detalhe acessíveis ao responsável. Na interface, atribuição mantida após recarregar o painel.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_gestor_can_assign_existing_driver"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-13",
+      "grupo": "Acrescentado R1",
+      "cenario": "Login válido do Motorista",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 200, tokens e perfil MOTORISTA no usuário e no JWT.",
+      "metodos": [
+        "accounts.tests.MotoristaLoginTests.test_motorista_valid_login_returns_tokens_and_role"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-14",
+      "grupo": "Acrescentado R1",
+      "cenario": "Credenciais inválidas do Motorista",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 401, mensagem genérica e ausência de tokens.",
+      "metodos": [
+        "accounts.tests.MotoristaLoginTests.test_invalid_credentials_are_rejected_without_tokens"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-15",
+      "grupo": "Acrescentado R1",
+      "cenario": "Consultar entregas cadastradas",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 200, dados completos e todas as entregas visíveis ao Gestor.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_gestor_can_create_and_list_delivery",
+        "deliveries.test_ft58.DriverDeliveryListTests.test_gestor_still_sees_all_deliveries"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-16",
+      "grupo": "Acrescentado R1",
+      "cenario": "Consultar lista sem entregas como Gestor",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 200 e lista vazia; estado vazio exibido na interface.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_gestor_sees_empty_delivery_list"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    },
+    {
+      "ct": "CT-17",
+      "grupo": "Acrescentado R1",
+      "cenario": "Tentar atribuir usuário que não é Motorista",
+      "resultado": "aprovado",
+      "verificacoes": "HTTP 400, erro em driver_id e atribuição anterior preservada. Na interface, o seletor disponibiliza somente Motoristas.",
+      "metodos": [
+        "deliveries.tests.FenemeDeliveryFlowTests.test_cannot_assign_user_with_manager_profile"
+      ],
+      "evidencias": [
+        "registros/execucao-api-transcricao.txt",
+        "registros/interface-transcricao.txt"
+      ]
+    }
+  ],
+  "git": {
+    "remote": "https://github.com/moon-byme/feneme-tech",
+    "branch": "test/validacao-funcional",
+    "commit_atual_na_organizacao": "5ed2c032665a943b661cf4755fab2181330b7127",
+    "commit_base_registrado_na_execucao": "2c4cfc03ca05628397081f57d1625f07315cffdb",
+    "evidencias_commitadas_nesta_organizacao": false
+  },
+  "evidencias": [
+    {
+      "arquivo": "registros/execucao-api-transcricao.txt",
+      "tipo": "transcrição de trechos da suíte da API"
+    },
+    {
+      "arquivo": "registros/build-frontend-transcricao.txt",
+      "tipo": "transcrição da saída do build"
+    },
+    {
+      "arquivo": "registros/interface-transcricao.txt",
+      "tipo": "transcrição das verificações da interface"
+    }
+  ],
+  "pendencias": [
+    "Aprovação formal do universo da Q-01 por PO/QA.",
+    "Revisão humana manual; a conferência de interface registrada foi automatizada.",
+    "Arquivos originais e capturas indisponíveis após exclusão; pacote consolidado baseado nas saídas registradas na conversa."
+  ],
+  "aceite_formal": "não declarado"
+}
