@@ -1,0 +1,90 @@
+{
+  "verificado_em": "2026-10-29T19:56:10.012581-03:00",
+  "escopo": "Organizacao documental; testes, interface e build nao foram reexecutados.",
+  "natureza_evidencias": "Transcricoes identificadas das saidas registradas na conversa. Arquivos originais e capturas indisponiveis apos exclusao.",
+  "pdf": {
+    "arquivo": "relatorio-consolidado.pdf",
+    "paginas": 5,
+    "estrutura_pdf_valida": true,
+    "criptografado": false
+  },
+  "conteudo_verificado": {
+    "casos_funcionais": 10,
+    "metodos_api_aprovados": 33,
+    "verificacoes_interface_aprovadas": 11,
+    "build_frontend": "aprovado conforme transcricao",
+    "metodos_associados_conferidos_por_leitura_do_codigo": true
+  },
+  "verificacao_dados_sensiveis": {
+    "resultado": "Nenhum indicador de segredo encontrado nas verificacoes aplicadas.",
+    "padroes": [
+      "jwt",
+      "private_key",
+      "aws_access_key",
+      "credential_uri",
+      "bearer_header",
+      "local_user_path"
+    ],
+    "valores_sensiveis_do_env_local_comparados_sem_exibicao": true,
+    "inclui_streams_pdf_descompactados": true,
+    "arquivos_ambiente_perfis_banco_build_incluidos": false,
+    "gitignore_alterado": false
+  },
+  "git": {
+    "branch": "test/validacao-funcional",
+    "arquivos_ainda_nao_rastreados": true,
+    "arquivos_ignorados": false,
+    "commit_ou_push_realizados": false,
+    "comando_inclusao": "git add evidencias/FT69",
+    "link_apos_push": "https://github.com/moon-byme/feneme-tech/tree/test/validacao-funcional/evidencias/FT69"
+  },
+  "arquivo_manifesto": {
+    "nome": "manifesto-evidencias.json",
+    "sha256_proprio_omitido_para_evitar_autorreferencia": true
+  },
+  "arquivos": [
+    {
+      "arquivo": "registros/build-frontend-transcricao.txt",
+      "bytes": 837,
+      "sha256": "0ebef7bda3b02ffb9593008f8bb5660d8062ee44912d375192b29b6c57d384d4",
+      "ignorado_pelo_git": false,
+      "rastreado_no_git": false
+    },
+    {
+      "arquivo": "registros/execucao-api-transcricao.txt",
+      "bytes": 2280,
+      "sha256": "c442c3ba52ee393e4ac6fe0117473d914bb854f4adea2a68f721969ab4d81652",
+      "ignorado_pelo_git": false,
+      "rastreado_no_git": false
+    },
+    {
+      "arquivo": "registros/interface-transcricao.txt",
+      "bytes": 2312,
+      "sha256": "a3e1b5ff68e1e9ffae3ed4dd67c1df1e057e0b3846c05c67068681bba2091356",
+      "ignorado_pelo_git": false,
+      "rastreado_no_git": false
+    },
+    {
+      "arquivo": "relatorio-consolidado.html",
+      "bytes": 12779,
+      "sha256": "35f07ed4c5a19e2bf7ebd00749895102d324a820ff7e34f21027148340939b48",
+      "ignorado_pelo_git": false,
+      "rastreado_no_git": false
+    },
+    {
+      "arquivo": "relatorio-consolidado.pdf",
+      "bytes": 151910,
+      "sha256": "ec258ab16c01b5cc30ceed6e17bdf651d57742e62aeb3e2b2849093dbb5067dc",
+      "ignorado_pelo_git": false,
+      "rastreado_no_git": false
+    },
+    {
+      "arquivo": "resultados-consolidados.json",
+      "bytes": 8718,
+      "sha256": "862d429b3cc7cccc4b7bc724af2284e8c76ea68cd6a567e0dc8178876e877f05",
+      "ignorado_pelo_git": false,
+      "rastreado_no_git": false
+    }
+  ],
+  "aprovacao_formal_po_qa": "pendente; aceite formal nao declarado"
+}

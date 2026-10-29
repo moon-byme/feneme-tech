@@ -1,0 +1,39 @@
+FT-69 / Q-01 — TRANSCRIÇÃO DOCUMENTAL DA CONFERÊNCIA DA INTERFACE
+
+Origem: saídas do terminal e JSON exibidos nesta conversa em 29/10/2026.
+Trechos transcritos; não são o log integral ou o JSON originais.
+A conferência no Chrome não foi repetida para esta consolidação.
+Os arquivos originais e as onze capturas foram removidos e não estão disponíveis neste pacote.
+
+Comando da primeira execução bem-sucedida da interface:
+.\backend\.venv\Scripts\python.exe backend\verify_ft69_browser.py evidencias/FT69/20261029-193103-403744
+
+Ambiente registrado: Chrome/156.0.8078.48, modo headless, perfil temporário,
+servidor Django real e banco PostgreSQL temporário.
+Início registrado no JSON: 2026-10-29T22:33:35.997Z (19:33:35.997 em America/Sao_Paulo).
+Fim registrado no JSON: 2026-10-29T22:33:44.025Z (19:33:44.025 em America/Sao_Paulo).
+
+Onze verificações aprovadas, transcritas da saída:
+
+CT-02: aprovado — Mensagem de credenciais inválidas e sessão não criada.
+CT-14: aprovado — Mensagem de credenciais inválidas e sessão não criada.
+CT-01: aprovado — Login do Gestor abre o painel de operações.
+CT-16: aprovado — Gestor visualiza o estado vazio da lista.
+CT-04: aprovado — Campo Destino obrigatório impede cadastro incompleto na interface.
+CT-03: aprovado — Cadastro válido exibe confirmação e entrega na lista.
+CT-15: aprovado — Entrega permanece na consulta após recarregar a página.
+CT-17-interface: aprovado — Seletor disponibiliza somente Motoristas; rejeição HTTP 400 está evidenciada na suíte da API.
+CT-05-gestor: aprovado — Motorista atribuído permanece após recarregar o painel do Gestor.
+CT-13: aprovado — Login do Motorista abre sua área e consulta a entrega atribuída.
+CT-05-motorista: aprovado — Entrega atribuída pelo Gestor está disponível ao Motorista responsável.
+
+Resumo da primeira execução bem-sucedida, registrado no terminal:
+
+Ran 1 test in 9.849s
+
+OK
+
+Esse método de conferência da interface é adicional aos 33 métodos da suíte da API.
+Onze verificações de interface não representam onze novos CT.
+O CT-17 comprova a rejeição de perfil inválido pela API; na interface foi verificada a restrição do seletor.
+A conferência foi automatizada. Revisão humana e aceite formal por PO/QA permanecem pendentes.

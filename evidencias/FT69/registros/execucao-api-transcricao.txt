@@ -1,0 +1,38 @@
+FT-69 / Q-01 — TRANSCRIÇÃO DOCUMENTAL DA EXECUÇÃO DA API
+
+Origem: saídas de terminal registradas nesta conversa em 29/10/2026.
+Este arquivo reúne trechos dessas saídas; não é o log integral original.
+O log original foi removido e não estava no histórico do Git.
+Nenhum teste foi reexecutado para produzir esta transcrição.
+Linhas de migração, docstrings e alguns métodos de regressão foram omitidos.
+
+Comando observado:
+.\backend\.venv\Scripts\python.exe backend\verify_ft69.py
+
+FT-69 / Q-01 — início: 2026-10-29T19:36:44.890042-03:00
+Found 33 test(s).
+Creating test database for alias 'default' ('test_feneme')...
+
+Trechos dos resultados que evidenciam os CT da Sprint 1:
+
+test_invalid_credentials_are_rejected_without_tokens (accounts.tests.MotoristaLoginTests.test_invalid_credentials_are_rejected_without_tokens) ... ok
+test_motorista_valid_login_returns_tokens_and_role (accounts.tests.MotoristaLoginTests.test_motorista_valid_login_returns_tokens_and_role) ... ok
+test_cannot_assign_user_with_manager_profile (deliveries.tests.FenemeDeliveryFlowTests.test_cannot_assign_user_with_manager_profile) ... ok
+test_gestor_can_assign_existing_driver (deliveries.tests.FenemeDeliveryFlowTests.test_gestor_can_assign_existing_driver) ... ok
+test_gestor_can_create_and_list_delivery (deliveries.tests.FenemeDeliveryFlowTests.test_gestor_can_create_and_list_delivery) ... ok
+test_gestor_sees_empty_delivery_list (deliveries.tests.FenemeDeliveryFlowTests.test_gestor_sees_empty_delivery_list) ... ok
+test_login_returns_role (deliveries.tests.FenemeDeliveryFlowTests.test_login_returns_role) ... ok
+test_missing_required_fields_are_rejected (deliveries.tests.FenemeDeliveryFlowTests.test_missing_required_fields_are_rejected) ... ok
+test_gestor_still_sees_all_deliveries (deliveries.test_ft58.DriverDeliveryListTests.test_gestor_still_sees_all_deliveries) ... ok
+
+Resumo registrado no terminal:
+
+Ran 33 tests in 40.860s
+
+OK
+Destroying test database for alias 'default' ('test_feneme')...
+System check identified no issues (0 silenced).
+CT: 10 aprovados, 0 reprovados, 0 incompletos.
+
+Ambiente registrado anteriormente: Python 3.14.5, Django 5.2.18 e PostgreSQL.
+O JSON original com os hashes dos fontes também foi removido; esses hashes não foram reconstruídos.
