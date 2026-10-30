@@ -362,16 +362,39 @@ Fluxo recomendado:
 
 Convenções de branch, commits e Pull Requests estão descritas em [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-## Equipe e papéis da Release 2
+## Equipe e papéis
 
-Os papéis são redistribuídos a cada release. Na **Release 2**, a composição é:
+###  Release 1
 
-| Integrante | Papel na Release 2 |
+| Integrante | Papel |
 |---|---|
-| João Paulo de Araújo | Product Owner (PO) / DevOps |
-| Lethycia Zenaide Queiroz Melo | Scrum Master (SM) |
-| José Araújo Agra Neto | Quality Assurance (QA) |
+| José Araújo Agra Neto | Product Owner / DevOps |
+| João Paulo de Araujo | Scrum Master |
+| Lethycia Zenaide Queiroz Melo | QA |
 
+### Release 2
+
+| Integrante | Papel |
+|---|---|
+| João Paulo de Araujo | Product Owner / DevOps |
+| Lethycia Zenaide Queiroz Melo | Scrum Master |
+| José Araújo Agra Neto | QA |
+
+### Release 3
+
+ Integrante | Papel |
+|---|---|
+| Lethycia Zenaide Queiroz Melo | Product Owner  / DevOps |
+| José Araújo Agra Neto | Scrum Master |
+| João Paulo de Araujo | QA |
+
+### Release 4
+
+| Integrante | Papel |
+|---|---|
+| José Araújo Agra Neto | Product Owner / DevOps |
+| João Paulo de Araujo | Scrum Master |
+| Lethycia Zenaide Queiroz Melo | QA |
 ### Responsabilidades
 
 - **Product Owner (PO):** define e prioriza os requisitos do produto, mantém o Product Backlog, esclarece dúvidas sobre as necessidades dos usuários e valida o incremento conforme os critérios de aceitação.
