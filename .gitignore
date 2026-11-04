@@ -24,3 +24,9 @@ frontend/.vite/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Cypress / Cucumber (artefatos gerados)
+frontend/cypress/reports/
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+frontend/cypress/downloads/

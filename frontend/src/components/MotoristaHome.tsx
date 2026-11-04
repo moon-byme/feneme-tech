@@ -42,7 +42,7 @@ function MotoristaHome({ user, token, onLogout }: Props) {
           <div><strong>Feneme</strong><span>Minhas entregas</span></div>
         </div>
         <div className="user-area">
-          <span className="role-chip">Motorista</span>
+          <span className="role-chip" data-cy="role-chip">Motorista</span>
           <span className="username">{user.username}</span>
           <button className="button-secondary" onClick={() => onLogout()} type="button">Sair</button>
         </div>
