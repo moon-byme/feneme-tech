@@ -167,7 +167,7 @@ function App() {
 
   if (!session) {
     return (
-      <main className="login-shell">
+      <main className="login-shell" data-cy="login-page">
         <section className="login-card">
           <div className="brand-mark" aria-hidden="true">F</div>
           <p className="eyebrow">GESTÃO LOGÍSTICA</p>
@@ -176,15 +176,15 @@ function App() {
           <form onSubmit={handleLogin} className="stack">
             <label>
               Usuário
-              <input autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <input data-cy="login-username" autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
             </label>
             <label>
               Senha
-              <input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input data-cy="login-password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </label>
-            {error && <p className="message error" role="alert">{error}</p>}
+            {error && <p className="message error" role="alert" data-cy="login-error">{error}</p>}
             {notice && <p className="message success" role="status">{notice}</p>}
-            <button disabled={loading} type="submit">{loading ? "Entrando..." : "Entrar"}</button>
+            <button data-cy="login-submit" disabled={loading} type="submit">{loading ? "Entrando..." : "Entrar"}</button>
           </form>
           <p className="footnote">As contas são criadas pela administração do sistema. Não há cadastro público.</p>
         </section>
@@ -204,7 +204,7 @@ function App() {
           <div><strong>Feneme</strong><span>Gestão de entregas</span></div>
         </div>
         <div className="user-area">
-          <span className="role-chip">Gestor</span>
+          <span className="role-chip" data-cy="role-chip">Gestor</span>
           <span className="username">{session.user.username}</span>
           <button className="button-secondary" onClick={() => logout()} type="button">Sair</button>
         </div>

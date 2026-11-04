@@ -1,0 +1,13 @@
+{
+  "stepDefinitions": "cypress/support/step_definitions/**/*.ts",
+  "filterSpecs": true,
+  "omitFiltered": true,
+  "html": {
+    "enabled": true,
+    "output": "cypress/reports/cucumber-report.html"
+  },
+  "messages": {
+    "enabled": true,
+    "output": "cypress/reports/cucumber-messages.ndjson"
+  }
+}
