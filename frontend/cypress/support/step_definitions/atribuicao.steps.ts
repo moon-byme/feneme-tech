@@ -1,15 +1,9 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import {
-  autenticarComoGestor,
   preencherEntregaUnica,
   salvarEntregaPelaInterface,
   senhaE2E,
 } from "../qa-helpers";
-
-Given("existe uma entrega cadastrada", () => {
-  preencherEntregaUnica();
-  salvarEntregaPelaInterface();
-});
 
 Given("existe um usuário válido com perfil Motorista", () => {
   cy.get("select").should("have.length.greaterThan", 0);
