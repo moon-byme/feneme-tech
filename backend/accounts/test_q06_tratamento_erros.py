@@ -141,7 +141,7 @@ class Q06SafeErrorHandlingTests(APITestCase):
 
     def test_q06_14_motorista_tenta_alterar_entrega_por_patch(self):
         self.request_and_assert_safe("patch",
-            f"/api/deliveries/{self.entrega.id}/", 405,
+            f"/api/deliveries/{self.entrega.id}/", 403,
             token=str(AccessToken.for_user(self.motorista)))
 
     def test_q06_15_motorista_tenta_excluir_entrega(self):
