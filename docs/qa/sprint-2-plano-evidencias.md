@@ -13,7 +13,8 @@
 
 - A branch principal contém o cadastro manual de até duas alternativas de trajeto (US-06 / FT-46), integrado pela PR #20, a integração Open-Meteo (US-08 / FT-47), integrada pela PR #23, e a medição Q-13, integrada pela PR #24.
 - A PR #25 da FT-56 foi integrada à `main` em 10/11/2026 (merge commit `862507f83fab4917dd862bf7a03fce65df3cb649`). A comparação explícita apresenta duas alternativas lado a lado e informa quando há zero ou uma alternativa.
-- O workflow executa `npm run e2e:smoke`, `npm run e2e:r1`, `npm run e2e:weather` e `npm run e2e:routes`. Na execução da `main` após a PR #25, os cenários `@US-07`, `@US-08`, `@R1` e smoke passaram.
+- O workflow executa `npm run e2e:smoke`, `npm run e2e:routes`, `npm run e2e:r1` e `npm run e2e:weather`. Na execução da `main` após a PR #25, os cenários `@US-07`, `@US-08`, `@R1` e smoke passaram.
+- O arquivo `trajetos.feature` também contém cenários `@US-06` com etapas implementadas, mas eles não são selecionados por nenhum script do CI atual: `e2e:routes` seleciona somente `@US-07`, enquanto os demais scripts selecionam `@smoke`, `@R1` e `@US-08`. A lacuna está registrada nas FT-46 e FT-89 como ação de DevOps.
 - A PR #22 integrou a validação visual da consulta de entregas do Motorista. A PR #27 também foi integrada à `main` em 10/11/2026 (merge commit `c76f97e9ab9a04e59aeaa4c9b4e94c48ab79c7f9`), acrescentando cobertura visual de lista vazia, atualização após reatribuição e conferência do status.
 - Permanecem pendentes as funcionalidades de recomendação (US-09), atualização de status/histórico persistente (US-11/US-13) e acompanhamento do Gestor (US-12), conforme os respectivos itens do backlog.
 
@@ -51,7 +52,9 @@ python manage.py test accounts.test_q06_tratamento_erros -v 2
 
 ## 3. FT-32 — Resiliência à indisponibilidade da Open-Meteo
 
-**Critério do driver:** 10 de 10 falhas simuladas devem preservar o cadastro e o registro manual de alternativas, informar indisponibilidade e não impedir os fluxos manuais.
+**Critério do driver:** 10 de 10 falhas simuladas (timeout, HTTP 5xx e previsão ausente) devem preservar cadastro e comparação manuais, exibir indisponibilidade e não confirmar recomendação climática sem dados.
+
+**Resultado da medição:** 10/10 cenários comprovaram a continuidade dos fluxos manuais e o aviso de indisponibilidade. A parte de recomendação climática não foi medida: depende da US-09 (FT-57), ainda não implementada, e será verificada na Sprint 3. Essa separação também está registrada no risco R06 (FT-65).
 
 ### Implementação e medição
 
@@ -176,6 +179,7 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 - O CI após integração aprovou smoke, `@US-07` (3/3), regressão `@R1` (10/10) e `@US-08` (2/2), além dos jobs backend e frontend.
 - Evidência: [GitHub Actions — main após PR #25 (run 42848223672)](https://github.com/moon-byme/feneme-tech/actions/runs/42848223672).
 - A DoD da FT-56 ainda exige registro de verificação técnica independente por integrante diferente do autor/QA e aceite final do PO, conforme decisão registrada no Jira.
+
 ### Pendências de execução
 
 - Criar definições de etapas para os demais cenários R2 somente depois que as interfaces e endpoints correspondentes estiverem disponíveis.
@@ -201,15 +205,15 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 
 | Issue | Entrega de QA | Situação honesta |
 |---|---|---|
-| FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Q-13 aprovada 10/10 e integrada pela PR #24; risco residual do provedor externo permanece |
+| FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Q-13 aprovada 10/10 para continuidade dos fluxos manuais e aviso de indisponibilidade; recomendação climática depende da US-09 (FT-57), prevista para Sprint 3; risco residual do provedor externo permanece |
 | FT-33 | Verificação de segurança das respostas e logs | Q-06 executado no CI: 20/20 aprovados, 0 exposições; evidência no [workflow da PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
 | FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
-| FT-47 | US-08: previsão e tratamento de indisponibilidade | Implementação integrada pela PR #23; E2E `@US-08` 2/2 na PR #24; chamada externa real bem-sucedida ainda precisa de evidência |
+| FT-47 | US-08: previsão e tratamento de indisponibilidade | PR #23 integrada; E2E `@US-08` 2/2; demonstração real registrada na FT-47 em 10/11/2026 (João Pessoa: máx. 30,3 °C / mín. 25,0 °C, conferida com o JSON da Open-Meteo); aceite do PO registrado em 10/11/2026 |
 | FT-56 | US-07: comparação de alternativas | PR #25 integrada; CT-06/CT-19 e CI aprovados; aguarda verificação técnica independente e aceite final do PO |
 | FT-81 | Q-13: continuidade dos fluxos manuais | 10/10 falhas simuladas; 10 entregas e 10 alternativas persistidas; Resultado R2 registrado na planilha, pendente de conferência da equipe |
 | FT-58 | US-10: consulta de entregas do Motorista | PRs #22 e #27 integradas; API e interface cobertas, incluindo lista vazia e reatribuição; revisão pós-integração e aceite formal do PO ainda pendentes |
-| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 e CT-22/CT-23 por API: 2/2 na PR #18; consulta visual integrada pela PR #22; complementos da PR #27 com smoke 7/7 e R1 10/10 aprovados, ainda aguardando integração. Cobertura R2 e aceite das histórias permanecem parciais. |
+| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 e CT-22/CT-23 por API: 2/2 na PR #18; consulta visual integrada pela PR #22; complementos da PR #27 integrados (`c76f97e`), com smoke 7/7 e R1 10/10 aprovados. Cobertura R2 e aceite das histórias permanecem parciais. |
 
 ## 7. Próximas dependências
 
