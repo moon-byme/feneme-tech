@@ -46,3 +46,10 @@ Funcionalidade: Cadastro e comparação de alternativas de trajeto
     Quando solicito a comparação de dois trajetos
     Então o sistema informa que faltam alternativas
     E não apresenta uma comparação fictícia
+
+  @US-07 @CT-19 @excecao @regressao
+  Cenário: Não comparar quando ainda não há alternativas
+    Dado que a entrega não possui alternativas cadastradas
+    Quando solicito a comparação de dois trajetos
+    Então o sistema informa que faltam alternativas
+    E não apresenta uma comparação fictícia
