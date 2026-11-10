@@ -6,12 +6,12 @@ from django.core.management.base import BaseCommand, CommandError
 
 from accounts.models import UserProfile
 
-E2E_USERS = (("gestor_e2e", "GESTOR"), ("motorista_e2e", "MOTORISTA"))
+E2E_USERS = (("gestor_e2e", "GESTOR"), ("motorista_e2e", "MOTORISTA"), ("motorista_outro_e2e", "MOTORISTA"))
 
 
 class Command(BaseCommand):
     help = (
-        "Cria (ou atualiza) as contas fictícias gestor_e2e e motorista_e2e usadas pelos "
+        "Cria (ou atualiza) as contas fictícias de Gestor e dois Motoristas usadas pelos "
         "testes Cucumber/Cypress. A senha vem da variável de ambiente E2E_PASSWORD."
     )
 
