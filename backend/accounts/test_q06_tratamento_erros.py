@@ -146,7 +146,7 @@ class Q06SafeErrorHandlingTests(APITestCase):
 
     def test_q06_15_motorista_tenta_excluir_entrega(self):
         self.request_and_assert_safe("delete",
-            f"/api/deliveries/{self.entrega.id}/", 405,
+            f"/api/deliveries/{self.entrega.id}/", 403,
             token=str(AccessToken.for_user(self.motorista)))
 
     # 16–20: entradas inválidas no cadastro e na atribuição.
