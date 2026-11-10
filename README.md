@@ -194,6 +194,9 @@ feneme-tech/
 │   ├── img/
 │   │   └── Burndown Sprint 1.png
 │   ├── modelos/                 # Modelos de documentação
+│   ├── releases/                # Registros históricos por release
+│   │   └── release-1/
+│   │       └── ata-retrospectiva-release-1-feneme.md
 │   └── sprints/                 # Documentação histórica por sprint
 │       ├── sprint-0/
 │       │   ├── ata-criacao-projeto-09-10-2026.md
@@ -424,6 +427,7 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [`docs/sprints/`](docs/sprints/): registros de planejamento, revisão, retrospectiva, Definition of Done, métricas e impedimentos das sprints.
 - [Sprint 0](docs/sprints/sprint-0/): [criação do projeto em 09/10](docs/sprints/sprint-0/ata-criacao-projeto-09-10-2026.md) e [avaliação das pendências do planejamento em 19/10](docs/sprints/sprint-0/ata-retrospectiva-19-10-2026.md). A sprint foi dedicada ao planejamento e à estruturação do projeto, sem implementação de funcionalidades.
 - [Sprint 1](docs/sprints/sprint-1/): [preparação em 19/10](docs/sprints/sprint-1/ata-planejamento-retrospectiva-sprint-1.md), [Review](docs/sprints/sprint-1/ata-review.md), [Retrospectiva](docs/sprints/sprint-1/ata-retrospectiva.md), [conferência da DoD](docs/sprints/sprint-1/dod-sprint-1.md) e [métricas e impedimentos](docs/sprints/sprint-1/metricas-e-impedimentos.md).
+- [Retrospectiva da Release 1](docs/releases/release-1/ata-retrospectiva-release-1-feneme.md): registro retrospectivo da reunião de 03/11/2026, elaborado em 10/11/2026, com avaliação do feedback e encaminhamentos para a Release 2.
 - [Planilha de Definition of Done](docs/Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx): arquivo preservado, com referência à aba "DoD da Sprint" na conferência da Sprint 1.
 - [`evidencias/`](evidencias/): registros e relatórios de evidências de validação.
 
