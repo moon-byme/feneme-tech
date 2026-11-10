@@ -17,6 +17,14 @@ export interface DriverOption {
   username: string;
 }
 
+export interface RouteAlternative {
+  id: number;
+  delivery: number;
+  distance_km: number;
+  duration_minutes: number;
+  created_at: string;
+}
+
 export interface Delivery {
   id: number;
   origin: string;
@@ -26,6 +34,22 @@ export interface Delivery {
   assigned_driver_username: string | null;
   created_by_username: string;
   status: string;
+  route_alternatives?: RouteAlternative[];
   created_at: string;
   updated_at: string;
+}
+
+export interface ReferenceLocation {
+  slug: string;
+  name: string;
+}
+
+export interface DailyForecast {
+  location: ReferenceLocation;
+  date: string;
+  temperature_max: number;
+  temperature_min: number;
+  unit: string;
+  source: string;
+  notice: string;
 }

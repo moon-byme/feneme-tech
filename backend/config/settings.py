@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "accounts.apps.AccountsConfig",
     "deliveries",
+    "weather.apps.WeatherConfig",
 ]
 
 MIDDLEWARE = [
@@ -104,3 +105,9 @@ CORS_ALLOWED_ORIGINS = [
         "CORS_ALLOWED_ORIGINS", "http://localhost:5173"
     ).split(",") if origin.strip()
 ]
+
+# Open-Meteo (US-08 / FT-47). A URL é fixa no servidor; o cliente nunca a informa.
+OPEN_METEO_FORECAST_URL = os.getenv(
+    "OPEN_METEO_FORECAST_URL", "https://api.open-meteo.com/v1/forecast"
+)
+OPEN_METEO_TIMEOUT_SECONDS = float(os.getenv("OPEN_METEO_TIMEOUT_SECONDS", "5"))
