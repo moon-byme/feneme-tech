@@ -9,7 +9,7 @@ Sistema web para gestão de entregas no transporte de alimentos, desenvolvido co
 - [Visão geral](#visão-geral)
 - [Estado atual do projeto](#estado-atual-do-projeto)
 - [Funcionalidades implementadas](#funcionalidades-implementadas)
-- [Funcionalidades previstas](#funcionalidades-previstas)
+- [Funcionalidades previstas](#funcionalidades-previstas-ou-ainda-não-disponíveis)
 - [Arquitetura e funcionamento](#arquitetura-e-funcionamento)
 - [Tecnologias utilizadas](#tecnologias-utilizadas)
 - [Estrutura do repositório](#estrutura-do-repositório)
@@ -17,7 +17,7 @@ Sistema web para gestão de entregas no transporte de alimentos, desenvolvido co
 - [API disponível](#api-disponível)
 - [Testes e qualidade](#testes-e-qualidade)
 - [Processo de desenvolvimento](#processo-de-desenvolvimento)
-- [Equipe e papéis da Release 2](#equipe-e-papéis-da-release-2)
+- [Equipe e papéis](#equipe-e-papéis)
 - [Documentação complementar](#documentação-complementar)
 
 ## Visão geral
@@ -190,8 +190,20 @@ feneme-tech/
 │   ├── manage.py
 │   └── requirements.txt
 ├── docs/
+│   ├── Feneme_Definition_of_Done_Preenchida (5).xlsx # Planilha de DoD
+│   ├── img/
+│   │   └── Burndown Sprint 1.png
 │   ├── modelos/                 # Modelos de documentação
-│   └── sprints/                 # Atas, DoD, métricas e impedimentos
+│   └── sprints/                 # Documentação histórica por sprint
+│       ├── sprint-0/
+│       │   ├── ata-criacao-projeto-09-10-2026.md
+│       │   └── ata-retrospectiva-19-10-2026.md
+│       └── sprint-1/
+│           ├── ata-planejamento-retrospectiva-sprint-1.md
+│           ├── ata-review.md
+│           ├── ata-retrospectiva.md
+│           ├── dod-sprint-1.md
+│           └── metricas-e-impedimentos.md
 ├── evidencias/                  # Evidências de validações e execuções
 ├── frontend/
 │   ├── src/
@@ -382,7 +394,7 @@ Convenções de branch, commits e Pull Requests estão descritas em [`CONTRIBUTI
 
 ### Release 3
 
- Integrante | Papel |
+| Integrante | Papel |
 |---|---|
 | Lethycia Zenaide Queiroz Melo | Product Owner  / DevOps |
 | José Araújo Agra Neto | Scrum Master |
@@ -410,7 +422,12 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): fluxo de contribuição, convenções de branches, commits e Pull Requests.
 - [`docs/modelos/`](docs/modelos/): modelos de histórias de usuário, bugs e documentação relacionada.
 - [`docs/sprints/`](docs/sprints/): registros de planejamento, revisão, retrospectiva, Definition of Done, métricas e impedimentos das sprints.
+- [Sprint 0](docs/sprints/sprint-0/): [criação do projeto em 09/10](docs/sprints/sprint-0/ata-criacao-projeto-09-10-2026.md) e [avaliação das pendências do planejamento em 19/10](docs/sprints/sprint-0/ata-retrospectiva-19-10-2026.md). A sprint foi dedicada ao planejamento e à estruturação do projeto, sem implementação de funcionalidades.
+- [Sprint 1](docs/sprints/sprint-1/): [preparação em 19/10](docs/sprints/sprint-1/ata-planejamento-retrospectiva-sprint-1.md), [Review](docs/sprints/sprint-1/ata-review.md), [Retrospectiva](docs/sprints/sprint-1/ata-retrospectiva.md), [conferência da DoD](docs/sprints/sprint-1/dod-sprint-1.md) e [métricas e impedimentos](docs/sprints/sprint-1/metricas-e-impedimentos.md).
+- [Planilha de Definition of Done](docs/Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx): arquivo preservado, com referência à aba "DoD da Sprint" na conferência da Sprint 1.
 - [`evidencias/`](evidencias/): registros e relatórios de evidências de validação.
+
+As atas de 09/10 e os dois registros da reunião de 19/10 foram **elaborados retrospectivamente em 10/11/2026**. Os registros de 19/10 descrevem o mesmo encontro, com referências cruzadas: avaliação das pendências da Sprint 0 e preparação da Sprint 1, sem afirmar uma cerimônia independente de Sprint Retrospective.
 
 ---
 

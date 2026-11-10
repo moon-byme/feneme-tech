@@ -1,4 +1,7 @@
-# Textos para cadastro manual no Jira — Feneme
+ 
+ 
+ 
+ # Textos para cadastro manual no Jira — Feneme
 
 Crie uma tarefa principal e subtarefas conforme o tipo de issue disponível no projeto. Os identificadores abaixo são nomes sugeridos, não chaves Jira reais.
 

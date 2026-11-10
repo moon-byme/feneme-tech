@@ -2,12 +2,17 @@
 
 **Sprint:** FT Sprint 1  
 **Período:** 21/10/2026 a 29/10/2026 | **Release:** R1  
-**Instrumento:** planilha `Feneme_Definition_of_Done_Preenchida`, aba "DoD da Sprint" (FT-38).  
+**Instrumento:** planilha [Feneme_Definition_of_Done_Preenchida (5).xlsx](../../Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx), aba "DoD da Sprint" (FT-38).
+
 **Sprint Goal:** Implementar o fluxo básico de gestão de entregas do Feneme, permitindo que Gestor e Motorista realizem login com segurança e que o Gestor cadastre, consulte e atribua entregas a motoristas.  
 **Papéis:** PO/DevOps — José Araújo Agra Neto | SM — João Paulo de Araujo | QA — Lethycia Zenaide Queiroz Melo  
 **Registro da conferência:** 29/10/2026, conduzida pelo SM, com consolidação das evidências disponíveis no Jira e no GitHub.
 
 **Resultado da conferência:** os critérios foram analisados considerando as evidências disponíveis no encerramento da Sprint 1. Quando a verificação dependia de confirmação específica do PO, QA ou DevOps e não havia evidência registrada, o item permaneceu como "A verificar".
+
+**Nota de organização documental — 10/11/2026:** os critérios, resultados e indicadores históricos desta conferência foram preservados. As observações dos critérios 11 e 14 retratam a documentação localizada no encerramento de 29/10. A [ata de preparação da Sprint 1](ata-planejamento-retrospectiva-sprint-1.md) e a [avaliação do planejamento da Sprint 0](../sprint-0/ata-retrospectiva-19-10-2026.md) foram elaboradas retrospectivamente em 10/11 e não comprovam a realização da Planning formal nem o acompanhamento de ações anteriores em 29/10.
+
+O nome da planilha foi mantido para preservar a referência existente. Recomenda-se padronizá-lo futuramente, retirando o sufixo de cópia ` (5)` após a equipe confirmar qual arquivo é a versão de referência, sem alterar seus critérios.
 
 Legenda: **Sim** = atendido com evidência; **Não** = não atendido; **N/A** = não aplicável à sprint; **A verificar** = depende de validação do papel responsável.
 
@@ -36,16 +41,16 @@ Legenda: **Sim** = atendido com evidência; **Não** = não atendido; **N/A** = 
 |---|---|---|---|---|
 | 10 | Board do Jira atualizado (status, responsável, SP, sprint e vínculos) | SM | Sim | As 23 issues da FT Sprint 1 possuíam responsável, story points e sprint. Links de PR e evidências foram adicionados às cinco US, FT-30 e FT-61 em 29/10/2026. |
 | 11 | Sprint Planning realizada, com plano e Sprint Goal | SM | Sim, parcialmente documentado | O Sprint Goal e o escopo estão registrados na FT Sprint 1, iniciada em 21/10/2026. Não foi localizada ata específica da Planning no repositório. |
-| 12 | Ata da Review em `docs/sprints/` | SM | Sim | A Review foi registrada em `ata-review.md`, com incremento apresentado, métricas, avaliação do Sprint Goal e pendências identificadas. |
-| 13 | Ata da Retrospectiva em `docs/sprints/`, com ações, responsáveis e prazos | SM | Sim | A retrospectiva foi registrada em `ata-retrospectiva.md`, contendo pontos positivos, oportunidades de melhoria e sete ações com responsáveis, prazos e formas de verificação. |
+| 12 | Ata da Review em `docs/sprints/` | SM | Sim | A Review foi registrada em [ata-review.md](ata-review.md), com incremento apresentado, métricas, avaliação do Sprint Goal e pendências identificadas. |
+| 13 | Ata da Retrospectiva em `docs/sprints/`, com ações, responsáveis e prazos | SM | Sim | A retrospectiva foi registrada em [ata-retrospectiva.md](ata-retrospectiva.md), contendo pontos positivos, oportunidades de melhoria e sete ações com responsáveis, prazos e formas de verificação. |
 | 14 | Ações da retrospectiva anterior acompanhadas | SM | Não | Não foi localizada ata da retrospectiva da Sprint 0 no repositório ou no Jira; portanto, não havia ações anteriores documentadas para acompanhamento. |
-| 15 | Impedimentos registrados com status e resolução | SM | Sim | I-01, I-02 e I-03 estão registrados em `metricas-e-impedimentos.md`. I-01 foi resolvido com a reintegração do código pelo PR #1 em 27/10; I-02 foi resolvido com a atualização das instruções de execução; I-03 permanece aberto. |
+| 15 | Impedimentos registrados com status e resolução | SM | Sim | I-01, I-02 e I-03 estão registrados em [metricas-e-impedimentos.md](metricas-e-impedimentos.md). I-01 foi resolvido com a reintegração do código pelo PR #1 em 27/10; I-02 foi resolvido com a atualização das instruções de execução; I-03 permanece aberto. |
 
 ## D. Métricas e planejamento
 
 | # | Critério | Quem verifica | Resultado | Evidência / registro da reunião |
 |---|---|---|---|---|
-| 16 | Métricas da sprint registradas (burndown e velocity) | SM | Sim | `metricas-e-impedimentos.md` apresenta burndown diário e velocity final de 64 SP (100% dos 64 SP comprometidos; 23/23 issues concluídas). |
+| 16 | Métricas da sprint registradas (burndown e velocity) | SM | Sim | [metricas-e-impedimentos.md](metricas-e-impedimentos.md) apresenta burndown diário e velocity final de 64 SP (100% dos 64 SP comprometidos; 23/23 issues concluídas). |
 | 17 | Backlog repriorizado pelo PO | PO | A verificar | A FT-53 consta como Done no estado final do Jira; a priorização registrada deverá ser considerada pelo PO na preparação da Sprint 2. |
 | 18 | Planilha de riscos atualizada | SM | Sim | O risco R02 (FT-61) foi reavaliado de 15 para 10 e registrado no Jira e na planilha, aba Riscos, linha 9, em 29/10/2026. |
 | 19 | Itens da próxima sprint com critérios de aceite e estimativa (DoR) | PO | A verificar | A velocity final foi de 64 SP, mas o compromisso da Sprint 2 deverá ser definido conforme a disponibilidade real da equipe e a prontidão dos itens, sem assumir repetição automática desse volume. A validação individual dos itens permanece com o PO. |

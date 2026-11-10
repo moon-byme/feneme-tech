@@ -9,6 +9,8 @@
 
 A Sprint Review teve como objetivo apresentar o incremento desenvolvido, verificar o progresso em relação ao Sprint Goal e discutir os próximos ajustes do Product Backlog. A demonstração foi acompanhada pelas evidências de testes e integração disponíveis no repositório.
 
+**Documentos relacionados:** [métricas e impedimentos](metricas-e-impedimentos.md), [retrospectiva da Sprint 1](ata-retrospectiva.md) e [conferência da DoD](dod-sprint-1.md).
+
 ## 1. Incremento apresentado
 
 **Versão demonstrada:** branch `main`, commit `7960995` (29/10/2026).  
