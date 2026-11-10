@@ -11,9 +11,9 @@
 
 - Existem oito arquivos Gherkin para fluxos de autenticação, entregas, trajetos, previsão, recomendação, status e histórico.
 - A branch principal já contém definições de etapas Cypress para autenticação, entregas e atribuição, incluindo `frontend/cypress/support/step_definitions/autenticacao.steps.ts`, `entregas.steps.ts` e `atribuicao.steps.ts`. Essas etapas foram incorporadas pela PR #15, já integrada à `main`.
-- O workflow `.github/workflows/ci.yml` executa tanto `npm run e2e:smoke` quanto `npm run e2e:r1`. A regressão `@R1` contém e executa 10 cenários da Sprint 1; portanto, o CI não está limitado aos dois cenários `@smoke` de autenticação.
+- O workflow `.github/workflows/ci.yml` executa `npm run e2e:smoke` e `npm run e2e:r1`. Após a PR #18, o smoke também seleciona CT-22 e CT-23 da US-10; a regressão `@R1` contém 10 cenários da Sprint 1.
 - O código da branch principal ainda não apresenta cliente/serviço/endpoint Open-Meteo nem recursos persistidos de alternativas de trajeto e recomendação. O modelo de entrega expõe apenas o status inicial PENDENTE; não há fluxo de atualização/histórico de status implementado nessa branch.
-- Há testes backend existentes para autenticação, cadastro, consulta, atribuição e isolamento de entregas. Eles não substituem a execução E2E de todos os critérios das histórias R2.
+- Há testes backend para autenticação, cadastro, consulta, atribuição e isolamento de entregas. A PR #18 acrescentou cenários Cypress/Cucumber para CT-22 e CT-23, exercitando a API com dois motoristas de teste. Isso não equivale a validar a interface visual do Motorista nem cobre todas as histórias R2.
 
 ## 2. FT-33 / FT-74 — Segurança de erros e logs (Q-06)
 
@@ -118,13 +118,26 @@ O workflow `.github/workflows/ci.yml` executa:
 - `npm run e2e:smoke`, para os cenários selecionados pela tag `@smoke`;
 - `npm run e2e:r1`, para a regressão da Sprint 1, selecionando 10 cenários marcados com `@R1`.
 
-Na execução registrada para esta PR, as etapas de smoke e de regressão `@R1` concluíram com sucesso. Isso comprova a execução da regressão R1, mas não significa que os cenários R2 estejam implementados ou aprovados.
+Na execução do CI da PR #18 (run `42736986570`), o job Cypress E2E smoke e o job de regressão `@R1` concluíram com sucesso. O log confirmou CT-22 e CT-23 aprovados (2/2) e 10 cenários `@R1` aprovados (10/10). Build do frontend e verificações/testes backend também concluíram com sucesso.
+
+### Execução e evidências da PR #18
+
+A PR [#18 — automatiza visibilidade das entregas do Motorista](https://github.com/moon-byme/feneme-tech/pull/18) foi aprovada e integrada à `main` em 09/11/2026 (horário local). O commit de merge é `9e23b4596cab31da9e454d8d6048a6b2ade2c6b4`.
+
+- [Workflow CI da PR #18 — run 42736986570](https://github.com/moon-byme/feneme-tech/actions/runs/42736986570)
+- [Artefato de evidências do Cypress](https://github.com/moon-byme/feneme-tech/actions/runs/42736986570/artifacts/13728016161)
+- CT-22: motorista consulta suas entregas e não recebe a entrega atribuída ao outro motorista — aprovado.
+- CT-23: acesso direto à entrega alheia retorna HTTP 404 e a resposta não contém origem, destino ou descrição — aprovado.
+- Regressão `@R1`: 10/10 cenários aprovados.
+- Build frontend, verificações Django e testes backend: jobs aprovados.
+
+**Limite da evidência:** CT-22/CT-23 foram verificados por requisições à API (`cy.request`), não por interação com a tela do Motorista. A revisão da PR recomendou registrar essa limitação e, quando a interface estiver estável, acrescentar validação visual. Também foi sugerida a criação futura de um comando `e2e:r2`, separando a suíte R2 do smoke; isso ainda não foi implementado nesta atualização.
 
 ### Pendências de execução
 
-- Criar definições de etapas para os cenários R2 somente depois que as interfaces e endpoints correspondentes estiverem disponíveis.
+- Criar definições de etapas para os demais cenários R2 somente depois que as interfaces e endpoints correspondentes estiverem disponíveis.
 - Executar os cenários de sucesso e exceção, anexando relatórios e screenshots quando houver falha.
-- Ampliar a regressão automatizada quando os fluxos R2 estiverem implementados e validados; não marcar cenários não executáveis ou não validados como smoke.
+- Criar, em alteração futura, um comando `e2e:r2` para executar a suíte R2 separadamente, quando houver conjunto suficiente de cenários executáveis; manter `@smoke` restrito ao caminho crítico.
 - Registrar um Bug por defeito reproduzível, com passos, esperado/observado, severidade, evidência e vínculo à US/PR.
 - Conferir a DoD de cada história candidata à conclusão. Status Done isolado não é evidência de teste nem aceite de QA.
 - Verificar a correção da branch `fix/corrigir-temperatura` quando ela estiver acessível e integrada; não presumir que a correção está presente na branch principal.
@@ -132,11 +145,11 @@ Na execução registrada para esta PR, as etapas de smoke e de regressão `@R1` 
 ### Evidências atuais
 
 - Os arquivos `.feature` existem e têm rastreabilidade por US/CT.
-- As etapas Cypress de autenticação, entregas e atribuição estão na `main`.
-- O CI executa smoke e regressão R1 (`@R1`, 10 cenários); ambas as etapas concluíram com sucesso na execução citada acima.
+- As etapas Cypress de autenticação, entregas e atribuição estão na `main`; a PR #18 adicionou os passos de API para CT-22/CT-23.
+- O CI executou smoke (incluindo CT-22/CT-23) e regressão R1 (10 cenários), todos aprovados no run 42736986570.
 - Nenhum Bug novo deve ser criado sem defeito confirmado.
 
-**Resultado:** regressão R1 implementada e executada no CI; execução funcional R2 permanece pendente da disponibilização das funcionalidades e dos contratos de integração.
+**Resultado:** regressão R1 (10/10) e CT-22/CT-23 (2/2) executados com sucesso no CI. A cobertura R2 continua parcial: os demais cenários dependem das funcionalidades correspondentes; CT-22/CT-23 ainda precisam de validação pela interface quando ela estiver estável.
 
 ## 6. Critérios de encerramento por issue
 
@@ -146,10 +159,10 @@ Na execução registrada para esta PR, as etapas de smoke e de regressão `@R1` 
 | FT-33 | Verificação de segurança das respostas e logs | Q-06 executado no CI: 20/20 aprovados, 0 exposições; evidência no [workflow da PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
 | FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
-| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | Regressão R1 (10 cenários) executada com sucesso; cenários funcionais R2 ainda dependem das funcionalidades correspondentes |
+| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 aprovados; CT-22/CT-23: 2/2 aprovados por API na PR #18; demais cenários R2 dependem das funcionalidades correspondentes; validação visual da US-10 pendente |
 
 ## 7. Próximas dependências
 
 1. Desenvolvedores: disponibilizar a integração Open-Meteo e as funcionalidades R2 ausentes.
 2. Equipe: disponibilizar ambiente funcional e cinco avaliadores para a medição Q-07.
-3. QA: completar etapas Cypress R2 quando houver funcionalidades e contratos, executar cenários, registrar bugs confirmados e atualizar resultados com evidências reais.
+3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; acrescentar validação visual de CT-22/CT-23 quando a tela estiver estável; avaliar a separação da suíte em `e2e:r2`.
