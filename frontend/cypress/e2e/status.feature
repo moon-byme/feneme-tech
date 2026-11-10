@@ -23,6 +23,23 @@ Funcionalidade: Consulta e atualização do status das entregas
     Então a interface mostra a entrega atribuída a mim
     E não mostra a entrega atribuída a outro Motorista
 
+  @US-10 @interface @excecao @smoke
+  Cenário: Motorista visualiza a mensagem de lista vazia
+    Dado que estou autenticado como Motorista
+    E a consulta de minhas entregas retorna uma lista vazia
+    Quando acesso a área do Motorista pela interface
+    Então a interface informa que não há entregas atribuídas
+
+  @US-10 @interface @regressao @smoke
+  Cenário: Motorista atualiza a lista após reatribuição de sua entrega
+    Dado que estou autenticado como Motorista
+    E possuo entregas atribuídas
+    Quando acesso a área do Motorista pela interface
+    Então a interface mostra a entrega atribuída a mim
+    Quando o Gestor reatribui minha entrega a outro Motorista
+    E atualizo a lista pela interface
+    Então a interface deixa de mostrar a entrega reatribuída
+
   @US-10 @CT-23 @excecao @regressao @smoke
   Cenário: Motorista tenta consultar entrega atribuída a outra pessoa
     Dado que estou autenticado como Motorista
