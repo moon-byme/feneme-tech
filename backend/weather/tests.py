@@ -160,24 +160,58 @@ class ForecastApiTests(APITestCase):
                     self.assertNotIn(leaked, body)
                     self.assertNotIn(leaked, log_text)
 
-    def test_failure_keeps_delivery_and_route_flows_available(self):
+    def test_ten_external_failure_scenarios_preserve_manual_flows(self):
+        """Q-13 / FT-32: 10 falhas simuladas não bloqueiam cadastro nem comparação manual."""
         self.login_as("gestor_ft47")
-        with mock.patch(URLOPEN, side_effect=socket.timeout("timed out")):
-            self.assertEqual(self.get_forecast().status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        failures = {
+            "timeout": socket.timeout("timed out"),
+            "conexao": URLError(ConnectionRefusedError("refused")),
+            "http_500": HTTPError("https://open-meteo.test/v1/forecast", 500, "Server Error", {}, None),
+            "http_503": HTTPError("https://open-meteo.test/v1/forecast", 503, "Unavailable", {}, None),
+            "http_429": HTTPError("https://open-meteo.test/v1/forecast", 429, "Too Many", {}, None),
+            "status_204": FakeResponse(b"", status_code=204),
+            "json_invalido": FakeResponse(b"<html>erro</html>"),
+            "sem_daily": FakeResponse({"error": True}),
+            "lista_vazia": FakeResponse({"daily": {"time": [], "temperature_2m_max": [], "temperature_2m_min": []}}),
+            "valor_nulo": FakeResponse(open_meteo_payload(max_value=None)),
+        }
 
-        created = self.client.post(
-            "/api/deliveries/",
-            {"origin": "Patos - PB", "destination": "Sousa - PB", "cargo_description": "Frutas"},
-            format="json",
+        passed = 0
+        for index, (name, outcome) in enumerate(failures.items(), start=1):
+            with self.subTest(scenario=name):
+                side_effect = outcome if isinstance(outcome, BaseException) else None
+                return_value = None if side_effect else outcome
+                with mock.patch(URLOPEN, side_effect=side_effect, return_value=return_value), \
+                        self.assertLogs("feneme.weather", level="WARNING"):
+                    response = self.get_forecast()
+
+                self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+                self.assertEqual(response.data, {"detail": UNAVAILABLE})
+
+                created = self.client.post(
+                    "/api/deliveries/",
+                    {
+                        "origin": f"Origem Q13 {index}",
+                        "destination": f"Destino Q13 {index}",
+                        "cargo_description": f"Carga Q13 {index}",
+                    },
+                    format="json",
+                )
+                self.assertEqual(created.status_code, status.HTTP_201_CREATED, created.data)
+                route = self.client.post(
+                    f"/api/deliveries/{created.data['id']}/route-alternatives/",
+                    {"distance_km": 64, "duration_minutes": 55},
+                    format="json",
+                )
+                self.assertEqual(route.status_code, status.HTTP_201_CREATED, route.data)
+                passed += 1
+
+        self.assertEqual(passed, 10)
+        self.assertEqual(Delivery.objects.count(), 10)
+        self.assertEqual(
+            sum(delivery.route_alternatives.count() for delivery in Delivery.objects.all()),
+            10,
         )
-        self.assertEqual(created.status_code, status.HTTP_201_CREATED)
-        route = self.client.post(
-            f"/api/deliveries/{created.data['id']}/route-alternatives/",
-            {"distance_km": 64, "duration_minutes": 55},
-            format="json",
-        )
-        self.assertEqual(route.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Delivery.objects.count(), 1)
 
     # Permissões
     def test_motorista_cannot_query_forecast_or_locations(self):
