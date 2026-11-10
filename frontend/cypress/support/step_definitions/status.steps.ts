@@ -1,4 +1,5 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { autenticarComoMotorista } from "../qa-helpers";
 
 const senhaE2E = (): string => {
   const password = Cypress.env("E2E_PASSWORD") as string | undefined;
@@ -92,6 +93,26 @@ When("acesso a lista de minhas entregas", () => {
       url: "/api/deliveries/",
       headers: { Authorization: `Bearer ${token}` },
     }).then(({ body }) => cy.wrap(body).as("qaDriverDeliveries"));
+  });
+});
+
+When("acesso a área do Motorista pela interface", () => {
+  autenticarComoMotorista();
+});
+
+Then("a interface mostra a entrega atribuída a mim", () => {
+  cy.get("@qaOwnDelivery").then((own: Delivery) => {
+    cy.contains("article.delivery-card", `ENTREGA #${own.id}`)
+      .should("be.visible")
+      .and("contain.text", own.origin)
+      .and("contain.text", own.destination)
+      .and("contain.text", own.cargo_description);
+  });
+});
+
+Then("não mostra a entrega atribuída a outro Motorista", () => {
+  cy.get("@qaOtherDelivery").then((other: Delivery) => {
+    cy.get("article.delivery-card").should("not.contain.text", other.origin);
   });
 });
 
