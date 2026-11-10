@@ -204,11 +204,15 @@ jobs:
         working-directory: frontend
         run: npm run e2e:smoke
 
+      - name: Run Sprint 1 regression (@R1)
+        working-directory: frontend
+        run: npm run e2e:r1
+
       - name: Upload Cucumber report and failure screenshots
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-smoke-report
+          name: e2e-regression-report
           path: |
             frontend/cypress/reports/
             frontend/cypress/screenshots/
