@@ -3,7 +3,8 @@ import type { FormEvent } from "react";
 import { api, ApiError } from "./api";
 import MotoristaHome from "./components/MotoristaHome";
 import RouteAlternatives from "./components/RouteAlternatives";
-import type { AuthUser, Delivery, DriverOption, UserRole } from "./types";
+import TemperatureForecast from "./components/TemperatureForecast";
+import type { AuthUser, Delivery, DriverOption, ReferenceLocation, UserRole } from "./types";
 
 type Session = { access: string; refresh: string; user: AuthUser };
 const SESSION_KEY = "feneme-session";
@@ -44,6 +45,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [drivers, setDrivers] = useState<DriverOption[]>([]);
+  const [locations, setLocations] = useState<ReferenceLocation[]>([]);
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [cargoDescription, setCargoDescription] = useState("");
@@ -90,12 +92,21 @@ function App() {
     }
   }, [handleApiError]);
 
+  const loadLocations = useCallback(async (token: string) => {
+    try {
+      setLocations(await api.listReferenceLocations(token));
+    } catch (e) {
+      handleApiError(e, "Erro ao consultar localidades de previsão.");
+    }
+  }, [handleApiError]);
+
   useEffect(() => {
     if (session?.user.role === "GESTOR") {
       void loadDeliveries(session.access);
       void loadDrivers(session.access);
+      void loadLocations(session.access);
     }
-  }, [session, loadDeliveries, loadDrivers]);
+  }, [session, loadDeliveries, loadDrivers, loadLocations]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -279,6 +290,12 @@ function App() {
                     token={session.access}
                     disabled={loading}
                     onSaved={() => loadDeliveries(session.access)}
+                    onSessionExpired={() => logout(SESSION_EXPIRED)}
+                  />
+                  <TemperatureForecast
+                    deliveryId={delivery.id}
+                    token={session.access}
+                    locations={locations}
                     onSessionExpired={() => logout(SESSION_EXPIRED)}
                   />
                   <div className="assignment">
