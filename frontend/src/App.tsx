@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { api, ApiError } from "./api";
 import MotoristaHome from "./components/MotoristaHome";
+import RouteAlternatives from "./components/RouteAlternatives";
 import type { AuthUser, Delivery, DriverOption, UserRole } from "./types";
 
 type Session = { access: string; refresh: string; user: AuthUser };
@@ -273,6 +274,13 @@ function App() {
                     <div><span className="route-dot destination-dot" /><div><small>DESTINO</small><strong>{delivery.destination}</strong></div></div>
                   </div>
                   <div className="cargo"><small>CARGA</small><p>{delivery.cargo_description}</p></div>
+                  <RouteAlternatives
+                    delivery={delivery}
+                    token={session.access}
+                    disabled={loading}
+                    onSaved={() => loadDeliveries(session.access)}
+                    onSessionExpired={() => logout(SESSION_EXPIRED)}
+                  />
                   <div className="assignment">
                     {delivery.assigned_driver_username ? (
                       <p className="assigned-label">Motorista: <strong>{delivery.assigned_driver_username}</strong></p>
