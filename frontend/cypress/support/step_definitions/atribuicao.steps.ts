@@ -5,14 +5,18 @@ import {
   senhaE2E,
 } from "../qa-helpers";
 
+// O card da entrega também tem o select de localidade da previsão (FT-47);
+// por isso o select de Motorista é localizado pelo id "driver-<id>".
+const SELECT_MOTORISTA = "select[id^=driver-]";
+
 Given("existe uma entrega cadastrada", () => {
   preencherEntregaUnica();
   salvarEntregaPelaInterface();
 });
 
 Given("existe um usuário válido com perfil Motorista", () => {
-  cy.get("select").should("have.length.greaterThan", 0);
-  cy.get("select").first().find("option").should(($options) => {
+  cy.get(SELECT_MOTORISTA).should("have.length.greaterThan", 0);
+  cy.get(SELECT_MOTORISTA).first().find("option").should(($options) => {
     expect([...$options].some((option) => option.textContent?.includes("motorista_e2e"))).to.eq(true);
   });
 });
@@ -21,10 +25,10 @@ When("associo o Motorista à entrega", () => {
   cy.intercept("POST", "**/assign-driver/").as("assignDriver");
   cy.get("@qaOrigin").then((origin) => {
     cy.contains("article.delivery-card", String(origin)).within(() => {
-      cy.get("select").find("option").then(($options) => {
+      cy.get(SELECT_MOTORISTA).find("option").then(($options) => {
         const option = [...$options].find((item) => item.textContent?.includes("motorista_e2e"));
         expect(option, "opção do Motorista de teste").to.exist;
-        cy.get("select").select((option as HTMLOptionElement).value);
+        cy.get(SELECT_MOTORISTA).select((option as HTMLOptionElement).value);
       });
       cy.contains("button", "Atribuir").click();
     });
