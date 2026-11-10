@@ -174,3 +174,7 @@ Then("o sistema informa que faltam alternativas", () => {
 Then("não apresenta uma comparação fictícia", () => {
   cartaoDaEntrega().find("[data-cy=route-comparison-panel]").should("not.exist");
 });
+
+Given("que a entrega não possui alternativas cadastradas", () => {
+  cartaoDaEntrega().find("[data-cy=route-alternatives-count]").should("have.text", "0/2");
+});
