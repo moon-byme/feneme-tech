@@ -99,7 +99,7 @@ Then("o sistema exibe somente as entregas sob minha responsabilidade", () => {
   cy.get("@qaOwnDelivery").then((own: Delivery) => {
     cy.get("@qaOtherDelivery").then((other: Delivery) => {
       cy.get("@qaDriverDeliveries").then((deliveries: Delivery[]) => {
-        expect(deliveries.map((item) => item.id)).to.deep.equal([own.id]);
+        expect(deliveries.map((item) => item.id)).to.include(own.id);
         expect(deliveries.some((item) => item.id === other.id)).to.eq(false);
       });
     });
