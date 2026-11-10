@@ -181,7 +181,7 @@ class ForecastApiTests(APITestCase):
             with self.subTest(scenario=name):
                 side_effect = outcome if isinstance(outcome, BaseException) else None
                 return_value = None if side_effect else outcome
-                with mock.patch(URLOPEN, side_effect=side_effect, return_value=return_value), \\
+                with mock.patch(URLOPEN, side_effect=side_effect, return_value=return_value), \
                         self.assertLogs("feneme.weather", level="WARNING"):
                     response = self.get_forecast()
 
