@@ -1,5 +1,5 @@
 // US-06 (FT-46) — Cadastro de alternativas de trajeto (CT-18 e CT-07).
-// Os cenários da US-07 (comparação, FT-56) ainda não têm etapas implementadas.
+// US-07 (FT-56) — Comparação de duas alternativas (CT-06 e CT-19).
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 function cartaoDaEntrega(): Cypress.Chainable<JQuery<HTMLElement>> {
@@ -127,4 +127,50 @@ Then("o sistema rejeita o registro", () => {
 
 Then("identifica o valor que deve ser corrigido", () => {
   cartaoDaEntrega().find("[data-cy=route-error]").should("contain.text", "distância");
+});
+
+
+// Cenário US-07: comparar duas alternativas cadastradas
+Given("que a entrega possui duas alternativas cadastradas", () => {
+  cadastrarAlternativaPelaInterface("125,5", "110");
+  cadastrarAlternativaPelaInterface("140", "95");
+  cartaoDaEntrega().find("[data-cy=route-alternatives-count]").should("have.text", "2/2");
+});
+
+When("solicito a comparação", () => {
+  cartaoDaEntrega().find("[data-cy=route-compare-button]").click();
+});
+
+Then("o sistema exibe as duas alternativas lado a lado", () => {
+  cartaoDaEntrega().find("[data-cy=route-comparison-panel]").should("be.visible");
+  cartaoDaEntrega().find("[data-cy=route-comparison-item]").should("have.length", 2);
+});
+
+Then("apresenta a distância e o tempo informados para cada uma", () => {
+  cartaoDaEntrega().find("[data-cy=route-comparison-item]").eq(0)
+    .should("contain.text", "125,5 km")
+    .and("contain.text", "1 h 50 min");
+  cartaoDaEntrega().find("[data-cy=route-comparison-item]").eq(1)
+    .should("contain.text", "140 km")
+    .and("contain.text", "1 h 35 min");
+});
+
+// Cenário US-07: não comparar quando há menos de duas alternativas
+Given("que a entrega possui menos de duas alternativas cadastradas", () => {
+  cadastrarAlternativaPelaInterface("125,5", "110");
+  cartaoDaEntrega().find("[data-cy=route-alternatives-count]").should("have.text", "1/2");
+});
+
+When("solicito a comparação de dois trajetos", () => {
+  cartaoDaEntrega().find("[data-cy=route-compare-button]").click();
+});
+
+Then("o sistema informa que faltam alternativas", () => {
+  cartaoDaEntrega().find("[data-cy=route-comparison-message]")
+    .should("be.visible")
+    .and("contain.text", "Cadastre duas alternativas para comparar");
+});
+
+Then("não apresenta uma comparação fictícia", () => {
+  cartaoDaEntrega().find("[data-cy=route-comparison-panel]").should("not.exist");
 });
