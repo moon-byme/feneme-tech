@@ -11,5 +11,6 @@ urlpatterns = [
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/drivers/", DriverListView.as_view(), name="driver-list"),
     path("api/", include("deliveries.urls")),
+    path("api/", include("weather.urls")),
     path("", TemplateView.as_view(template_name="index.html"), name="frontend"),
 ]
