@@ -1,4 +1,4 @@
-# FENEME — Ata retrospectiva da Sprint 0 e preparação da Sprint 1
+# FENEME — Avaliação retrospectiva do planejamento da Sprint 0
 
 **Projeto:** Feneme — Gestão Inteligente de Transporte de Alimentos  
 **Release:** 1  
@@ -15,23 +15,23 @@
 
 ## 1. Objetivo
 
-Registrar a avaliação do planejamento realizado na Sprint 0, especialmente os pontos que precisaram de revisão após o feedback da professora, e a preparação documental e a divisão de tarefas para a Sprint 1.
+Registrar a avaliação das pendências do planejamento realizado na Sprint 0, especialmente os pontos que precisaram de revisão após o feedback da professora.
+
+Este documento e a [ata de preparação da Sprint 1](../sprint-1/ata-planejamento-retrospectiva-sprint-1.md) correspondem à **mesma reunião de 19/10/2026, das 20h30 às 21h, no Google Meet**, com os três integrantes. São recortes complementares do encontro, sem registro de uma cerimônia independente de Sprint Retrospective.
 
 ## 2. Contextualização da Sprint 0
 
 A Sprint 0 foi dedicada à definição inicial do sistema, à estruturação do projeto, à organização das próximas sprints e ao repositório de trabalho. **Não houve implementação de funcionalidades nessa sprint**, conforme o relato da equipe.
 
-Em **09/10/2026**, foi realizada a atividade de criação do projeto e definição inicial da ideia. Em **16/10/2026**, houve uma reunião por chat voltada principalmente ao planejamento das próximas sprints, à proposta do programa e à organização do repositório.
+Em **09/10/2026**, foi realizada a atividade de [criação do projeto e definição inicial da ideia](ata-criacao-projeto-09-10-2026.md). Em **16/10/2026**, houve uma reunião por chat voltada principalmente ao planejamento das próximas sprints, à proposta do programa e à organização do repositório.
 
 ## 3. Pauta da reunião de 19/10
 
-1. Revisão dos pontos da proposta inicial que não foram aprovados pela professora.
+1. Revisão das pendências da proposta inicial apontadas pela professora.
 2. Discussão sobre o excesso de perfis de acesso e a necessidade de reduzir o escopo.
-3. Revisão e definição dos requisitos funcionais do sistema.
-4. Preenchimento e organização do Plano de Qualidade.
-5. Preenchimento e definição da *Definition of Done* (DoD).
-6. Elaboração e organização do Plano de Testes.
-7. Distribuição de tarefas de documentação e preparação da Sprint 1.
+3. Revisão dos requisitos e das pendências de documentação para as próximas atividades.
+
+O trabalho no Plano de Qualidade, na DoD e no Plano de Testes e a distribuição de tarefas estão descritos na ata de preparação da Sprint 1, referenciada acima.
 
 ## 4. Avaliação retrospectiva do planejamento da Sprint 0
 
@@ -43,15 +43,7 @@ Esses pontos correspondem à revisão do planejamento relatada para a reunião d
 
 ## 5. Preparação da Sprint 1
 
-Na mesma reunião, os três integrantes trabalharam nos documentos de planejamento e dividiram as tarefas da equipe. Foram contemplados:
-
-- **Requisitos funcionais:** revisão do escopo do sistema após as observações da professora;
-- **Plano de Qualidade:** preenchimento dos indicadores e critérios previstos;
-- **Definition of Done:** definição dos critérios para verificar a conclusão de atividades e entregas;
-- **Plano de Testes:** organização das verificações funcionais previstas;
-- **Distribuição de tarefas:** divisão das atividades entre os integrantes.
-
-O **Sprint Goal** posteriormente registrado no Jira para a Sprint 1 foi implementar o fluxo básico de gestão de entregas com autenticação de Gestor e Motorista, cadastro, consulta e atribuição de entregas. Esse texto é uma **referência posterior do Jira**, não uma citação literal de decisão tomada durante a reunião de 19/10.
+A preparação documental e a divisão de tarefas da mesma reunião estão registradas na [ata de preparação da Sprint 1](../sprint-1/ata-planejamento-retrospectiva-sprint-1.md). Este registro concentra-se na avaliação das pendências da Sprint 0.
 
 ## 6. Encaminhamentos e acompanhamento
 
@@ -71,6 +63,6 @@ O **Sprint Goal** posteriormente registrado no Jira para a Sprint 1 foi implemen
 
 ## 8. Nota metodológica
 
-Esta ata foi **elaborada retrospectivamente em 10/11/2026**, a partir das informações relatadas sobre a reunião de 19/10/2026 e das referências de planejamento do projeto. Ela organiza, em um só documento, a **avaliação do que precisava ser ajustado na Sprint 0** e a **preparação da Sprint 1**.
+Esta ata foi **elaborada retrospectivamente em 10/11/2026**, a partir das informações relatadas sobre a reunião de 19/10/2026 e das referências de planejamento do projeto. Seu foco é a **avaliação do que precisava ser ajustado na Sprint 0**; a preparação da Sprint 1 consta no registro complementar da mesma reunião.
 
 **Situação:** Registro retrospectivo sujeito à conferência dos três participantes.

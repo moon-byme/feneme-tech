@@ -1,4 +1,4 @@
-# FENEME — Ata Retrospectiva da Reunião de Planejamento da Sprint 1
+# FENEME — Registro retrospectivo da reunião de preparação da Sprint 1
 
 **Projeto:** Feneme — Gestão Inteligente de Transporte de Alimentos  
 **Release:** 1  
@@ -11,6 +11,10 @@
 - José Araújo Agra Neto — Product Owner (PO) e DevOps
 - João Paulo de Araujo — Scrum Master (SM)
 - Lethycia Zenaide Queiroz Melo — Quality Assurance (QA)
+
+**Data de elaboração desta ata:** 10/11/2026 — registro retrospectivo
+
+Esta ata e a [avaliação retrospectiva do planejamento da Sprint 0](../sprint-0/ata-retrospectiva-19-10-2026.md) descrevem a **mesma reunião de 19/10/2026**. O registro da Sprint 0 trata das pendências do planejamento inicial; este trata da preparação das atividades, da documentação e da divisão de tarefas. Não se afirma a realização de uma cerimônia independente de Sprint Retrospective, nem que o encontro de 19/10 tenha sido a Planning formal da sprint iniciada em 21/10.
 
 ## 1. Objetivo da reunião
 
@@ -36,6 +40,8 @@ Também foi trabalhado o Plano de Testes, com o propósito de organizar as verif
 
 As tarefas foram distribuídas entre os três integrantes, considerando as atividades necessárias ao andamento do projeto.
 
+O **Sprint Goal** posteriormente registrado no Jira para a Sprint 1 foi implementar o fluxo básico de gestão de entregas com autenticação de Gestor e Motorista, cadastro, consulta e atribuição de entregas. Esse texto é uma **referência posterior do Jira**, não uma citação literal de decisão tomada durante a reunião de 19/10.
+
 ## 4. Documentos relacionados
 
 Os principais documentos associados às atividades da reunião são:
@@ -47,10 +53,16 @@ Os principais documentos associados às atividades da reunião são:
 | Plano de Testes | FT-10 |
 | Requisitos funcionais | Histórias de Usuário do Product Backlog |
 
+A [planilha de Definition of Done](../../Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx) está preservada no repositório. A [conferência da DoD da Sprint 1](dod-sprint-1.md) registra a avaliação de encerramento de 29/10; esses registros posteriores não comprovam o estado da planilha na reunião de 19/10.
+
 ## 5. Encaminhamentos
 
 A partir das atividades realizadas, a equipe deu continuidade à organização dos requisitos, à documentação do projeto e às tarefas distribuídas.
 
 Os documentos desenvolvidos serviriam como referência para a implementação, os testes e o acompanhamento das funcionalidades nas sprints seguintes.
+
+## 6. Nota sobre a elaboração
+
+Este documento foi **elaborado retrospectivamente em 10/11/2026**, com base nas informações relatadas sobre a reunião de 19/10. A atribuição detalhada de tarefas por integrante e eventuais aprovações dos documentos não estão confirmadas neste registro.
 
 **Situação:** Registro retrospectivo, sujeito à conferência da equipe.

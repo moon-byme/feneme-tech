@@ -4,9 +4,12 @@
 **Release:** 1  
 **Sprint:** 0  
 **Data da reunião:** 09/10/2026  
-**Horário:** 20h às 21h
-**Modalidade:**  Chat
-**Participantes:** 
+**Horário:** pendente de confirmação; a versão anterior indicava 20h às 21h, sem confirmação disponível.
+
+**Modalidade:** pendente de confirmação; a versão anterior indicava chat, sem confirmação disponível.
+
+**Participantes:** presença em 09/10 pendente de confirmação. A versão anterior relacionava os integrantes abaixo, cujos papéis na Release 1 não comprovam a participação nessa reunião:
+
 - José Araújo Agra Neto — Product Owner (PO) / DevOps na Release 1;
 - João Paulo de Araujo — Scrum Master (SM) na Release 1;
 - Lethycia Zenaide Queiroz Melo — Quality Assurance (QA) na Release 1.
@@ -44,5 +47,9 @@ Essa etapa teve caráter de **concepção e planejamento**. Não corresponde à 
 ## 6. Observação sobre a elaboração
 
 Esta ata foi **elaborada retrospectivamente em 10/11/2026**, com base nas informações relatadas sobre 09/10/2026.
+
+Estão confirmadas a data, a criação do projeto e a definição inicial da ideia. Horário, modalidade e presença de cada integrante precisam ser conferidos pela equipe. A reunião por chat confirmada em 16/10 não comprova a modalidade de 09/10.
+
+O planejamento inicial foi posteriormente avaliado na [reunião de 19/10/2026](ata-retrospectiva-19-10-2026.md).
 
 **Situação:** Registro histórico sujeito à conferência dos integrantes.
