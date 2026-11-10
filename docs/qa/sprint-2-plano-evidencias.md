@@ -208,6 +208,7 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 | FT-47 | US-08: previsão e tratamento de indisponibilidade | Implementação integrada pela PR #23; E2E `@US-08` 2/2 na PR #24; chamada externa real bem-sucedida ainda precisa de evidência |
 | FT-56 | US-07: comparação de alternativas | PR #25 integrada; CT-06/CT-19 e CI aprovados; aguarda verificação técnica independente e aceite final do PO |
 | FT-81 | Q-13: continuidade dos fluxos manuais | 10/10 falhas simuladas; 10 entregas e 10 alternativas persistidas; Resultado R2 registrado na planilha, pendente de conferência da equipe |
+| FT-58 | US-10: consulta de entregas do Motorista | PRs #22 e #27 integradas; API e interface cobertas, incluindo lista vazia e reatribuição; revisão pós-integração e aceite formal do PO ainda pendentes |
 | FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 e CT-22/CT-23 por API: 2/2 na PR #18; consulta visual integrada pela PR #22; complementos da PR #27 com smoke 7/7 e R1 10/10 aprovados, ainda aguardando integração. Cobertura R2 e aceite das histórias permanecem parciais. |
 
 ## 7. Próximas dependências
