@@ -60,7 +60,9 @@ Ao final da discussão, foram estabelecidas as seguintes ações para a Sprint 2
 
 ## 5. Acompanhamento da retrospectiva anterior
 
-Não foi localizada uma ata da retrospectiva da Sprint 0 no repositório ou no Jira. Por esse motivo, a equipe não encontrou ações anteriores formalmente registradas para acompanhar.
+No encerramento da Sprint 1, não havia sido localizada uma ata da retrospectiva da Sprint 0 no repositório ou no Jira. Por esse motivo, a equipe não encontrou ações anteriores formalmente registradas para acompanhar.
+
+**Nota documental — 10/11/2026:** a [avaliação retrospectiva do planejamento da Sprint 0](../sprint-0/ata-retrospectiva-19-10-2026.md) e a [ata de preparação da Sprint 1](ata-planejamento-retrospectiva-sprint-1.md) foram elaboradas posteriormente e descrevem a mesma reunião de 19/10. Esses registros não comprovam acompanhamento de ações no encerramento da Sprint 1, nem uma cerimônia independente de Sprint Retrospective da Sprint 0.
 
 Ficou definido que o acompanhamento das sete ações desta retrospectiva será realizado no início da retrospectiva da Sprint 2. O Scrum Master ficará responsável por atualizar o status de cada ação e reunir as evidências correspondentes.
 
