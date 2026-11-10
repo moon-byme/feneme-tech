@@ -1,4 +1,11 @@
-import type { Delivery, DriverOption, LoginResponse, RouteAlternative } from "./types";
+import type {
+  DailyForecast,
+  Delivery,
+  DriverOption,
+  LoginResponse,
+  ReferenceLocation,
+  RouteAlternative,
+} from "./types";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -66,6 +73,12 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ driver_id: driverId }),
     });
+  },
+  listReferenceLocations(token: string) {
+    return request<ReferenceLocation[]>("/weather/locations/", token);
+  },
+  getForecast(token: string, location: string) {
+    return request<DailyForecast>(`/weather/forecast/?location=${encodeURIComponent(location)}`, token);
   },
   createRouteAlternative(
     token: string,

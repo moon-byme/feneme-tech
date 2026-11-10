@@ -38,3 +38,18 @@ export interface Delivery {
   created_at: string;
   updated_at: string;
 }
+
+export interface ReferenceLocation {
+  slug: string;
+  name: string;
+}
+
+export interface DailyForecast {
+  location: ReferenceLocation;
+  date: string;
+  temperature_max: number;
+  temperature_min: number;
+  unit: string;
+  source: string;
+  notice: string;
+}
