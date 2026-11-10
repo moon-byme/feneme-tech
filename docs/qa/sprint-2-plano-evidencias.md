@@ -7,13 +7,15 @@
 
 > Este documento separa implementação de testes, execução comprovada e atividades que dependem de pessoas ou funcionalidades ainda não disponíveis. Os resultados abaixo são atualizados com base nas execuções efetivamente concluídas no CI.
 
-## 1. Estado do repositório na auditoria
+> **Atualização de referências — 10/11/2026:** a cobertura da US-10 foi complementada pelo PR #22, já integrado, e pelo PR #27, ainda aberto e com CI aprovado. As evidências estão na seção 5. Os diagnósticos de funcionalidades ausentes na auditoria inicial e os resultados históricos dos demais drivers foram preservados; sua situação atual exige conferência específica.
+
+## 1. Estado do repositório na auditoria inicial
 
 - Existem oito arquivos Gherkin para fluxos de autenticação, entregas, trajetos, previsão, recomendação, status e histórico.
 - A branch principal já contém definições de etapas Cypress para autenticação, entregas e atribuição, incluindo `frontend/cypress/support/step_definitions/autenticacao.steps.ts`, `entregas.steps.ts` e `atribuicao.steps.ts`. Essas etapas foram incorporadas pela PR #15, já integrada à `main`.
 - O workflow `.github/workflows/ci.yml` executa `npm run e2e:smoke` e `npm run e2e:r1`. Após a PR #18, o smoke também seleciona CT-22 e CT-23 da US-10; a regressão `@R1` contém 10 cenários da Sprint 1.
-- O código da branch principal ainda não apresenta cliente/serviço/endpoint Open-Meteo nem recursos persistidos de alternativas de trajeto e recomendação. O modelo de entrega expõe apenas o status inicial PENDENTE; não há fluxo de atualização/histórico de status implementado nessa branch.
-- Há testes backend para autenticação, cadastro, consulta, atribuição e isolamento de entregas. A PR #18 acrescentou cenários Cypress/Cucumber para CT-22 e CT-23, exercitando a API com dois motoristas de teste. Isso não equivale a validar a interface visual do Motorista nem cobre todas as histórias R2.
+- Na auditoria inicial, o código da branch principal ainda não apresentava cliente/serviço/endpoint Open-Meteo nem recursos persistidos de alternativas de trajeto e recomendação. O modelo de entrega expunha apenas o status inicial PENDENTE; não havia fluxo de atualização/histórico de status implementado na versão auditada.
+- Foram identificados testes backend para autenticação, cadastro, consulta, atribuição e isolamento de entregas. A PR #18 acrescentou cenários Cypress/Cucumber para CT-22 e CT-23, exercitando a API com dois motoristas de teste. Essa execução não validava a interface visual do Motorista nem cobria todas as histórias R2; a complementação visual posterior está registrada na seção 5.
 
 ## 2. FT-33 / FT-74 — Segurança de erros e logs (Q-06)
 
@@ -133,6 +135,20 @@ A PR [#18 — automatiza visibilidade das entregas do Motorista](https://github.
 
 **Limite da evidência:** CT-22/CT-23 foram verificados por requisições à API (`cy.request`), não por interação com a tela do Motorista. A revisão da PR recomendou registrar essa limitação e, quando a interface estiver estável, acrescentar validação visual. Também foi sugerida a criação futura de um comando `e2e:r2`, separando a suíte R2 do smoke; isso ainda não foi implementado nesta atualização.
 
+### Complementação visual da US-10 — PRs #22 e #27
+
+O [PR #22 — valida consulta de entregas na interface do Motorista](https://github.com/moon-byme/feneme-tech/pull/22) foi integrado à `main` em **10/11/2026**, pelo commit `b1e48947332b6c4865c084651a35f739459b8688`. Seu cenário realiza login pela interface, verifica identificação, origem, destino e carga da entrega própria e confirma que a entrega do outro Motorista não aparece na lista.
+
+- [CI do PR #22 — run 42838232088](https://github.com/moon-byme/feneme-tech/actions/runs/42838232088): workflow concluído com sucesso; smoke **5/5**, incluindo três cenários da US-10, e regressão R1 **10/10**.
+- O acesso direto à entrega alheia continua verificado pelo CT-23 de API; a cobertura visual complementa essa evidência, sem substituí-la.
+
+O [PR #27 — consulta de entregas revisada](https://github.com/moon-byme/feneme-tech/pull/27) acrescenta os cenários visuais de lista vazia e atualização após reatribuição, além da conferência explícita do status. **Na consulta de 10/11/2026, o PR permanecia aberto, sem merge.**
+
+- [CI do PR #27 — run 42857524540](https://github.com/moon-byme/feneme-tech/actions/runs/42857524540), head `64c4506562e8cacac0de464bb7a8b1afcbbabc97`: quatro jobs aprovados; os logs confirmam smoke **7/7**, sendo dois cenários de autenticação e cinco da US-10, e regressão R1 **10/10**.
+- O cenário visual de lista vazia intercepta uma resposta `200 []`. A resposta real da API sem atribuições possui cobertura em `backend/deliveries/test_ft58.py`.
+- O cenário de reatribuição usa a API real como Gestor e verifica a remoção do cartão ao clicar em **Atualizar** na sessão do Motorista. Não comprova atualização automática de uma tela já aberta.
+- A CI aprovada do PR #27 não significa que seus testes já estejam integrados à `main`, nem substitui revisão humana ou aceite formal do PO da FT-58.
+
 ### Pendências de execução
 
 - Criar definições de etapas para os demais cenários R2 somente depois que as interfaces e endpoints correspondentes estiverem disponíveis.
@@ -140,6 +156,7 @@ A PR [#18 — automatiza visibilidade das entregas do Motorista](https://github.
 - Criar, em alteração futura, um comando `e2e:r2` para executar a suíte R2 separadamente, quando houver conjunto suficiente de cenários executáveis; manter `@smoke` restrito ao caminho crítico.
 - Registrar um Bug por defeito reproduzível, com passos, esperado/observado, severidade, evidência e vínculo à US/PR.
 - Conferir a DoD de cada história candidata à conclusão. Status Done isolado não é evidência de teste nem aceite de QA.
+- Acompanhar a revisão e a integração do PR #27; preservar a distinção entre cobertura já integrada pelo PR #22 e complementos ainda em análise.
 - Verificar a correção da branch `fix/corrigir-temperatura` quando ela estiver acessível e integrada; não presumir que a correção está presente na branch principal.
 
 ### Evidências atuais
@@ -147,9 +164,11 @@ A PR [#18 — automatiza visibilidade das entregas do Motorista](https://github.
 - Os arquivos `.feature` existem e têm rastreabilidade por US/CT.
 - As etapas Cypress de autenticação, entregas e atribuição estão na `main`; a PR #18 adicionou os passos de API para CT-22/CT-23.
 - O CI executou smoke (incluindo CT-22/CT-23) e regressão R1 (10 cenários), todos aprovados no run 42736986570.
+- A validação visual de consulta própria foi integrada pelo PR #22, com CI aprovado no run 42838232088.
+- Os complementos de lista vazia, reatribuição e status passaram no CI do PR #27 (run 42857524540); sua integração continua pendente.
 - Nenhum Bug novo deve ser criado sem defeito confirmado.
 
-**Resultado:** regressão R1 (10/10) e CT-22/CT-23 (2/2) executados com sucesso no CI. A cobertura R2 continua parcial: os demais cenários dependem das funcionalidades correspondentes; CT-22/CT-23 ainda precisam de validação pela interface quando ela estiver estável.
+**Resultado:** preservam-se os resultados históricos de regressão R1 (10/10) e CT-22/CT-23 por API (2/2) da PR #18. A consulta própria também possui validação visual integrada pelo PR #22. A PR #27 apresenta smoke 7/7 e regressão R1 10/10 aprovados, mas ainda aguarda integração. A cobertura R2 continua parcial; esses resultados não comprovam a execução de todas as histórias nem o aceite formal da FT-58.
 
 ## 6. Critérios de encerramento por issue
 
@@ -159,10 +178,10 @@ A PR [#18 — automatiza visibilidade das entregas do Motorista](https://github.
 | FT-33 | Verificação de segurança das respostas e logs | Q-06 executado no CI: 20/20 aprovados, 0 exposições; evidência no [workflow da PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
 | FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
-| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 aprovados; CT-22/CT-23: 2/2 aprovados por API na PR #18; demais cenários R2 dependem das funcionalidades correspondentes; validação visual da US-10 pendente |
+| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 e CT-22/CT-23 por API: 2/2 na PR #18; consulta visual integrada pela PR #22; complementos da PR #27 com smoke 7/7 e R1 10/10 aprovados, ainda aguardando integração. Cobertura R2 e aceite das histórias permanecem parciais. |
 
 ## 7. Próximas dependências
 
 1. Desenvolvedores: disponibilizar a integração Open-Meteo e as funcionalidades R2 ausentes.
 2. Equipe: disponibilizar ambiente funcional e cinco avaliadores para a medição Q-07.
-3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; acrescentar validação visual de CT-22/CT-23 quando a tela estiver estável; avaliar a separação da suíte em `e2e:r2`.
+3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; acompanhar a revisão e integração do PR #27 e manter a cobertura visual da US-10; avaliar a separação da suíte em `e2e:r2`.
