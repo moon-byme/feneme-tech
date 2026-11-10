@@ -7,7 +7,7 @@ Funcionalidade: Consulta e atualização do status das entregas
   Quero consultar e atualizar o status das entregas conforme minhas permissões
   Para acompanhar o andamento do transporte
 
-  @US-10 @CT-22 @regressao
+  @US-10 @CT-22 @regressao @smoke
   Cenário: Motorista consulta suas próprias entregas
     Dado que estou autenticado como Motorista
     E possuo entregas atribuídas
@@ -15,7 +15,7 @@ Funcionalidade: Consulta e atualização do status das entregas
     Então o sistema exibe somente as entregas sob minha responsabilidade
     E apresenta as informações essenciais de cada uma
 
-  @US-10 @CT-23 @excecao @regressao
+  @US-10 @CT-23 @excecao @regressao @smoke
   Cenário: Motorista tenta consultar entrega atribuída a outra pessoa
     Dado que estou autenticado como Motorista
     E existe uma entrega atribuída a outro Motorista
