@@ -14,6 +14,7 @@ type Delivery = {
   origin: string;
   destination: string;
   cargo_description: string;
+  status: string;
 };
 
 type Driver = {
@@ -102,11 +103,61 @@ When("acesso a área do Motorista pela interface", () => {
 
 Then("a interface mostra a entrega atribuída a mim", () => {
   cy.get("@qaOwnDelivery").then((own: Delivery) => {
-    cy.contains("article.delivery-card", `ENTREGA #${own.id}`)
+    cy.contains(".delivery-id", new RegExp(`^ENTREGA #${own.id}$`))
+      .closest("article.delivery-card")
       .should("be.visible")
       .and("contain.text", own.origin)
       .and("contain.text", own.destination)
-      .and("contain.text", own.cargo_description);
+      .and("contain.text", own.cargo_description)
+      .find(".status-chip")
+      .should("have.text", own.status === "PENDENTE" ? "Pendente" : own.status);
+  });
+});
+
+Given("a consulta de minhas entregas retorna uma lista vazia", () => {
+  // Verificação do estado visual; a resposta real [] já é coberta no Django.
+  cy.intercept("GET", "**/api/deliveries/", { statusCode: 200, body: [] })
+    .as("qaEmptyDeliveries");
+});
+
+Then("a interface informa que não há entregas atribuídas", () => {
+  cy.wait("@qaEmptyDeliveries").its("response.body").should("deep.eq", []);
+  cy.contains("strong", "Nenhuma entrega atribuída").should("be.visible");
+  cy.get("article.delivery-card").should("not.exist");
+  cy.get(".count-badge").should("have.text", "0");
+});
+
+When("o Gestor reatribui minha entrega a outro Motorista", () => {
+  cy.get("@qaManagerToken").then((managerToken) => {
+    cy.request({
+      method: "GET",
+      url: "/api/drivers/",
+      headers: { Authorization: `Bearer ${managerToken}` },
+    }).then(({ body: drivers }: { body: Driver[] }) => {
+      const other = drivers.find((driver) => driver.username === "motorista_outro_e2e");
+      expect(other, "segundo Motorista fictício").to.exist;
+      cy.get("@qaOwnDelivery").then((own: Delivery) => {
+        cy.request({
+          method: "POST",
+          url: `/api/deliveries/${own.id}/assign-driver/`,
+          headers: { Authorization: `Bearer ${managerToken}` },
+          body: { driver_id: (other as Driver).id },
+        }).its("body.assigned_driver").should("eq", (other as Driver).id);
+      });
+    });
+  });
+});
+
+When("atualizo a lista pela interface", () => {
+  cy.intercept("GET", "**/api/deliveries/").as("qaRefreshedDeliveries");
+  cy.contains("button", "Atualizar").should("be.enabled").click();
+  cy.wait("@qaRefreshedDeliveries").its("response.statusCode").should("eq", 200);
+});
+
+Then("a interface deixa de mostrar a entrega reatribuída", () => {
+  cy.get("@qaOwnDelivery").then((own: Delivery) => {
+    cy.contains(".delivery-id", new RegExp(`^ENTREGA #${own.id}$`)).should("not.exist");
+    cy.get("main").should("not.contain.text", own.origin);
   });
 });
 
@@ -135,6 +186,7 @@ Then("apresenta as informações essenciais de cada uma", () => {
       expect(delivery?.origin).to.eq(own.origin);
       expect(delivery?.destination).to.eq(own.destination);
       expect(delivery?.cargo_description).to.eq(own.cargo_description);
+      expect(delivery?.status).to.eq(own.status);
     });
   });
 });
