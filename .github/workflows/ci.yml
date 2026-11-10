@@ -204,6 +204,10 @@ jobs:
         working-directory: frontend
         run: npm run e2e:smoke
 
+      - name: Run route comparison scenarios (@US-07)
+        working-directory: frontend
+        run: npm run e2e:routes
+
       - name: Run Sprint 1 regression (@R1)
         working-directory: frontend
         run: npm run e2e:r1

@@ -31,9 +31,23 @@ function RouteAlternatives({ delivery, token, disabled, onSaved, onSessionExpire
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [showComparison, setShowComparison] = useState(false);
+  const [comparisonMessage, setComparisonMessage] = useState("");
 
   const alternatives = delivery.route_alternatives ?? [];
   const limitReached = alternatives.length >= MAX_ROUTE_ALTERNATIVES;
+
+  function handleCompare() {
+    setComparisonMessage("");
+    if (alternatives.length < MAX_ROUTE_ALTERNATIVES) {
+      setShowComparison(false);
+      setComparisonMessage(
+        `Cadastre duas alternativas para comparar. Atualmente há ${alternatives.length} de ${MAX_ROUTE_ALTERNATIVES}.`,
+      );
+      return;
+    }
+    setShowComparison((current) => !current);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,6 +62,8 @@ function RouteAlternatives({ delivery, token, disabled, onSaved, onSessionExpire
       });
       setDistance("");
       setDuration("");
+      setShowComparison(false);
+      setComparisonMessage("");
       setNotice("Alternativa de trajeto salva.");
       await onSaved();
     } catch (e) {
@@ -82,6 +98,35 @@ function RouteAlternatives({ delivery, token, disabled, onSaved, onSessionExpire
             </li>
           ))}
         </ol>
+      )}
+
+      <div className="route-comparison-actions">
+        <button
+          type="button"
+          className="button-secondary"
+          data-cy="route-compare-button"
+          onClick={handleCompare}
+        >
+          {showComparison ? "Ocultar comparação" : "Comparar alternativas"}
+        </button>
+      </div>
+
+      {comparisonMessage && (
+        <p className="message route-comparison-message" role="status" data-cy="route-comparison-message">
+          {comparisonMessage}
+        </p>
+      )}
+
+      {showComparison && alternatives.length === MAX_ROUTE_ALTERNATIVES && (
+        <section className="route-comparison" data-cy="route-comparison-panel" aria-label="Comparação de alternativas de trajeto">
+          {alternatives.map((alternative, index) => (
+            <article className="route-comparison-card" data-cy="route-comparison-item" key={alternative.id}>
+              <strong>Alternativa {index + 1}</strong>
+              <span><small>Distância</small>{formatDistance(alternative.distance_km)}</span>
+              <span><small>Duração</small>{formatDuration(alternative.duration_minutes)}</span>
+            </article>
+          ))}
+        </section>
       )}
 
       {limitReached ? (
