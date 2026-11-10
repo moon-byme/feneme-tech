@@ -11,6 +11,7 @@
     "e2e:smoke": "cypress run --env tags=@smoke",
     "e2e:open": "cypress open",
     "e2e:r1": "cypress run --env tags=\"@R1\"",
+    "e2e:weather": "cypress run --env tags=\"@US-08\"",
     "e2e:routes": "cypress run --env tags=\"@US-07\""
   },
   "dependencies": {
