@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from accounts.models import UserProfile
 
-E2E_USERS = (("gestor_e2e", "GESTOR"), ("motorista_e2e", "MOTORISTA"))
+E2E_USERS = (("gestor_e2e", "GESTOR"), ("motorista_e2e", "MOTORISTA"), ("motorista_outro_e2e", "MOTORISTA"))
 
 
 class Command(BaseCommand):
