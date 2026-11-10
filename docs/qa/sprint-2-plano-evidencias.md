@@ -5,13 +5,13 @@
 **Responsável QA:** José Araújo Agra Neto  
 **Issues:** FT-32, FT-33, FT-74, FT-75 e FT-88
 
-> Este documento separa implementação de testes, execução comprovada e atividades que dependem de pessoas ou funcionalidades ainda não disponíveis. Não registrar como aprovado nenhum cenário que não tenha sido executado.
+> Este documento separa implementação de testes, execução comprovada e atividades que dependem de pessoas ou funcionalidades ainda não disponíveis. Os resultados abaixo são atualizados com base nas execuções efetivamente concluídas no CI.
 
 ## 1. Estado do repositório na auditoria
 
 - Existem oito arquivos Gherkin para fluxos de autenticação, entregas, trajetos, previsão, recomendação, status e histórico.
-- A única definição de etapas Cypress encontrada na branch principal é `frontend/cypress/support/step_definitions/autenticacao.steps.ts`.
-- O workflow `.github/workflows/ci.yml` executa `npm run e2e:smoke`, filtrando `@smoke`. No arquivo de autenticação, as tags `@smoke` estão nos dois logins válidos da R1. Portanto, CI verde nesse job não comprova execução dos cenários R2.
+- A branch principal já contém definições de etapas Cypress para autenticação, entregas e atribuição, incluindo `frontend/cypress/support/step_definitions/autenticacao.steps.ts`, `entregas.steps.ts` e `atribuicao.steps.ts`. Essas etapas foram incorporadas pela PR #15, já integrada à `main`.
+- O workflow `.github/workflows/ci.yml` executa tanto `npm run e2e:smoke` quanto `npm run e2e:r1`. A regressão `@R1` contém e executa 10 cenários da Sprint 1; portanto, o CI não está limitado aos dois cenários `@smoke` de autenticação.
 - O código da branch principal ainda não apresenta cliente/serviço/endpoint Open-Meteo nem recursos persistidos de alternativas de trajeto e recomendação. O modelo de entrega expõe apenas o status inicial PENDENTE; não há fluxo de atualização/histórico de status implementado nessa branch.
 - Há testes backend existentes para autenticação, cadastro, consulta, atribuição e isolamento de entregas. Eles não substituem a execução E2E de todos os critérios das histórias R2.
 
@@ -29,7 +29,15 @@ Cada caso verifica:
 - ausência de senha e marcadores fictícios sensíveis na resposta;
 - ausência desses mesmos valores nos logs capturados durante a requisição.
 
-### Como executar
+### Execução e evidência no CI
+
+**Resultado confirmado:** 20/20 cenários Q-06 aprovados, com **0 exposições** de senha ou marcadores sensíveis nas respostas e nos logs, e sem traceback nas respostas/logs verificados. A suíte completa do backend executou 123 testes com resultado `OK`.
+
+A execução ocorreu no CI da PR #17, commit `a40004bd92ffab404705b3d3fdf2b50d26338460`. Todos os jobs do workflow terminaram com sucesso.
+
+**Evidência:** [GitHub Actions — CI da PR #17 (run 42732366544)](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544)
+
+### Como executar localmente
 
 Na pasta `backend`:
 
@@ -37,9 +45,7 @@ Na pasta `backend`:
 python manage.py test accounts.test_q06_tratamento_erros -v 2
 ```
 
-**Resultado:** pendente de execução no ambiente com dependências e PostgreSQL configurados. O número de testes escritos (20) não deve ser confundido com 20 testes aprovados. Após executar, registrar o resultado real do runner e o link do workflow/artefato.
-
-**Limitação da medição:** a instrumentação cobre os endpoints e fluxos que existem atualmente na branch principal. Ela não comprova o tratamento de exceções de serviços ainda inexistentes, incluindo Open-Meteo.
+**Limitação da medição:** a instrumentação cobre os endpoints e fluxos existentes e exercitados. Ela não comprova o tratamento de exceções de serviços ainda inexistentes, incluindo Open-Meteo.
 
 ## 3. FT-32 — Resiliência à indisponibilidade da Open-Meteo
 
@@ -91,7 +97,7 @@ Essa métrica exige participantes humanos. Não é válido substituir os cinco a
 
 **Cálculo:** avaliadores com sucesso / 5. A meta é ≥ 4/5 (80%).
 
-**Resultado:** não medido — depende de cinco participantes e da versão funcional do formulário de cadastro. O responsável descrito no texto da FT-75 é Lethycia, embora a atribuição atual do Jira esteja em José; confirmar a responsabilidade com o PO antes do encerramento.
+**Resultado:** não medido — depende de cinco participantes e da versão funcional do formulário de cadastro. **Responsabilidade pela medição Q-07: confirmada pelo PO**; a divergência anterior entre o texto da issue e a atribuição no Jira não é mais uma pendência de confirmação.
 
 ## 5. FT-88 — Execução e rastreabilidade de QA na Sprint 2
 
@@ -104,13 +110,21 @@ Os cenários R2 existentes estão em:
 - `frontend/cypress/e2e/status.feature`
 - `frontend/cypress/e2e/historico.feature`
 
-Também há cenários R1 em `autenticacao.feature` e `entregas.feature`, além de atribuição.
+Os cenários R1 estão em `autenticacao.feature` e `entregas.feature`, além dos cenários de atribuição. A PR #15 já foi integrada à `main` e adicionou as etapas Cypress de entregas e atribuição, complementando as etapas de autenticação.
+
+### Execução no CI
+
+O workflow `.github/workflows/ci.yml` executa:
+- `npm run e2e:smoke`, para os cenários selecionados pela tag `@smoke`;
+- `npm run e2e:r1`, para a regressão da Sprint 1, selecionando 10 cenários marcados com `@R1`.
+
+Na execução registrada para esta PR, as etapas de smoke e de regressão `@R1` concluíram com sucesso. Isso comprova a execução da regressão R1, mas não significa que os cenários R2 estejam implementados ou aprovados.
 
 ### Pendências de execução
 
 - Criar definições de etapas para os cenários R2 somente depois que as interfaces e endpoints correspondentes estiverem disponíveis.
 - Executar os cenários de sucesso e exceção, anexando relatórios e screenshots quando houver falha.
-- Definir com DevOps o conjunto smoke. O pipeline atual seleciona apenas `@smoke`; não marcar cenários não executáveis ou não validados como smoke.
+- Ampliar a regressão automatizada quando os fluxos R2 estiverem implementados e validados; não marcar cenários não executáveis ou não validados como smoke.
 - Registrar um Bug por defeito reproduzível, com passos, esperado/observado, severidade, evidência e vínculo à US/PR.
 - Conferir a DoD de cada história candidata à conclusão. Status Done isolado não é evidência de teste nem aceite de QA.
 - Verificar a correção da branch `fix/corrigir-temperatura` quando ela estiver acessível e integrada; não presumir que a correção está presente na branch principal.
@@ -118,27 +132,24 @@ Também há cenários R1 em `autenticacao.feature` e `entregas.feature`, além d
 ### Evidências atuais
 
 - Os arquivos `.feature` existem e têm rastreabilidade por US/CT.
-- A implementação Cypress de etapas observada na branch principal cobre apenas autenticação.
-- O workflow smoke existente comprova apenas os cenários que de fato carregam `@smoke` e são selecionados pelo comando. Não comprova os cenários R2 ainda sem etapas.
+- As etapas Cypress de autenticação, entregas e atribuição estão na `main`.
+- O CI executa smoke e regressão R1 (`@R1`, 10 cenários); ambas as etapas concluíram com sucesso na execução citada acima.
 - Nenhum Bug novo deve ser criado sem defeito confirmado.
 
-**Resultado:** parcialmente preparado; execução funcional R2 pendente da disponibilização das funcionalidades e dos contratos de integração.
+**Resultado:** regressão R1 implementada e executada no CI; execução funcional R2 permanece pendente da disponibilização das funcionalidades e dos contratos de integração.
 
 ## 6. Critérios de encerramento por issue
 
 | Issue | Entrega de QA | Situação honesta |
 |---|---|---|
 | FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Bloqueado: integração não localizada |
-| FT-33 | Verificação de segurança das respostas e logs | Instrumentação adicionada via FT-74; aguarda execução |
-| FT-74 | Q-06: 0 exposição em 20 cenários | 20 testes escritos; resultado ainda não medido |
-| FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda avaliadores humanos |
-| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | Parcial; cenários R2 ainda não executáveis na branch auditada |
+| FT-33 | Verificação de segurança das respostas e logs | Q-06 executado no CI: 20/20 aprovados, 0 exposições; evidência no [workflow da PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) |
+| FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
+| FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
+| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | Regressão R1 (10 cenários) executada com sucesso; cenários funcionais R2 ainda dependem das funcionalidades correspondentes |
 
 ## 7. Próximas dependências
 
 1. Desenvolvedores: disponibilizar a integração Open-Meteo e as funcionalidades R2 ausentes.
-2. DevOps: executar a suíte Q-06 no CI e publicar artefatos; alinhar a seleção smoke com QA.
-3. PO: confirmar o responsável final pela FT-75 e aprovar os critérios de usabilidade.
-4. Equipe: disponibilizar ambiente funcional e cinco avaliadores para a medição Q-07.
-5. QA: completar etapas Cypress, executar cenários, registrar bugs confirmados e atualizar resultados com evidências reais.
-
+2. Equipe: disponibilizar ambiente funcional e cinco avaliadores para a medição Q-07.
+3. QA: completar etapas Cypress R2 quando houver funcionalidades e contratos, executar cenários, registrar bugs confirmados e atualizar resultados com evidências reais.
