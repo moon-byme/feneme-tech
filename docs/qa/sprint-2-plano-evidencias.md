@@ -3,19 +3,20 @@
 **Projeto:** Feneme — Release 2  
 **Sprint:** FT Sprint 2 (03/11/2026 a 12/11/2026)  
 **Responsável QA:** José Araújo Agra Neto  
-**Issues:** FT-32, FT-33, FT-74, FT-75 e FT-88
+**Issues:** FT-32, FT-33, FT-47, FT-56, FT-74, FT-75, FT-81 e FT-88
 
 > Este documento separa implementação de testes, execução comprovada e atividades que dependem de pessoas ou funcionalidades ainda não disponíveis. Os resultados abaixo são atualizados com base nas execuções efetivamente concluídas no CI.
 
-> **Atualização de referências — 10/11/2026:** a cobertura da US-10 foi complementada pelo PR #22, já integrado, e pelo PR #27, ainda aberto e com CI aprovado. As evidências estão na seção 5. Os diagnósticos de funcionalidades ausentes na auditoria inicial e os resultados históricos dos demais drivers foram preservados; sua situação atual exige conferência específica.
+> **Atualização de referências — 10/11/2026:** as PRs #25 e #27 foram integradas à `main`. Este documento registra os resultados Q-13/US-08, a comparação de trajetos da US-07 e a cobertura ampliada da consulta do Motorista, distinguindo evidências automatizadas de validações humanas pendentes.
 
-## 1. Estado do repositório na auditoria inicial
+## 1. Estado atual do repositório
 
-- Existem oito arquivos Gherkin para fluxos de autenticação, entregas, trajetos, previsão, recomendação, status e histórico.
-- A branch principal já contém definições de etapas Cypress para autenticação, entregas e atribuição, incluindo `frontend/cypress/support/step_definitions/autenticacao.steps.ts`, `entregas.steps.ts` e `atribuicao.steps.ts`. Essas etapas foram incorporadas pela PR #15, já integrada à `main`.
-- O workflow `.github/workflows/ci.yml` executa `npm run e2e:smoke` e `npm run e2e:r1`. Após a PR #18, o smoke também seleciona CT-22 e CT-23 da US-10; a regressão `@R1` contém 10 cenários da Sprint 1.
-- Na auditoria inicial, o código da branch principal ainda não apresentava cliente/serviço/endpoint Open-Meteo nem recursos persistidos de alternativas de trajeto e recomendação. O modelo de entrega expunha apenas o status inicial PENDENTE; não havia fluxo de atualização/histórico de status implementado na versão auditada.
-- Foram identificados testes backend para autenticação, cadastro, consulta, atribuição e isolamento de entregas. A PR #18 acrescentou cenários Cypress/Cucumber para CT-22 e CT-23, exercitando a API com dois motoristas de teste. Essa execução não validava a interface visual do Motorista nem cobria todas as histórias R2; a complementação visual posterior está registrada na seção 5.
+- A branch principal contém o cadastro manual de até duas alternativas de trajeto (US-06 / FT-46), integrado pela PR #20, a integração Open-Meteo (US-08 / FT-47), integrada pela PR #23, e a medição Q-13, integrada pela PR #24.
+- A PR #25 da FT-56 foi integrada à `main` em 10/11/2026 (merge commit `862507f83fab4917dd862bf7a03fce65df3cb649`). A comparação explícita apresenta duas alternativas lado a lado e informa quando há zero ou uma alternativa.
+- O workflow executa `npm run e2e:smoke`, `npm run e2e:routes`, `npm run e2e:r1` e `npm run e2e:weather`. Na execução da `main` após a PR #25, os cenários `@US-07`, `@US-08`, `@R1` e smoke passaram.
+- O arquivo `trajetos.feature` também contém cenários `@US-06` com etapas implementadas, mas eles não são selecionados por nenhum script do CI atual: `e2e:routes` seleciona somente `@US-07`, enquanto os demais scripts selecionam `@smoke`, `@R1` e `@US-08`. A lacuna está registrada nas FT-46 e FT-89 como ação de DevOps.
+- A PR #22 integrou a validação visual da consulta de entregas do Motorista. A PR #27 também foi integrada à `main` em 10/11/2026 (merge commit `c76f97e9ab9a04e59aeaa4c9b4e94c48ab79c7f9`), acrescentando cobertura visual de lista vazia, atualização após reatribuição e conferência do status.
+- Permanecem pendentes as funcionalidades de recomendação (US-09), atualização de status/histórico persistente (US-11/US-13) e acompanhamento do Gestor (US-12), conforme os respectivos itens do backlog.
 
 ## 2. FT-33 / FT-74 — Segurança de erros e logs (Q-06)
 
@@ -47,29 +48,50 @@ Na pasta `backend`:
 python manage.py test accounts.test_q06_tratamento_erros -v 2
 ```
 
-**Limitação da medição:** a instrumentação cobre os endpoints e fluxos existentes e exercitados. Ela não comprova o tratamento de exceções de serviços ainda inexistentes, incluindo Open-Meteo.
+**Limitação da medição:** a instrumentação Q-06 cobre os endpoints e fluxos exercitados na época da PR #17. O tratamento de falhas da Open-Meteo é coberto separadamente pela medição Q-13, integrada pela PR #24.
 
 ## 3. FT-32 — Resiliência à indisponibilidade da Open-Meteo
 
 **Critério do driver:** 10 de 10 falhas simuladas (timeout, HTTP 5xx e previsão ausente) devem preservar cadastro e comparação manuais, exibir indisponibilidade e não confirmar recomendação climática sem dados.
 
-**Bloqueio encontrado:** não foi localizado cliente Open-Meteo, serviço meteorológico ou endpoint de previsão na branch principal. Sem a implementação e seu contrato, não é possível escrever testes de integração válidos sem inventar interfaces ou produzir testes que passam sem testar o sistema real.
+**Resultado da medição:** 10/10 cenários comprovaram a continuidade dos fluxos manuais e o aviso de indisponibilidade. A parte de recomendação climática não foi medida: depende da US-09 (FT-57), ainda não implementada, e será verificada na Sprint 3. Essa separação também está registrada no risco R06 (FT-65).
 
-**Ação necessária da equipe de desenvolvimento:** disponibilizar o cliente/serviço e o ponto de integração de previsão, mantendo a dependência externa isolada e injetável/mockável. Quando disponível, QA deverá simular pelo menos:
+### Implementação e medição
+
+A integração Open-Meteo está na `main` pela PR #23:
+- `GET /api/weather/locations/` lista as localidades de referência.
+- `GET /api/weather/forecast/?location=<slug>` consulta a previsão diária de temperatura ambiente.
+- O cliente trata timeout, falha de conexão/DNS, HTTP diferente de 200, JSON inválido, previsão ausente e valores inconsistentes.
+- A API retorna uma mensagem genérica de indisponibilidade; a integração externa é simulada nos testes.
+
+A PR [#24 — comprova dez falhas sem bloquear fluxos manuais](https://github.com/moon-byme/feneme-tech/pull/24) foi aprovada e integrada à `main` em 10/11/2026. Merge commit: `024f13492689b450a281278663d44a673d576d6b`.
+
+O teste `test_ten_external_failure_scenarios_preserve_manual_flows`, em `backend/weather/tests.py`, executa dez cenários:
 1. timeout;
-2. HTTP 500;
-3. HTTP 502;
+2. conexão recusada;
+3. HTTP 500;
 4. HTTP 503;
-5. resposta sem corpo;
-6. JSON inválido;
-7. campo de temperatura ausente;
-8. lista de previsões vazia;
-9. latência acima do limite;
-10. erro de conexão/DNS.
+5. HTTP 429;
+6. HTTP 204;
+7. JSON inválido;
+8. estrutura sem previsão diária;
+9. listas vazias;
+10. temperatura nula.
 
-Para cada caso, verificar que o cadastro e a comparação manuais continuam acessíveis, que a interface informa indisponibilidade e que nenhuma recomendação climática é marcada como confirmada.
+Em cada cenário, verifica HTTP 503 com mensagem genérica, cadastra uma entrega e registra uma alternativa manual. Ao final, confirma **10 entregas e 10 alternativas persistidas**.
 
-**Resultado:** não medido — bloqueado por ausência da integração no código auditado.
+### Execução e evidência no CI
+
+**Resultado confirmado:** 10/10 cenários de falha com continuidade dos fluxos manuais. No workflow da PR #24:
+- backend: 142 testes aprovados;
+- frontend: build aprovado;
+- regressão `@R1`: 10/10;
+- cenários `@US-08`: 2/2;
+- job E2E smoke: aprovado.
+
+**Evidência:** [GitHub Actions — PR #24 (run 42844947365)](https://github.com/moon-byme/feneme-tech/actions/runs/42844947365).
+
+**Limitação:** os cenários usam mocks. Comprovam o tratamento das falhas simuladas e a continuidade do cadastro/alternativas manuais; não medem disponibilidade real do provedor nem comprovam uma chamada externa real bem-sucedida. O risco residual de indisponibilidade do provedor deve continuar registrado e ser reavaliado pela equipe.
 
 ## 4. FT-75 — Facilidade de cadastro (Q-07)
 
@@ -142,12 +164,21 @@ O [PR #22 — valida consulta de entregas na interface do Motorista](https://git
 - [CI do PR #22 — run 42838232088](https://github.com/moon-byme/feneme-tech/actions/runs/42838232088): workflow concluído com sucesso; smoke **5/5**, incluindo três cenários da US-10, e regressão R1 **10/10**.
 - O acesso direto à entrega alheia continua verificado pelo CT-23 de API; a cobertura visual complementa essa evidência, sem substituí-la.
 
-O [PR #27 — consulta de entregas revisada](https://github.com/moon-byme/feneme-tech/pull/27) acrescenta os cenários visuais de lista vazia e atualização após reatribuição, além da conferência explícita do status. **Na consulta de 10/11/2026, o PR permanecia aberto, sem merge.**
+O [PR #27 — consulta de entregas revisada](https://github.com/moon-byme/feneme-tech/pull/27) acrescenta os cenários visuais de lista vazia e atualização após reatribuição, além da conferência explícita do status. **A PR #27 foi aprovada e integrada à `main` em 10/11/2026**, pelo merge commit `c76f97e9ab9a04e59aeaa4c9b4e94c48ab79c7f9`.
 
 - [CI do PR #27 — run 42857524540](https://github.com/moon-byme/feneme-tech/actions/runs/42857524540), head `64c4506562e8cacac0de464bb7a8b1afcbbabc97`: quatro jobs aprovados; os logs confirmam smoke **7/7**, sendo dois cenários de autenticação e cinco da US-10, e regressão R1 **10/10**.
 - O cenário visual de lista vazia intercepta uma resposta `200 []`. A resposta real da API sem atribuições possui cobertura em `backend/deliveries/test_ft58.py`.
 - O cenário de reatribuição usa a API real como Gestor e verifica a remoção do cartão ao clicar em **Atualizar** na sessão do Motorista. Não comprova atualização automática de uma tela já aberta.
-- A CI aprovada do PR #27 não significa que seus testes já estejam integrados à `main`, nem substitui revisão humana ou aceite formal do PO da FT-58.
+- A CI e a revisão da PR #27 foram concluídas e os testes estão integrados à `main`; isso não substitui o aceite formal do PO da FT-58.
+
+### US-07 / FT-56 — comparação de alternativas
+
+A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/feneme-tech/pull/25) foi aprovada pelo PO e integrada à `main` em 10/11/2026 (merge commit `862507f83fab4917dd862bf7a03fce65df3cb649`). A implementação apresenta os dois valores cadastrados lado a lado quando existem duas alternativas e informa quando há zero ou uma, sem exibir comparação fictícia.
+
+- Os cenários Cypress CT-06 e CT-19 cobrem duas, uma e zero alternativas.
+- O CI após integração aprovou smoke, `@US-07` (3/3), regressão `@R1` (10/10) e `@US-08` (2/2), além dos jobs backend e frontend.
+- Evidência: [GitHub Actions — main após PR #25 (run 42848223672)](https://github.com/moon-byme/feneme-tech/actions/runs/42848223672).
+- A DoD da FT-56 ainda exige registro de verificação técnica independente por integrante diferente do autor/QA e aceite final do PO, conforme decisão registrada no Jira.
 
 ### Pendências de execução
 
@@ -156,7 +187,7 @@ O [PR #27 — consulta de entregas revisada](https://github.com/moon-byme/feneme
 - Criar, em alteração futura, um comando `e2e:r2` para executar a suíte R2 separadamente, quando houver conjunto suficiente de cenários executáveis; manter `@smoke` restrito ao caminho crítico.
 - Registrar um Bug por defeito reproduzível, com passos, esperado/observado, severidade, evidência e vínculo à US/PR.
 - Conferir a DoD de cada história candidata à conclusão. Status Done isolado não é evidência de teste nem aceite de QA.
-- Acompanhar a revisão e a integração do PR #27; preservar a distinção entre cobertura já integrada pelo PR #22 e complementos ainda em análise.
+- Preservar a distinção entre a cobertura visual integrada pelas PRs #22 e #27 e o aceite formal ainda pendente da FT-58.
 - Verificar a correção da branch `fix/corrigir-temperatura` quando ela estiver acessível e integrada; não presumir que a correção está presente na branch principal.
 
 ### Evidências atuais
@@ -165,23 +196,27 @@ O [PR #27 — consulta de entregas revisada](https://github.com/moon-byme/feneme
 - As etapas Cypress de autenticação, entregas e atribuição estão na `main`; a PR #18 adicionou os passos de API para CT-22/CT-23.
 - O CI executou smoke (incluindo CT-22/CT-23) e regressão R1 (10 cenários), todos aprovados no run 42736986570.
 - A validação visual de consulta própria foi integrada pelo PR #22, com CI aprovado no run 42838232088.
-- Os complementos de lista vazia, reatribuição e status passaram no CI do PR #27 (run 42857524540); sua integração continua pendente.
+- Os complementos de lista vazia, reatribuição e status passaram no CI do PR #27 (run 42857524540); sua integração foi concluída pelo commit `c76f97e`.
 - Nenhum Bug novo deve ser criado sem defeito confirmado.
 
-**Resultado:** preservam-se os resultados históricos de regressão R1 (10/10) e CT-22/CT-23 por API (2/2) da PR #18. A consulta própria também possui validação visual integrada pelo PR #22. A PR #27 apresenta smoke 7/7 e regressão R1 10/10 aprovados, mas ainda aguarda integração. A cobertura R2 continua parcial; esses resultados não comprovam a execução de todas as histórias nem o aceite formal da FT-58.
+**Resultado:** preservam-se os resultados históricos de regressão R1 (10/10) e CT-22/CT-23 por API (2/2) da PR #18. A consulta própria também possui validação visual integrada pelo PR #22. A PR #27 foi integrada após smoke 7/7 e regressão R1 10/10 aprovados. A cobertura R2 continua parcial; esses resultados não comprovam a execução de todas as histórias nem o aceite formal da FT-58.
 
 ## 6. Critérios de encerramento por issue
 
 | Issue | Entrega de QA | Situação honesta |
 |---|---|---|
-| FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Bloqueado: integração não localizada |
+| FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Q-13 aprovada 10/10 para continuidade dos fluxos manuais e aviso de indisponibilidade; recomendação climática depende da US-09 (FT-57), prevista para Sprint 3; risco residual do provedor externo permanece |
 | FT-33 | Verificação de segurança das respostas e logs | Q-06 executado no CI: 20/20 aprovados, 0 exposições; evidência no [workflow da PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
 | FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
-| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 e CT-22/CT-23 por API: 2/2 na PR #18; consulta visual integrada pela PR #22; complementos da PR #27 com smoke 7/7 e R1 10/10 aprovados, ainda aguardando integração. Cobertura R2 e aceite das histórias permanecem parciais. |
+| FT-47 | US-08: previsão e tratamento de indisponibilidade | PR #23 integrada; E2E `@US-08` 2/2; demonstração real registrada na FT-47 em 10/11/2026 (João Pessoa: máx. 30,3 °C / mín. 25,0 °C, conferida com o JSON da Open-Meteo); aceite do PO registrado em 10/11/2026 |
+| FT-56 | US-07: comparação de alternativas | PR #25 integrada; CT-06/CT-19 e CI aprovados; aguarda verificação técnica independente e aceite final do PO |
+| FT-81 | Q-13: continuidade dos fluxos manuais | 10/10 falhas simuladas; 10 entregas e 10 alternativas persistidas; Resultado R2 registrado na planilha, pendente de conferência da equipe |
+| FT-58 | US-10: consulta de entregas do Motorista | PRs #22 e #27 integradas; API e interface cobertas, incluindo lista vazia e reatribuição; revisão pós-integração e aceite formal do PO ainda pendentes |
+| FT-88 | Cenários, smoke, bugs, indicadores e DoD de R2 | R1: 10/10 e CT-22/CT-23 por API: 2/2 na PR #18; consulta visual integrada pela PR #22; complementos da PR #27 integrados (`c76f97e`), com smoke 7/7 e R1 10/10 aprovados. Cobertura R2 e aceite das histórias permanecem parciais. |
 
 ## 7. Próximas dependências
 
-1. Desenvolvedores: disponibilizar a integração Open-Meteo e as funcionalidades R2 ausentes.
+1. Equipe: manter o risco residual de indisponibilidade real da Open-Meteo registrado; a Q-13 mede falhas simuladas, não disponibilidade externa.
 2. Equipe: disponibilizar ambiente funcional e cinco avaliadores para a medição Q-07.
-3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; acompanhar a revisão e integração do PR #27 e manter a cobertura visual da US-10; avaliar a separação da suíte em `e2e:r2`.
+3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; manter a cobertura visual da US-10 e avaliar a separação da suíte em `e2e:r2`.
