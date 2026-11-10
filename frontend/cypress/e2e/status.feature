@@ -15,6 +15,14 @@ Funcionalidade: Consulta e atualização do status das entregas
     Então o sistema exibe somente as entregas sob minha responsabilidade
     E apresenta as informações essenciais de cada uma
 
+  @US-10 @CT-22 @interface @smoke
+  Cenário: Motorista visualiza suas entregas pela interface
+    Dado que estou autenticado como Motorista
+    E possuo entregas atribuídas
+    Quando acesso a área do Motorista pela interface
+    Então a interface mostra a entrega atribuída a mim
+    E não mostra a entrega atribuída a outro Motorista
+
   @US-10 @CT-23 @excecao @regressao @smoke
   Cenário: Motorista tenta consultar entrega atribuída a outra pessoa
     Dado que estou autenticado como Motorista
