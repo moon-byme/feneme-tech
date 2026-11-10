@@ -112,7 +112,7 @@ function RouteAlternatives({ delivery, token, disabled, onSaved, onSessionExpire
       </div>
 
       {comparisonMessage && (
-        <p className="message error" role="status" data-cy="route-comparison-message">
+        <p className="message route-comparison-message" role="status" data-cy="route-comparison-message">
           {comparisonMessage}
         </p>
       )}
