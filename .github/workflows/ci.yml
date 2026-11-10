@@ -212,6 +212,10 @@ jobs:
         working-directory: frontend
         run: npm run e2e:r1
 
+      - name: Run Open-Meteo scenarios (@US-08)
+        working-directory: frontend
+        run: npm run e2e:weather
+
       - name: Upload Cucumber report and failure screenshots
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
