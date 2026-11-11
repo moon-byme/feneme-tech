@@ -123,7 +123,18 @@ Essa métrica exige participantes humanos. Não é válido substituir os cinco a
 
 **Cálculo:** avaliadores com sucesso / 5. A meta é ≥ 4/5 (80%).
 
-**Resultado:** não medido — depende de cinco participantes e da versão funcional do formulário de cadastro. **Responsabilidade pela medição Q-07: confirmada pelo PO**; a divergência anterior entre o texto da issue e a atribuição no Jira não é mais uma pendência de confirmação.
+**Resultado da medição (11/11/2026): 5/5 participantes (100%) atingiram o critério**, conforme confirmação do responsável pela avaliação: todos concluíram corretamente o cadastro, sem ajuda e em até 3 minutos. A meta original (≥ 4/5, ou 80%) foi superada.
+
+| Resultado agregado | Valor |
+|---|---:|
+| Participantes avaliados | 5 |
+| Conclusões corretas, sem ajuda e ≤ 3 min | 5/5 (100%) |
+| Meta | ≥ 4/5 (80%) |
+| Resultado | Atingida |
+
+**Rastreabilidade:** resultado informado pelo QA após a execução presencial/remota do roteiro com cinco pessoas reais, não envolvidas no desenvolvimento, usando a mesma versão funcional do formulário. Os tempos individuais e observações por participante não foram fornecidos no registro consolidado; não são inventados neste documento. Se a equipe tiver a folha individual de coleta, deve anexá-la à issue para complementar a trilha de auditoria.
+
+**Responsabilidade pela medição Q-07:** confirmada pelo PO. A métrica atingiu a meta; a conclusão formal da issue ainda depende da conferência das evidências e do aceite conforme a DoD.
 
 ## 5. FT-88 — Execução e rastreabilidade de QA na Sprint 2
 
@@ -210,7 +221,7 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 | FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Q-13 aprovada 10/10 para continuidade dos fluxos manuais e aviso de indisponibilidade; recomendação climática depende da US-09 (FT-57), prevista para Sprint 3; risco residual do provedor externo permanece |
 | FT-33 | Verificação de segurança das respostas e logs | Q-06: 20/20 aprovados e 0 exposições; cobertura complementar de 18 categorias de falha Open-Meteo verifica resposta genérica e ausência de detalhes externos nos logs/respostas. Evidências: [CI PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) e [CI PR #24](https://github.com/moon-byme/feneme-tech/actions/runs/42844947365). Mantém-se a ressalva de que US-09/FT-57 ainda não foi implementada. |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
-| FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
+| FT-75 | Q-07: ≥ 4/5 em até 3 min | Meta atingida: 5/5 (100%) concluíram corretamente, sem ajuda e em até 3 min, conforme resultado consolidado informado pelo QA em 11/11/2026. Tempos/observações individuais não foram fornecidos no registro consolidado; anexar a folha individual, se disponível, e obter conferência/aceite formal antes de encerrar a issue. |
 | FT-47 | US-08: previsão e tratamento de indisponibilidade | PR #23 integrada; E2E `@US-08` 2/2; demonstração real registrada na FT-47 em 10/11/2026 (João Pessoa: máx. 30,3 °C / mín. 25,0 °C, conferida com o JSON da Open-Meteo); aceite do PO registrado em 10/11/2026 |
 | FT-56 | US-07: comparação de alternativas | PR #25 integrada; CT-06/CT-19 e CI aprovados; aguarda verificação técnica independente e aceite final do PO |
 | FT-81 | Q-13: continuidade dos fluxos manuais | 10/10 falhas simuladas; 10 entregas e 10 alternativas persistidas; Resultado R2 registrado na planilha, pendente de conferência da equipe |
@@ -220,5 +231,5 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 ## 7. Próximas dependências
 
 1. Equipe: manter o risco residual de indisponibilidade real da Open-Meteo registrado; a Q-13 mede falhas simuladas, não disponibilidade externa.
-2. Equipe: disponibilizar ambiente funcional e cinco avaliadores para a medição Q-07.
+2. QA/equipe: anexar à FT-75 a folha individual de coleta, se disponível, e obter conferência/aceite formal do resultado Q-07 (5/5, 100%).
 3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; manter a cobertura visual da US-10 e avaliar a separação da suíte em `e2e:r2`.
