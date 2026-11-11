@@ -80,7 +80,7 @@ O teste `test_ten_external_failure_scenarios_preserve_manual_flows`, em `backend
 9. listas vazias;
 10. temperatura nula.
 
-Em cada cenário, verifica HTTP 503 com mensagem genérica, cadastra uma entrega e registra uma alternativa manual. Ao final, confirma **10 entregas e 10 alternativas persistidas**.
+Em cada cenário, verifica HTTP 503 com mensagem genérica, cadastra uma entrega, registra duas alternativas manuais e consulta a lista para confirmar que ambas continuam disponíveis para comparação. Ao final, confirma **10 entregas e 20 alternativas persistidas**, com distâncias e durações recuperadas corretamente.
 
 ### Execução e evidência no CI
 
