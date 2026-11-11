@@ -115,27 +115,30 @@ Essa métrica exige participantes humanos. Não é válido substituir os cinco a
 
 | Avaliador | Concluiu corretamente? | Sem ajuda? | Tempo (mm:ss) | Sucesso (≤ 3 min)? | Observações |
 |---|---|---|---|---|---|
-| P1 | Pendente | Pendente | Pendente | Pendente | |
-| P2 | Pendente | Pendente | Pendente | Pendente | |
-| P3 | Pendente | Pendente | Pendente | Pendente | |
-| P4 | Pendente | Pendente | Pendente | Pendente | |
-| P5 | Pendente | Pendente | Pendente | Pendente | |
+| P1 | Sim (relato consolidado) | Sim (relato consolidado) | Não cronometrado | Não verificável | Teste remoto conduzido por José Araújo Agra Neto; conclusão descrita como rápida, sem tempo medido |
+| P2 | Sim (relato consolidado) | Sim (relato consolidado) | Não cronometrado | Não verificável | Teste remoto conduzido por José Araújo Agra Neto; conclusão descrita como rápida, sem tempo medido |
+| P3 | Sim (relato consolidado) | Sim (relato consolidado) | Não cronometrado | Não verificável | Teste remoto conduzido por José Araújo Agra Neto; conclusão descrita como rápida, sem tempo medido |
+| P4 | Sim (relato consolidado) | Sim (relato consolidado) | Não cronometrado | Não verificável | Teste remoto conduzido por José Araújo Agra Neto; conclusão descrita como rápida, sem tempo medido |
+| P5 | Sim (relato consolidado) | Sim (relato consolidado) | Não cronometrado | Não verificável | Teste remoto conduzido por José Araújo Agra Neto; conclusão descrita como rápida, sem tempo medido |
 
 **Cálculo:** avaliadores com sucesso / 5. A meta é ≥ 4/5 (80%).
 
-**Resultado da medição (11/11/2026): 5/5 participantes (100%) atingiram o critério**, conforme confirmação do responsável pela avaliação: todos concluíram corretamente o cadastro, sem ajuda e em até 3 minutos. A meta original (≥ 4/5, ou 80%) foi superada.
+**Resultado da execução (11/11/2026):** os cinco participantes concluíram corretamente o cadastro e não solicitaram ajuda, conforme relato consolidado do QA. Os testes foram realizados **remotamente e conduzidos por José Araújo Agra Neto (QA)**.
 
-| Resultado agregado | Valor |
+**Limitação importante:** o cronômetro não foi utilizado e os tempos individuais não foram anotados. O responsável relata que as conclusões pareceram rápidas, mas essa impressão não comprova que cada participante concluiu em até 3 minutos. Por isso, o critério temporal permanece **não verificado** e não se declara que a meta quantitativa completa foi atingida.
+
+| Resultado observado | Valor |
 |---|---:|
 | Participantes avaliados | 5 |
-| Conclusões corretas, sem ajuda e ≤ 3 min | 5/5 (100%) |
-| Meta | ≥ 4/5 (80%) |
-| Resultado | Atingida |
+| Cadastros concluídos corretamente (relato do QA) | 5/5 |
+| Participantes que não solicitaram ajuda (relato do QA) | 5/5 |
+| Tempos individuais medidos | 0/5 |
+| Conclusões comprovadas em até 3 minutos | Não verificável |
+| Meta completa (≥ 4/5 corretos, sem ajuda e ≤ 3 min) | Ainda não comprovada |
 
-**Rastreabilidade:** resultado informado pelo QA após a execução presencial/remota do roteiro com cinco pessoas reais, não envolvidas no desenvolvimento, usando a mesma versão funcional do formulário. Os tempos individuais e observações por participante não foram fornecidos no registro consolidado; não são inventados neste documento. Se a equipe tiver a folha individual de coleta, deve anexá-la à issue para complementar a trilha de auditoria.
+**Rastreabilidade:** cinco avaliações remotas com a mesma versão do formulário, conduzidas por José Araújo Agra Neto. Os identificadores P1–P5 são anônimos e representam apenas a organização da coleta; os resultados de conclusão correta e ausência de ajuda foram informados pelo QA de forma consolidada, sem fichas individuais contemporâneas. Não foram criados tempos fictícios. Para comprovar a métrica original, será necessário repetir a medição com cronômetro e registrar o tempo real de cada participante, ou obter registros contemporâneos confiáveis.
 
-**Responsabilidade pela medição Q-07:** confirmada pelo PO. A métrica atingiu a meta; a conclusão formal da issue ainda depende da conferência das evidências e do aceite conforme a DoD.
-
+**Responsabilidade pela medição Q-07:** QA — José Araújo Agra Neto. O resultado observado é favorável, mas a verificação da meta de três minutos permanece pendente.
 ## 5. FT-88 — Execução e rastreabilidade de QA na Sprint 2
 
 ### Estado das especificações
@@ -221,7 +224,7 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 | FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Q-13 aprovada 10/10 para continuidade dos fluxos manuais e aviso de indisponibilidade; recomendação climática depende da US-09 (FT-57), prevista para Sprint 3; risco residual do provedor externo permanece |
 | FT-33 | Verificação de segurança das respostas e logs | Q-06: 20/20 aprovados e 0 exposições; cobertura complementar de 18 categorias de falha Open-Meteo verifica resposta genérica e ausência de detalhes externos nos logs/respostas. Evidências: [CI PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) e [CI PR #24](https://github.com/moon-byme/feneme-tech/actions/runs/42844947365). Mantém-se a ressalva de que US-09/FT-57 ainda não foi implementada. |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
-| FT-75 | Q-07: ≥ 4/5 em até 3 min | Meta atingida: 5/5 (100%) concluíram corretamente, sem ajuda e em até 3 min, conforme resultado consolidado informado pelo QA em 11/11/2026. Tempos/observações individuais não foram fornecidos no registro consolidado; anexar a folha individual, se disponível, e obter conferência/aceite formal antes de encerrar a issue. |
+| FT-75 | Q-07: ≥ 4/5 em até 3 min | Cinco participantes concluíram corretamente e sem ajuda, conforme relato consolidado do QA. Teste remoto conduzido por José Araújo Agra Neto. Tempos não foram cronometrados; limite de 3 min e meta completa permanecem não verificados. Repetir medição cronometrada e registrar tempos reais antes de declarar a meta atingida. |
 | FT-47 | US-08: previsão e tratamento de indisponibilidade | PR #23 integrada; E2E `@US-08` 2/2; demonstração real registrada na FT-47 em 10/11/2026 (João Pessoa: máx. 30,3 °C / mín. 25,0 °C, conferida com o JSON da Open-Meteo); aceite do PO registrado em 10/11/2026 |
 | FT-56 | US-07: comparação de alternativas | PR #25 integrada; CT-06/CT-19 e CI aprovados; aguarda verificação técnica independente e aceite final do PO |
 | FT-81 | Q-13: continuidade dos fluxos manuais | 10/10 falhas simuladas; 10 entregas e 10 alternativas persistidas; Resultado R2 registrado na planilha, pendente de conferência da equipe |
@@ -231,5 +234,5 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 ## 7. Próximas dependências
 
 1. Equipe: manter o risco residual de indisponibilidade real da Open-Meteo registrado; a Q-13 mede falhas simuladas, não disponibilidade externa.
-2. QA/equipe: anexar à FT-75 a folha individual de coleta, se disponível, e obter conferência/aceite formal do resultado Q-07 (5/5, 100%).
+2. QA/equipe: repetir a medição Q-07 com cronômetro, registrar os cinco tempos reais e obter conferência/aceite formal antes de declarar a meta atingida.
 3. QA: completar etapas Cypress dos demais fluxos R2 quando houver funcionalidades e contratos; manter a cobertura visual da US-10 e avaliar a separação da suíte em `e2e:r2`.
