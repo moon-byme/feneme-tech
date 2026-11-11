@@ -115,13 +115,13 @@ Essa métrica exige participantes humanos. Não é válido substituir os cinco a
 
 | Avaliador | Concluiu corretamente? | Sem ajuda? | Tempo (mm:ss) | Sucesso (≤ 3 min)? | Observações |
 |---|---|---|---|---|---|
-| P1 | Sim (relato do QA) | Sim (relato do QA) | 00:30 (estimativa retrospectiva) | Indicativo: abaixo de 3 min; não cronometrado | Teste remoto conduzido por José Araújo Agra Neto |
-| P2 | Sim (relato do QA) | Sim (relato do QA) | 01:58 (estimativa retrospectiva) | Indicativo: abaixo de 3 min; não cronometrado | Teste remoto conduzido por José Araújo Agra Neto |
-| P3 | Sim (relato do QA) | Sim (relato do QA) | 01:22 (estimativa retrospectiva) | Indicativo: abaixo de 3 min; não cronometrado | Teste remoto conduzido por José Araújo Agra Neto |
-| P4 | Sim (relato do QA) | Sim (relato do QA) | 02:16 (estimativa retrospectiva) | Indicativo: abaixo de 3 min; não cronometrado | Teste remoto conduzido por José Araújo Agra Neto |
-| P5 | Sim (relato do QA) | Sim (relato do QA) | 00:48 (estimativa retrospectiva) | Indicativo: abaixo de 3 min; não cronometrado | Teste remoto conduzido por José Araújo Agra Neto |
+| P1 | Sim (relato do QA) | Sim (relato do QA) | 00:30 (estimado) | **Sim (estimado; não cronometrado)** | Remoto; conduzido por José Araújo Agra Neto; observações adicionais não registradas |
+| P2 | Sim (relato do QA) | Sim (relato do QA) | 01:58 (estimado) | **Sim (estimado; não cronometrado)** | Remoto; conduzido por José Araújo Agra Neto; observações adicionais não registradas |
+| P3 | Sim (relato do QA) | Sim (relato do QA) | 01:22 (estimado) | **Sim (estimado; não cronometrado)** | Remoto; conduzido por José Araújo Agra Neto; observações adicionais não registradas |
+| P4 | Sim (relato do QA) | Sim (relato do QA) | 02:16 (estimado) | **Sim (estimado; não cronometrado)** | Remoto; conduzido por José Araújo Agra Neto; observações adicionais não registradas |
+| P5 | Sim (relato do QA) | Sim (relato do QA) | 00:48 (estimado) | **Sim (estimado; não cronometrado)** | Remoto; conduzido por José Araújo Agra Neto; observações adicionais não registradas |
 
-**Cálculo:** avaliadores com sucesso / 5. A meta é ≥ 4/5 (80%).
+**Cálculo:** considerando os tempos retrospectivos informados, o resultado estimado é **5/5 (100%)**, acima da meta de ≥ 4/5 (80%). Esse percentual é indicativo, não uma comprovação cronometrada.
 
 **Resultado da execução (11/11/2026):** os cinco participantes concluíram corretamente o cadastro e não solicitaram ajuda, conforme relato consolidado do QA. Os testes foram realizados **remotamente e conduzidos por José Araújo Agra Neto (QA)**.
 
@@ -135,7 +135,8 @@ Essa métrica exige participantes humanos. Não é válido substituir os cinco a
 | Tempos cronometrados durante a sessão | 0/5 |
 | Estimativas retrospectivas informadas | 5 (00:30; 01:58; 01:22; 02:16; 00:48) |
 | Média das estimativas | 01:23 |
-| Conclusões comprovadas objetivamente em até 3 minutos | Não verificável |
+| Sucessos estimados (tempo informado abaixo de 3 min) | 5/5 (100%) — indicativo, não cronometrado |
+| Conclusões comprovadas objetivamente em até 3 minutos | 0/5 cronometrados; critério não verificável |
 | Meta completa (≥ 4/5 corretos, sem ajuda e ≤ 3 min) | Resultado favorável, mas não comprovado por cronometragem |
 
 **Rastreabilidade:** cinco avaliações remotas com a mesma versão do formulário, conduzidas por José Araújo Agra Neto. Os identificadores P1–P5 são anônimos. A conclusão correta e a ausência de ajuda foram relatadas pelo QA; os tempos acima foram fornecidos posteriormente como estimativas retrospectivas, pois não houve cronometragem nem fichas individuais contemporâneas. Portanto, não devem ser apresentados como tempos observados ou medidos. Para comprovar a métrica original, será necessário repetir a medição com cronômetro e registrar o tempo real de cada participante.
