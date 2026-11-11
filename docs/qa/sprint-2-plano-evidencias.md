@@ -50,6 +50,8 @@ python manage.py test accounts.test_q06_tratamento_erros -v 2
 
 **Limitação da medição:** a instrumentação Q-06 cobre os endpoints e fluxos exercitados na época da PR #17. O tratamento de falhas da Open-Meteo é coberto separadamente pela medição Q-13, integrada pela PR #24.
 
+**Verificação complementar do driver DA-SEG-JA-01 (FT-33):** além dos 20 cenários Q-06, `backend/weather/tests.py` contém `test_external_failures_return_503_with_generic_message`, que exercita 18 categorias de falha da dependência externa (timeout, conexão/DNS, HTTP 4xx/5xx, resposta vazia/inválida, dados ausentes ou inconsistentes e resposta excessiva). Em cada caso, verifica a resposta HTTP 503 genérica e inspeciona resposta e logs para impedir a exposição de URL, traceback e marcadores/detalhes da exceção externa. Essa cobertura complementar não é somada aos 20 cenários Q-06; são evidências distintas para fluxos distintos.
+
 ## 3. FT-32 — Resiliência à indisponibilidade da Open-Meteo
 
 **Critério do driver:** 10 de 10 falhas simuladas (timeout, HTTP 5xx e previsão ausente) devem preservar cadastro e comparação manuais, exibir indisponibilidade e não confirmar recomendação climática sem dados.
@@ -206,7 +208,7 @@ A PR [#25 — Comparar alternativas de trajeto](https://github.com/moon-byme/fen
 | Issue | Entrega de QA | Situação honesta |
 |---|---|---|
 | FT-32 | 10 cenários de falha Open-Meteo com continuidade manual | Q-13 aprovada 10/10 para continuidade dos fluxos manuais e aviso de indisponibilidade; recomendação climática depende da US-09 (FT-57), prevista para Sprint 3; risco residual do provedor externo permanece |
-| FT-33 | Verificação de segurança das respostas e logs | Q-06 executado no CI: 20/20 aprovados, 0 exposições; evidência no [workflow da PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) |
+| FT-33 | Verificação de segurança das respostas e logs | Q-06: 20/20 aprovados e 0 exposições; cobertura complementar de 18 categorias de falha Open-Meteo verifica resposta genérica e ausência de detalhes externos nos logs/respostas. Evidências: [CI PR #17](https://github.com/moon-byme/feneme-tech/actions/runs/42732366544) e [CI PR #24](https://github.com/moon-byme/feneme-tech/actions/runs/42844947365). Mantém-se a ressalva de que US-09/FT-57 ainda não foi implementada. |
 | FT-74 | Q-06: 0 exposição em 20 cenários | Atingido: 20/20 aprovados, 0 exposições na resposta e nos logs; suíte backend com 123 testes `OK` |
 | FT-75 | Q-07: ≥ 4/5 em até 3 min | Protocolo pronto; aguarda cinco avaliadores humanos; responsável pela medição confirmado pelo PO |
 | FT-47 | US-08: previsão e tratamento de indisponibilidade | PR #23 integrada; E2E `@US-08` 2/2; demonstração real registrada na FT-47 em 10/11/2026 (João Pessoa: máx. 30,3 °C / mín. 25,0 °C, conferida com o JSON da Open-Meteo); aceite do PO registrado em 10/11/2026 |
