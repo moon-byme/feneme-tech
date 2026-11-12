@@ -198,19 +198,32 @@ class ForecastApiTests(APITestCase):
                     format="json",
                 )
                 self.assertEqual(created.status_code, status.HTTP_201_CREATED, created.data)
-                route = self.client.post(
-                    f"/api/deliveries/{created.data['id']}/route-alternatives/",
-                    {"distance_km": 64, "duration_minutes": 55},
-                    format="json",
+                # Duas alternativas manuais devem continuar registráveis e consultáveis
+                # para comparação mesmo quando a previsão externa falha.
+                for distance, duration in ((64, 55), (72, 61)):
+                    route = self.client.post(
+                        f"/api/deliveries/{created.data['id']}/route-alternatives/",
+                        {"distance_km": distance, "duration_minutes": duration},
+                        format="json",
+                    )
+                    self.assertEqual(route.status_code, status.HTTP_201_CREATED, route.data)
+
+                comparison = self.client.get(
+                    f"/api/deliveries/{created.data['id']}/route-alternatives/"
                 )
-                self.assertEqual(route.status_code, status.HTTP_201_CREATED, route.data)
+                self.assertEqual(comparison.status_code, status.HTTP_200_OK, comparison.data)
+                self.assertEqual(len(comparison.data), 2)
+                self.assertEqual(
+                    [(float(item["distance_km"]), item["duration_minutes"]) for item in comparison.data],
+                    [(64.0, 55), (72.0, 61)],
+                )
                 passed += 1
 
         self.assertEqual(passed, 10)
         self.assertEqual(Delivery.objects.count(), 10)
         self.assertEqual(
             sum(delivery.route_alternatives.count() for delivery in Delivery.objects.all()),
-            10,
+            20,
         )
 
     # Permissões
