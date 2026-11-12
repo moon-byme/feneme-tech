@@ -110,6 +110,20 @@ O widget apresenta *36 Story Points* para a FT Sprint 2. A consulta ao quadro co
   [*Total*], [*36*], [*Total operacional, sujeito à validação formal da DoD*],
 )
 
+=== Cálculo da Velocity — Sprint 2
+
+A Velocity foi calculada pela soma dos Story Points das issues concluídas na Sprint 2, considerando a validação da Definition of Done pela equipe.
+
+*Fórmula:* Velocity = Σ Story Points dos itens concluídos e aceitos.
+
+*Cálculo:* 3 + 3 + 5 + 2 + 2 + 2 + 2 + 1 + 3 + 5 + 8 = *36 Story Points*.
+
+A Sprint 2 apresenta 11 issues concluídas, totalizando *36 SP*, incluindo histórias de usuário, drivers arquiteturais, tarefas de qualidade, riscos e atividades de processo.
+
+As histórias funcionais representam 12 SP, com aceite do Product Owner registrado no Jira. A FT-58 mantém sua ressalva histórica referente à revisão do PR original.
+
+As alterações de escopo foram consideradas separadamente: 40 SP inicialmente selecionados, 4 SP adicionados e 8 SP transferidos para a Sprint 3, resultando em 36 SP no escopo final.
+
 *Critério para fechamento:* confirmar na Review quais itens serão contabilizados na velocity, os aceites e as ressalvas. Preservar, em paralelo, o indicador funcional de *12 SP aceitos pelo PO*, dos quais *2 SP com ressalva*. Não converter o status Concluído em evidência automática de atendimento à DoD.
 
 == 3. Impedimentos e não conformidades acompanhados
