@@ -202,12 +202,27 @@ feneme-tech/
 │       ├── sprint-0/
 │       │   ├── ata-criacao-projeto-09-10-2026.md
 │       │   └── ata-retrospectiva-19-10-2026.md
-│       └── sprint-1/
-│           ├── ata-planejamento-retrospectiva-sprint-1.md
-│           ├── ata-review.md
-│           ├── ata-retrospectiva.md
-│           ├── dod-sprint-1.md
-│           └── metricas-e-impedimentos.md
+│       ├── sprint-1/
+│       │   ├── ata-planejamento-retrospectiva-sprint-1.md
+│       │   ├── ata-review.md
+│       │   ├── ata-retrospectiva.md
+│       │   ├── dod-sprint-1.md
+│       │   └── metricas-e-impedimentos.md
+│       └── sprint-2/
+│           ├── fontes/
+│           │   ├── acordos-de-trabalho.typ
+│           │   ├── ata-planning.typ
+│           │   ├── ata-review.typ
+│           │   ├── ata-retrospectiva.typ
+│           │   ├── calendario-cerimonias.typ
+│           │   └── metricas-e-impedimentos.typ
+│           ├── ata-planning.pdf
+│           ├── ata-review.pdf
+│           ├── acordos-de-trabalho.pdf
+│           ├── burndown-sprint-2.png
+│           ├── calendario-cerimonias.pdf
+│           ├── metricas-e-impedimentos.pdf
+│           └── velocity-sprint-2.png
 ├── evidencias/                  # Evidências de validações e execuções
 ├── frontend/
 │   ├── src/
@@ -433,6 +448,7 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [`docs/sprints/`](docs/sprints/): registros de planejamento, revisão, retrospectiva, Definition of Done, métricas e impedimentos das sprints.
 - [Sprint 0](docs/sprints/sprint-0/): [criação do projeto em 09/10](docs/sprints/sprint-0/ata-criacao-projeto-09-10-2026.md) e [avaliação das pendências do planejamento em 19/10](docs/sprints/sprint-0/ata-retrospectiva-19-10-2026.md). A sprint foi dedicada ao planejamento e à estruturação do projeto, sem implementação de funcionalidades.
 - [Sprint 1](docs/sprints/sprint-1/): [preparação em 19/10](docs/sprints/sprint-1/ata-planejamento-retrospectiva-sprint-1.md), [Review](docs/sprints/sprint-1/ata-review.md), [Retrospectiva](docs/sprints/sprint-1/ata-retrospectiva.md), [conferência da DoD](docs/sprints/sprint-1/dod-sprint-1.md) e [métricas e impedimentos](docs/sprints/sprint-1/metricas-e-impedimentos.md).
+- [Sprint 2](docs/sprints/sprint-2/): [retrospectiva](docs/sprints/sprint-2/fontes/ata-retrospectiva.typ), [Review](docs/sprints/sprint-2/fontes/ata-review.typ) e [métricas e impedimentos](docs/sprints/sprint-2/fontes/metricas-e-impedimentos.typ) em fontes Typst.
 - [Retrospectiva da Release 1](docs/releases/release-1/ata-retrospectiva-release-1-feneme.md): registro retrospectivo da reunião de 03/11/2026, elaborado em 10/11/2026, com avaliação do feedback e encaminhamentos para a Release 2.
 - [Relatório do pipeline da Release 1](docs/releases/release-1/relatorio-pipeline.md): histórico do CI de 06 a 29/10/2026, com execuções, limitações, situação da proteção da `main` e dos PRs, e comparação com a R2.
 - [Planilha de Definition of Done](docs/Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx): arquivo preservado, com referência à aba "DoD da Sprint" na conferência da Sprint 1.
