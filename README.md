@@ -348,14 +348,19 @@ Os testes do Django utilizam um banco de testes separado. O usuário PostgreSQL 
 
 ### Integração contínua
 
-O workflow `.github/workflows/ci.yml` é executado em pushes para branches e em Pull Requests direcionados à `main`, além de permitir execução manual.
+O workflow `.github/workflows/ci.yml` é executado em pushes para qualquer branch e em Pull Requests para a `main`, além de permitir execução manual.
 
-O pipeline possui verificações para:
+| Job | O que verifica |
+|---|---|
+| `Backend - Django checks and tests` | Instala dependências, sobe PostgreSQL no runner, executa `manage.py check` e a suíte de testes do Django |
+| `Frontend - build and tests` | Instala dependências e gera o build de produção (`tsc -b && vite build`); não há testes unitários de frontend configurados |
+| `E2E - Cucumber/Cypress (@smoke)` | Sobe backend e frontend integrados e executa os cenários `@smoke`, `@US-07` (comparação de trajetos), `@R1` (regressão da Sprint 1) e `@US-08` (Open-Meteo); publica relatório e capturas de falha como artefato |
 
-- **Backend:** instalação das dependências, inicialização de PostgreSQL, `manage.py check` e testes do Django.
-- **Frontend:** instalação das dependências e execução do build de produção.
+**Proteção da `main` (desde 04/11/2026):** alterações entram apenas por Pull Request, com 1 aprovação de outro integrante e os três jobs acima como checagens obrigatórias; as regras valem também para administradores. Detalhes em [`docs/devops/protecao-main.md`](docs/devops/protecao-main.md).
 
-O workflow detecta se os componentes existem antes de executar seus respectivos jobs. Atualmente, o frontend não possui script de testes automatizados configurado; portanto, a etapa de testes frontend é ignorada e o build é verificado.
+**Limitação conhecida:** os cenários `@US-06` têm etapas implementadas, mas ainda não estão em nenhuma seleção de tags do CI.
+
+O histórico do pipeline da Release 1 está em [`docs/releases/release-1/relatorio-pipeline.md`](docs/releases/release-1/relatorio-pipeline.md).
 
 ### Critérios de qualidade
 
