@@ -30,3 +30,8 @@ frontend/cypress/reports/
 frontend/cypress/screenshots/
 frontend/cypress/videos/
 frontend/cypress/downloads/
+
+# Saídas dos spikes de rotas (contêm respostas brutas ou a chave do mapa)
+scripts/spikes/spike_respostas/
+scripts/spikes/spike2_respostas/
+scripts/spikes/mapa_*.html

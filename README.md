@@ -87,17 +87,25 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 
 ## Funcionalidades previstas ou ainda não disponíveis
 
-As funcionalidades a seguir fazem parte da proposta mais ampla do Feneme ou foram indicadas na documentação de planejamento, mas **não foram identificadas como implementadas no código analisado**. A inclusão e a prioridade de cada uma devem seguir o backlog aprovado da Release 2 e das releases seguintes.
+> **Mudança de escopo em 16/11/2026.** Após a Sprint Review da Sprint 2, a equipe aprovou uma nova linha do produto: o Feneme passa a comparar até 3 rotas reais entre cidades de uma lista fechada e a indicar qual delas expõe menos a carga ao calor, conforme o tipo de carga e o horário de saída. O Gestor decide. Detalhes completos em [`docs/produto/escopo-r3-r4.md`](docs/produto/escopo-r3-r4.md) e no Jira ([FT-112](https://feneme.atlassian.net/browse/FT-112)).
 
-- Integração com a API Open-Meteo para consulta de informações climáticas.
-- Consulta e apresentação de temperatura associada às entregas ou aos trajetos.
-- Cadastro, comparação ou recomendação de alternativas de rota.
-- Cálculo ou apresentação de distância e tempo estimado de deslocamento.
-- Atualização do status da entrega pelo Motorista.
-- Histórico de entregas e de alterações.
-- Funcionalidades adicionais de acompanhamento da operação.
+As funcionalidades abaixo estão **planejadas, não implementadas**:
 
-**Limites da implementação atual:** o modelo de entrega possui apenas o status `PENDENTE`; não há fluxo de atualização de status. Também não foram identificados no frontend ou backend atuais recursos de integração climática, recomendação de rotas ou histórico de entregas. A presença dessas ideias na visão do produto não significa que estejam disponíveis.
+| Funcionalidade | Jira | Sprint |
+| --- | --- | --- |
+| Lista única de cidades no cadastro e na previsão do clima | FT-113 (US-14) | 3 |
+| Catálogo de tipos de carga com limite de temperatura e fonte | FT-114 (US-15) | 3 |
+| Atualização de status, acompanhamento e histórico | FT-48, FT-49, FT-59 | 3 |
+| Tipo de carga e data/hora de saída na entrega | FT-117 (US-16) | 4 |
+| Até 3 rotas automáticas pela Google Routes API | FT-118 (US-17) | 4 |
+| Mapa das rotas (Maps JavaScript API) | FT-120 (US-18) | 4 |
+| Comparação da exposição ao calor por rota, com destaque da menor | FT-57 (US-09) | 5 |
+| Registro da rota escolhida pelo Gestor | FT-122 (US-19) | 5 |
+| Comparação de horários de saída | FT-123 (US-20) | 6 |
+
+**Vai ser removido:** o cadastro e a comparação manual de até 2 trajetos (`RouteAlternative`, FT-46/FT-56) serão substituídos pelas rotas automáticas na Sprint 4 (FT-119).
+
+**Continua fora do escopo:** GPS e rastreamento em tempo real, sensores e temperatura medida da carga, modelagem de veículo refrigerado e aplicativo nativo. A temperatura usada é sempre a **prevista do ambiente**.
 
 ## Arquitetura e funcionamento
 
@@ -453,6 +461,9 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [Relatório do pipeline da Release 1](docs/releases/release-1/relatorio-pipeline.md): histórico do CI de 06 a 29/10/2026, com execuções, limitações, situação da proteção da `main` e dos PRs, e comparação com a R2.
 - [Planilha de Definition of Done](docs/Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx): arquivo preservado, com referência à aba "DoD da Sprint" na conferência da Sprint 1.
 - [`evidencias/`](evidencias/): registros e relatórios de evidências de validação.
+- [Nova linha do produto (R2 a R4)](docs/produto/escopo-r3-r4.md): funcionalidades novas, catálogo de cargas, lista de cidades e regras RN-01 a RN-10.
+- [Spikes das rotas e da comparação térmica](docs/produto/spikes-rotas-google.md): resultados de 13–14/11/2026 e scripts em [`scripts/spikes/`](scripts/spikes/).
+- [Google Maps Platform](docs/devops/google-maps-platform.md): chaves, cotas, alertas e uso no CI.
 
 As atas de 09/10 e os dois registros da reunião de 19/10 foram **elaborados retrospectivamente em 10/11/2026**. Os registros de 19/10 descrevem o mesmo encontro, com referências cruzadas: avaliação das pendências da Sprint 0 e preparação da Sprint 1, sem afirmar uma cerimônia independente de Sprint Retrospective.
 
