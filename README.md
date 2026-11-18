@@ -27,7 +27,7 @@ O transporte de alimentos envolve fatores como origem, destino, duração do des
 O Feneme está sendo desenvolvido para apoiar a gestão dessas operações por meio de uma aplicação web. A proposta contempla dois perfis principais:
 
 - **Gestor:** organiza as entregas, consulta os registros e atribui motoristas.
-- **Motorista:** consulta as entregas que foram atribuídas à sua própria conta e, conforme a evolução do produto, poderá acompanhar e atualizar sua execução.
+- **Motorista:** consulta suas entregas e atualiza manualmente o status conforme o andamento do transporte.
 
 O sistema está sendo desenvolvido incrementalmente, em releases e sprints. Por isso, nem todas as funcionalidades previstas para o produto estão necessariamente disponíveis na versão atual.
 
@@ -42,7 +42,8 @@ Na versão analisada, o fluxo funcional implementado permite:
 3. consultar as entregas como Gestor;
 4. consultar os motoristas cadastrados;
 5. atribuir uma entrega a um Motorista;
-6. permitir que cada Motorista consulte somente as entregas atribuídas à própria conta.
+6. permitir que cada Motorista consulte somente as entregas atribuídas à própria conta;
+7. atualizar manualmente o status dessas entregas e persistir cada alteração no histórico (FT-48; pendente de QA e aceite do PO).
 
 A equipe iniciou a **Release 2**, na qual os papéis Scrum são redistribuídos. As funcionalidades adicionais devem ser incorporadas conforme o backlog e os critérios de aceitação definidos para a release.
 
@@ -77,6 +78,18 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 - Exibição de estado de carregamento, erro e lista vazia.
 - Isolamento dos dados: o Motorista não consulta entregas atribuídas a outras contas.
 
+### Atualização manual de status — FT-48 / US-11
+
+- Somente o Motorista atribuído altera o status, seguindo `PENDENTE → EM_TRANSPORTE → ENTREGUE`.
+- Não são permitidos saltos, retornos, repetição do mesmo estado ou mudanças após `ENTREGUE`.
+- A interface oferece a próxima transição, informa carregamento, sucesso e erro e desabilita entregas finalizadas.
+- Status e histórico são gravados em uma transação com bloqueio da entrega no PostgreSQL.
+- Cada evento registra entrega, estado anterior, novo estado, Motorista e data/hora; ordenação por `changed_at, id`.
+- O Gestor consulta o status persistido na listagem existente, sem controles de alteração.
+- A consulta completa do histórico e a evolução do acompanhamento pertencem à FT-59 e FT-49.
+
+Execução, decisões e evidências: [relatório da FT-48](docs/qa/ft48-implementacao.md). A implementação ainda depende da revisão de QA, aceite do PO e conferência da DoD.
+
 ### Segurança e autorização
 
 - As permissões são verificadas no backend, não apenas na interface.
@@ -95,7 +108,7 @@ As funcionalidades abaixo estão **planejadas, não implementadas**:
 | --- | --- | --- |
 | Lista única de cidades no cadastro e na previsão do clima | FT-113 (US-14) | 3 |
 | Catálogo de tipos de carga com limite de temperatura e fonte | FT-114 (US-15) | 3 |
-| Atualização de status, acompanhamento e histórico | FT-48, FT-49, FT-59 | 3 |
+| Consulta completa de acompanhamento e histórico (base persistente na FT-48) | FT-49, FT-59 | 3 |
 | Tipo de carga e data/hora de saída na entrega | FT-117 (US-16) | 4 |
 | Até 3 rotas automáticas pela Google Routes API | FT-118 (US-17) | 4 |
 | Mapa das rotas (Maps JavaScript API) | FT-120 (US-18) | 4 |
@@ -161,7 +174,8 @@ O sistema utiliza PostgreSQL. Entre os dados persistidos estão:
 
 - usuários do Django;
 - perfil de cada usuário, relacionado ao usuário por uma relação um-para-um;
-- entregas, incluindo origem, destino, descrição da carga, motorista atribuído, usuário criador, status e datas de criação/atualização.
+- entregas, incluindo origem, destino, descrição da carga, motorista atribuído, usuário criador, status e datas de criação/atualização;
+- eventos de histórico de status, associados à entrega e ao Motorista responsável, com estados anterior/novo e data/hora.
 
 O motorista atribuído pode ser nulo, permitindo que uma entrega permaneça sem responsável até que o Gestor faça a atribuição.
 
@@ -317,6 +331,7 @@ As rotas abaixo correspondem à implementação identificada no backend atual.
 | `GET` | `/api/deliveries/` | Gestor e Motorista | Gestor consulta todas; Motorista consulta somente as próprias entregas atribuídas. |
 | `POST` | `/api/deliveries/` | Gestor | Cadastra uma entrega. |
 | `GET` | `/api/deliveries/{id}/` | Gestor e Motorista | Consulta uma entrega, respeitando o isolamento por Motorista. |
+| `POST` | `/api/deliveries/{id}/update-status/` | Motorista atribuído | Recebe `{"status":"EM_TRANSPORTE"}` ou `{"status":"ENTREGUE"}` e retorna a entrega atualizada. |
 | `POST` | `/api/deliveries/{id}/assign-driver/` | Gestor | Atribui ou reatribui um Motorista à entrega. |
 
 ### Exemplo de cadastro de entrega

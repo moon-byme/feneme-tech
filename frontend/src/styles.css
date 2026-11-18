@@ -69,6 +69,11 @@ h2 { font-size: 1.35rem; margin-bottom: 0; }
 .delivery-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 17px; }
 .delivery-id { color: #678075; font-size: .7rem; font-weight: 800; letter-spacing: .08em; }
 .status-chip { background: #fff4df; color: #94651b; }
+.status-chip[data-status="EM_TRANSPORTE"] { background: #e8f0fb; color: #2e5c90; }
+.status-chip[data-status="ENTREGUE"] { background: var(--green-soft); color: var(--green); }
+.status-actions { display: grid; gap: 10px; border-top: 1px solid #edf1ee; padding-top: 13px; }
+.status-actions button:disabled { cursor: default; }
+.status-actions[aria-busy="true"] button { cursor: wait; }
 .route { display: grid; gap: 8px; }
 .route > div:not(.route-line) { display: flex; align-items: flex-start; gap: 10px; }
 .route small, .cargo small { display: block; color: #809088; font-size: .64rem; letter-spacing: .1em; font-weight: 800; margin-bottom: 3px; }

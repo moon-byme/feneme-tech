@@ -1,6 +1,7 @@
 import type {
   DailyForecast,
   Delivery,
+  DeliveryStatus,
   DriverOption,
   LoginResponse,
   ReferenceLocation,
@@ -61,6 +62,12 @@ export const api = {
   },
   listDrivers(token: string) {
     return request<DriverOption[]>("/drivers/", token);
+  },
+  updateDeliveryStatus(token: string, deliveryId: number, status: DeliveryStatus) {
+    return request<Delivery>(`/deliveries/${deliveryId}/update-status/`, token, {
+      method: "POST",
+      body: JSON.stringify({ status }),
+    });
   },
   createDelivery(token: string, input: { origin: string; destination: string; cargo_description: string }) {
     return request<Delivery>("/deliveries/", token, {

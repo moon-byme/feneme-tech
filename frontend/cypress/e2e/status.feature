@@ -48,23 +48,59 @@ Funcionalidade: Consulta e atualização do status das entregas
     Então a API nega o acesso
     E não expõe os dados dessa entrega
 
-  @US-11 @CT-10 @regressao
+  # O histórico é verificado no PostgreSQL por deliveries.test_ft48.
+  # A consulta pública de eventos pertence à FT-59.
+  @US-11 @CT-10 @regressao @smoke
   Cenário: Motorista atualiza o status de uma entrega atribuída
     Dado que estou autenticado como Motorista
-    E possuo uma entrega atribuída
-    E a transição solicitada é permitida
-    Quando atualizo o status da entrega
-    Então o sistema salva o novo status
-    E disponibiliza a atualização para consulta
-    E registra a alteração no histórico
+    E possuo entregas atribuídas
+    Quando acesso a área do Motorista pela interface
+    E inicio o transporte da minha entrega
+    Então minha entrega mostra o status "Em transporte"
+    Quando confirmo a conclusão da minha entrega
+    Então minha entrega mostra o status "Entregue"
+    E o controle da minha entrega está finalizado
+    E o status Entregue permanece após nova autenticação
+    E o Gestor visualiza a entrega finalizada sem controles de alteração
 
-  @US-11 @CT-11 @excecao @regressao
+  @US-11 @CT-11 @excecao @regressao @smoke
   Cenário: Motorista tenta atualizar entrega de outra pessoa
     Dado que estou autenticado como Motorista
     E existe uma entrega atribuída a outro Motorista
     Quando tento alterar o status dessa entrega
     Então o sistema nega a operação
-    E preserva o status e o histórico originais
+    E preserva o status original consultado pelo Gestor
+
+  @US-11 @interface @excecao @smoke
+  Cenário: Falha de atualização preserva o status e permite nova tentativa
+    Dado que estou autenticado como Motorista
+    E possuo entregas atribuídas
+    Quando acesso a área do Motorista pela interface
+    E a API rejeita temporariamente a alteração da minha entrega
+    Então vejo o carregamento sem antecipar o novo status
+    E vejo a mensagem de erro da atualização
+    E minha entrega mostra o status "Pendente"
+    Quando inicio o transporte da minha entrega
+    Então minha entrega mostra o status "Em transporte"
+
+  @US-11 @interface @excecao @smoke
+  Cenário: Sessão expirada durante atualização de status
+    Dado que estou autenticado como Motorista
+    E possuo entregas atribuídas
+    Quando acesso a área do Motorista pela interface
+    E a sessão expira ao iniciar o transporte
+    Então volto ao login com mensagem de sessão expirada
+
+  @US-11 @interface @excecao @smoke
+  Cenário: Outra sessão já iniciou o transporte
+    Dado que estou autenticado como Motorista
+    E possuo entregas atribuídas
+    Quando acesso a área do Motorista pela interface
+    E outra sessão inicia o transporte pela API
+    E tento iniciar novamente pela interface
+    Então vejo a mensagem de transição não permitida
+    Quando atualizo a lista pela interface
+    Então minha entrega mostra o status "Em transporte"
 
   @US-12 @CT-24 @regressao
   Cenário: Gestor consulta o andamento atualizado das entregas
