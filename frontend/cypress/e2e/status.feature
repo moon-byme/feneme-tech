@@ -48,7 +48,7 @@ Funcionalidade: Consulta e atualização do status das entregas
     Então a API nega o acesso
     E não expõe os dados dessa entrega
 
-  # O histórico é verificado no PostgreSQL por deliveries.test_ft48.
+  # O histórico é verificado no PostgreSQL por deliveries.test_delivery_status.
   # A consulta pública de eventos pertence à FT-59.
   @US-11 @CT-10 @regressao @smoke
   Cenário: Motorista atualiza o status de uma entrega atribuída

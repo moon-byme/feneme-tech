@@ -88,7 +88,7 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 - O Gestor consulta o status persistido na listagem existente, sem controles de alteração.
 - A consulta completa do histórico e a evolução do acompanhamento pertencem à FT-59 e FT-49.
 
-Execução, decisões e evidências: [relatório da FT-48](docs/qa/ft48-implementacao.md). A implementação ainda depende da revisão de QA, aceite do PO e conferência da DoD.
+Execução, decisões e evidências: [relatório da FT-48](docs/qa/atualizacao-status-entrega.md). A implementação ainda depende da revisão de QA, aceite do PO e conferência da DoD.
 
 ### Segurança e autorização
 

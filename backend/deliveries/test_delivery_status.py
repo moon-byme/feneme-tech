@@ -25,9 +25,9 @@ class StatusFixtures:
 
     def setUp(self):
         super().setUp()
-        self.manager = self.make_user("gestor_ft48", UserProfile.Role.GESTOR)
-        self.driver = self.make_user("motorista_ft48", UserProfile.Role.MOTORISTA)
-        self.other = self.make_user("outro_ft48", UserProfile.Role.MOTORISTA)
+        self.manager = self.make_user("gestor_status", UserProfile.Role.GESTOR)
+        self.driver = self.make_user("motorista_status", UserProfile.Role.MOTORISTA)
+        self.other = self.make_user("outro_status", UserProfile.Role.MOTORISTA)
         self.delivery = self.make_delivery()
         self.url = f"/api/deliveries/{self.delivery.pk}/update-status/"
 
@@ -216,7 +216,7 @@ class DeliveryStatusTests(StatusFixtures, APITestCase):
 
     def test_ft34_twenty_updates_recovered_after_reauthentication(self):
         # Dez entregas x duas transições válidas = 20 alterações persistidas.
-        self.driver.set_password("SenhaTesteFT48!")
+        self.driver.set_password("SenhaTesteStatus!")
         self.driver.save(update_fields=["password"])
         deliveries = [self.make_delivery() for _ in range(10)]
         recovered = 0
@@ -226,7 +226,7 @@ class DeliveryStatusTests(StatusFixtures, APITestCase):
                 # Nova sessão/autenticação e nova instância ORM, sem cache do cliente.
                 client = APIClient()
                 login = client.post("/api/auth/login/", {
-                    "username": self.driver.username, "password": "SenhaTesteFT48!",
+                    "username": self.driver.username, "password": "SenhaTesteStatus!",
                 })
                 self.assertEqual(login.status_code, 200)
                 client.credentials(HTTP_AUTHORIZATION=f"Bearer {login.data['access']}")

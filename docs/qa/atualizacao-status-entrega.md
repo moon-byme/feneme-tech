@@ -1,6 +1,6 @@
 # FT-48 / US-11 — atualização manual de status
 
-Implementação preparada em 18/11/2026 para R2 / Sprint 3, baseada na `main` (`ab1bae3`). Branch: `feature/ft-48-atualizar-status-entrega`.
+Implementação preparada em 18/11/2026 para R2 / Sprint 3, baseada na `main` (`ab1bae3`). Branch: `feature/atualizar-status-entrega`.
 
 Referências: [FT-48](https://feneme.atlassian.net/browse/FT-48), incluindo a decisão do PO de 10/11/2026; [FT-34](https://feneme.atlassian.net/browse/FT-34), [FT-49](https://feneme.atlassian.net/browse/FT-49) e [FT-59](https://feneme.atlassian.net/browse/FT-59).
 
@@ -43,7 +43,7 @@ Na pasta `backend`, usando `.venv\Scripts\python.exe` como interpretador:
 
 Resultados: system check sem problemas; migração aplicada; nenhuma migração pendente de geração; **166 testes aprovados em 171,914 s**, sem testes ignorados. A suíte completa abrange autenticação, cadastro, atribuição, FT-46, FT-58, acesso cruzado e clima, além da FT-48.
 
-Cobertura específica em `deliveries.test_ft48` e `deliveries.test_ft48_migration`:
+Cobertura específica em `deliveries.test_delivery_status` e `deliveries.test_delivery_status_migration`:
 
 - Matriz dos nove pares de estado: duas transições aceitas e sete rejeitadas, com preservação dos dados em rejeições.
 - Eventos com todos os campos obrigatórios e ordenação cronológica.
@@ -68,7 +68,7 @@ Resultados: **build de produção aprovado** (TypeScript + Vite, 34 módulos); *
 
 Os cenários da FT-48 estão em `status.feature`, marcados `@US-11` e `@smoke`, integrando o job de smoke existente no CI. Exercitam as duas transições pela interface, estado final, nova autenticação/reload, consulta pelo Gestor sem controles, acesso cruzado, carregamento, erro/repetição, expiração da sessão e conflito com outra sessão. Histórico é verificado nos testes Django; não foi criado endpoint de consulta antecipando a FT-59.
 
-Execução específica da FT-48, contra banco PostgreSQL descartável `feneme_ft48_e2e_20261118_001`, separado da base local:
+Execução específica da FT-48, contra banco PostgreSQL descartável `feneme_status_e2e_20261118_001`, separado da base local:
 
 ```powershell
 # Backend: DB_NAME aponta para a base descartável, já migrada e com seed_e2e_users.
@@ -90,10 +90,10 @@ Resultado: **25/25 cenários aprovados em 3 min 6 s**, sem falhas, pendências o
 Verificação adicional, na pasta `backend`:
 
 ```powershell
-.venv\Scripts\python.exe verify_ft48_restart.py --database feneme_ft48_e2e_20261118_001
+.venv\Scripts\python.exe verify_delivery_status_restart.py --database feneme_status_e2e_20261118_001
 ```
 
-Resultado: **PASS**. O script cria dados fictícios em base com prefixo obrigatório `feneme_ft48_e2e_`, inicia um processo Django independente, cadastra/atribui a entrega pela API, executa a primeira transição e encerra o servidor. Após iniciar outro processo, autentica novamente Gestor e Motorista e confirma `EM_TRANSPORTE` via HTTP; uma conexão ORM nova recupera o evento com entrega, estados, autoria e data/hora. No Windows, encerra a árvore do PID que criou, confirma que a porta fechou e exige um novo PID. A execução requer permissão para encerrar os próprios subprocessos; neste ambiente foi feita fora do sandbox. A sondagem de inicialização repete erros de conexão transitórios.
+Resultado: **PASS**. O script cria dados fictícios em base com prefixo obrigatório `feneme_status_e2e_`, inicia um processo Django independente, cadastra/atribui a entrega pela API, executa a primeira transição e encerra o servidor. Após iniciar outro processo, autentica novamente Gestor e Motorista e confirma `EM_TRANSPORTE` via HTTP; uma conexão ORM nova recupera o evento com entrega, estados, autoria e data/hora. No Windows, encerra a árvore do PID que criou, confirma que a porta fechou e exige um novo PID. A execução requer permissão para encerrar os próprios subprocessos; neste ambiente foi feita fora do sandbox. A sondagem de inicialização repete erros de conexão transitórios.
 
 ## Arquivos alterados
 
@@ -103,12 +103,12 @@ Resultado: **PASS**. O script cria dados fictícios em base com prefixo obrigat�
 | Dados | `backend/deliveries/models.py`, `migrations/0003_alter_delivery_status_deliverystatushistory.py` | Estados e histórico persistente |
 | API | `backend/deliveries/serializers.py`, `views.py` | Entrada validada, transições, bloqueio e transação |
 | Administração | `backend/deliveries/admin.py` | Status somente leitura |
-| Testes de backend | `backend/deliveries/test_ft48.py`, `test_ft48_migration.py` | Regras, segurança, atomicidade, concorrência, FT-34 e migração |
-| Verificação adicional | `backend/verify_ft48_restart.py` | Reinício real do servidor em banco descartável |
+| Testes de backend | `backend/deliveries/test_delivery_status.py`, `test_delivery_status_migration.py` | Regras, segurança, atomicidade, concorrência, FT-34 e migração |
+| Verificação adicional | `backend/verify_delivery_status_restart.py` | Reinício real do servidor em banco descartável |
 | Cliente HTTP e tipos | `frontend/src/api.ts`, `types.ts` | Operação específica e rótulos compartilhados |
 | Interface | `frontend/src/components/MotoristaHome.tsx`, `App.tsx`, `styles.css` | Ações do Motorista e status legível para ambos os perfis |
 | Aceitação | `frontend/cypress/e2e/status.feature`, `support/step_definitions/status.steps.ts` | Cenários reais da US-11 e tipagem dos aliases existentes |
-| Documentação | `README.md`, `docs/qa/ft48-implementacao.md` | Contrato, decisões, evidências e pendências |
+| Documentação | `README.md`, `docs/qa/atualizacao-status-entrega.md` | Contrato, decisões, evidências e pendências |
 
 ## Integrações e pendências de aceite
 

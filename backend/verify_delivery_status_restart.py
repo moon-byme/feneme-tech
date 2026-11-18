@@ -1,7 +1,7 @@
 """Evidência reproduzível de persistência após reinício real do servidor.
 
 Use somente um banco descartável já migrado:
-python verify_ft48_restart.py --database feneme_ft48_e2e_20261118_001
+python verify_delivery_status_restart.py --database feneme_status_e2e_20261118_001
 """
 import argparse
 import json
@@ -19,8 +19,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", required=True)
     args = parser.parse_args()
-    if not args.database.startswith("feneme_ft48_e2e_"):
-        parser.error("Use um banco descartável com prefixo feneme_ft48_e2e_.")
+    if not args.database.startswith("feneme_status_e2e_"):
+        parser.error("Use um banco descartável com prefixo feneme_status_e2e_.")
     os.environ["DB_NAME"] = args.database
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
     import django
