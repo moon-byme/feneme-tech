@@ -1,4 +1,11 @@
 export type UserRole = "GESTOR" | "MOTORISTA";
+export type DeliveryStatus = "PENDENTE" | "EM_TRANSPORTE" | "ENTREGUE";
+
+export const DELIVERY_STATUS_LABELS: Record<DeliveryStatus, string> = {
+  PENDENTE: "Pendente",
+  EM_TRANSPORTE: "Em transporte",
+  ENTREGUE: "Entregue",
+};
 
 export interface AuthUser {
   id: number;
@@ -33,7 +40,7 @@ export interface Delivery {
   assigned_driver: number | null;
   assigned_driver_username: string | null;
   created_by_username: string;
-  status: string;
+  status: DeliveryStatus;
   route_alternatives?: RouteAlternative[];
   created_at: string;
   updated_at: string;

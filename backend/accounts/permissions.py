@@ -14,6 +14,18 @@ class IsGestorOrMotorista(BasePermission):
         except UserProfile.DoesNotExist:
             return False
 
+class IsMotorista(BasePermission):
+    message = "Esta operação está disponível apenas para usuários com perfil Motorista."
+
+    def has_permission(self, request, view):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        try:
+            return request.user.profile.role == UserProfile.Role.MOTORISTA
+        except UserProfile.DoesNotExist:
+            return False
+
+
 class IsGestor(BasePermission):
     message = "Esta operação está disponível apenas para usuários com perfil Gestor."
 
