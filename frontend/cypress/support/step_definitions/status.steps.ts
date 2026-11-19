@@ -1,20 +1,13 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import { autenticarComoGestor, autenticarComoMotorista } from "../qa-helpers";
-
-const senhaE2E = (): string => {
-  const password = Cypress.env("E2E_PASSWORD") as string | undefined;
-  if (!password) {
-    throw new Error("Defina CYPRESS_E2E_PASSWORD com a senha das contas fictícias de teste.");
-  }
-  return password;
-};
+import { autenticarComoGestor, autenticarComoMotorista, senhaE2E } from "../qa-helpers";
 
 type Delivery = {
   id: number;
   origin: string;
   destination: string;
   cargo_description: string;
-  status: string;
+  status: "PENDENTE" | "EM_TRANSPORTE" | "ENTREGUE";
+  assigned_driver_username?: string | null;
 };
 
 type Driver = {
@@ -23,9 +16,11 @@ type Driver = {
 };
 
 function autenticarApi(username: string) {
-  return cy.request("POST", "/api/auth/login/", {
-    username,
-    password: senhaE2E(),
+  return cy.request({
+    method: "POST",
+    url: "/api/auth/login/",
+    body: { username, password: senhaE2E() },
+    log: false,
   });
 }
 
@@ -62,6 +57,36 @@ function criarEntregaParaMotorista(
   });
 }
 
+function atualizarStatusComoMotorista(
+  token: string,
+  delivery: Delivery,
+  status: Delivery["status"],
+) {
+  return cy.request({
+    method: "POST",
+    url: `/api/deliveries/${delivery.id}/update-status/`,
+    headers: { Authorization: `Bearer ${token}` },
+    body: { status },
+  }).then((response) => {
+    expect(response.status).to.eq(200);
+    expect(response.body.status).to.eq(status);
+  });
+}
+
+function cardDoGestor(delivery: Delivery) {
+  return cy.contains(".delivery-id", new RegExp(`^ENTREGA #${delivery.id}$`))
+    .closest("article.delivery-card");
+}
+
+Given("que o Gestor está autenticado para consultar entregas", () => {
+  autenticarApi("gestor_e2e").then(({ body }) => {
+    cy.wrap(body.access).as("qaManagerToken");
+  });
+  autenticarApi("motorista_e2e").then(({ body }) => {
+    cy.wrap(body.access).as("qaDriverToken");
+  });
+});
+
 Given("que estou autenticado como Motorista", () => {
   autenticarApi("gestor_e2e").then(({ body }) => {
     cy.wrap(body.access).as("qaManagerToken");
@@ -69,6 +94,137 @@ Given("que estou autenticado como Motorista", () => {
   autenticarApi("motorista_e2e").then(({ body }) => {
     cy.wrap(body.access).as("qaDriverToken");
   });
+});
+
+Given("existem entregas com status atualizados pelos Motoristas", () => {
+  const marker = `US12-${Date.now()}`;
+  cy.get<string>("@qaManagerToken").then((managerToken) => {
+    return criarEntregaParaMotorista(managerToken, "motorista_e2e", `${marker}-PENDENTE`)
+      .then((delivery) => {
+        cy.wrap(delivery).as("qaPendingDelivery");
+        return criarEntregaParaMotorista(managerToken, "motorista_e2e", `${marker}-TRANSPORTE`);
+      })
+      .then((delivery) => {
+        cy.wrap(delivery).as("qaTransitDelivery");
+        return criarEntregaParaMotorista(managerToken, "motorista_e2e", `${marker}-ENTREGUE`);
+      })
+      .then((delivery) => cy.wrap(delivery).as("qaDeliveredDelivery"));
+  }).then(() => {
+    return cy.get<string>("@qaDriverToken").then((driverToken) => {
+      return cy.get<Delivery>("@qaTransitDelivery").then((delivery) => {
+        return atualizarStatusComoMotorista(driverToken, delivery, "EM_TRANSPORTE");
+      }).then(() => {
+        return cy.get<Delivery>("@qaDeliveredDelivery").then((delivery) => {
+          return atualizarStatusComoMotorista(driverToken, delivery, "EM_TRANSPORTE")
+            .then(() => atualizarStatusComoMotorista(driverToken, delivery, "ENTREGUE"));
+        });
+      });
+    });
+  });
+});
+
+Given("existe outra entrega cadastrada", () => {
+  cy.get<string>("@qaManagerToken").then((managerToken) => {
+    return criarEntregaParaMotorista(
+      managerToken,
+      "motorista_e2e",
+      `NAO-VAZAR-${Date.now()}`,
+    ).then((delivery) => cy.wrap(delivery).as("qaExistingDelivery"));
+  });
+});
+
+When("acesso o acompanhamento das entregas", () => {
+  cy.intercept("GET", "**/api/deliveries/").as("qaManagerTracking");
+  autenticarComoGestor();
+  cy.wait("@qaManagerTracking").its("response.statusCode").should("eq", 200);
+});
+
+Then("o sistema exibe o status atual de cada entrega", () => {
+  cy.get<Delivery>("@qaPendingDelivery").then((delivery) => {
+    cardDoGestor(delivery)
+      .should("be.visible")
+      .and("contain.text", delivery.origin)
+      .and("contain.text", delivery.destination)
+      .and("contain.text", "Motorista responsável: motorista_e2e")
+      .find(".status-chip")
+      .should("have.text", "Pendente");
+  });
+  cy.get<Delivery>("@qaTransitDelivery").then((delivery) => {
+    cardDoGestor(delivery).find(".status-chip").should("have.text", "Em transporte");
+  });
+  cy.get<Delivery>("@qaDeliveredDelivery").then((delivery) => {
+    cardDoGestor(delivery).find(".status-chip").should("have.text", "Entregue");
+  });
+  cy.get("[data-cy=update-status]").should("not.exist");
+});
+
+Then("apresenta as atualizações persistidas pelos Motoristas", () => {
+  cy.get<string>("@qaDriverToken").then((driverToken) => {
+    return cy.get<Delivery>("@qaPendingDelivery").then((delivery) => {
+      return atualizarStatusComoMotorista(driverToken, delivery, "EM_TRANSPORTE");
+    });
+  }).then(() => {
+    cy.intercept("GET", "**/api/deliveries/").as("qaManagerRefresh");
+    cy.contains("button", "Atualizar").should("be.enabled").click();
+    return cy.wait("@qaManagerRefresh").then(({ response }) => {
+      expect(response?.statusCode).to.eq(200);
+      cy.get<Delivery>("@qaPendingDelivery").then((delivery) => {
+        const refreshed = (response?.body as Delivery[]).find((item) => item.id === delivery.id);
+        expect(refreshed?.status).to.eq("EM_TRANSPORTE");
+        cardDoGestor(delivery).find(".status-chip").should("have.text", "Em transporte");
+      });
+    });
+  }).then(() => {
+    cy.contains("button", "Sair").click();
+    cy.intercept("GET", "**/api/deliveries/").as("qaManagerNewSession");
+    autenticarComoGestor();
+    return cy.wait("@qaManagerNewSession").its("response.statusCode").should("eq", 200);
+  }).then(() => {
+    cy.get<Delivery>("@qaPendingDelivery").then((delivery) => {
+      cardDoGestor(delivery).find(".status-chip").should("have.text", "Em transporte");
+    });
+  });
+});
+
+When("tento consultar o andamento de uma entrega inexistente", () => {
+  cy.get<string>("@qaManagerToken").then((token) => {
+    cy.request({
+      method: "GET",
+      url: "/api/deliveries/9000000000000000/",
+      headers: { Authorization: `Bearer ${token}` },
+      failOnStatusCode: false,
+    }).as("qaMissingDeliveryResponse");
+  });
+});
+
+Then("o sistema informa que o registro não foi encontrado", () => {
+  cy.get<Cypress.Response<unknown>>("@qaMissingDeliveryResponse")
+    .its("status").should("eq", 404);
+});
+
+Then("não apresenta dados de outra entrega", () => {
+  cy.get<Delivery>("@qaExistingDelivery").then((delivery) => {
+    cy.get<Cypress.Response<unknown>>("@qaMissingDeliveryResponse").then((response) => {
+      const body = JSON.stringify(response.body);
+      expect(body).not.to.include(delivery.origin);
+      expect(body).not.to.include(delivery.destination);
+      expect(body).not.to.include(delivery.cargo_description);
+    });
+  });
+});
+
+When("a consulta do acompanhamento falha", () => {
+  cy.intercept("GET", "**/api/deliveries/", {
+    statusCode: 503,
+    body: { detail: "Consulta indisponível no teste." },
+  }).as("qaManagerTrackingFailure");
+  autenticarComoGestor();
+  cy.wait("@qaManagerTrackingFailure").its("response.statusCode").should("eq", 503);
+});
+
+Then("a interface informa a falha sem indicar lista vazia", () => {
+  cy.get("[role=alert]").should("contain.text", "Consulta indisponível no teste.");
+  cy.contains("strong", "Nenhuma entrega cadastrada").should("not.exist");
 });
 
 Given("possuo entregas atribuídas", () => {
