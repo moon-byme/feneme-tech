@@ -86,6 +86,17 @@ class DeliverySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Informe a descrição da carga.")
         return value
 
+class UpdateDeliveryStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(
+        choices=Delivery.Status.choices,
+        error_messages={
+            "required": "Informe o novo status da entrega.",
+            "null": "Informe o novo status da entrega.",
+            "invalid_choice": "Status inválido. Use PENDENTE, EM_TRANSPORTE ou ENTREGUE.",
+        },
+    )
+
+
 class AssignDriverSerializer(serializers.Serializer):
     driver_id = serializers.IntegerField(min_value=1)
 
