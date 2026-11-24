@@ -1,4 +1,5 @@
 import type {
+  CargoType,
   DailyForecast,
   Delivery,
   DeliveryStatus,
@@ -65,6 +66,9 @@ export const api = {
     return request<DeliveryStatusHistoryResponse>(
       `/deliveries/${deliveryId}/status-history/`, token,
     );
+  },
+  listCargoTypes(token: string, signal?: AbortSignal) {
+    return request<CargoType[]>("/tipos-carga/", token, { signal });
   },
   listDrivers(token: string) {
     return request<DriverOption[]>("/drivers/", token);

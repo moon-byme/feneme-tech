@@ -99,6 +99,13 @@ Execução, decisões e evidências da FT-48: [PR #41](https://github.com/moon-b
 - Apenas Gestor autenticado consulta o histórico; Motorista recebe 403, anônimo 401 e entrega inexistente 404. A API é somente leitura e não altera transições.
 - Sem GPS, ocorrência detalhada, rota escolhida ou indicadores térmicos (ampliações previstas para a FT-122).
 
+### Catálogo de tipos de carga — FT-114 / US-15
+
+- Catálogo somente leitura com 7 tipos de carga (decisão D4 da FT-112): tomate, frangos de corte, suínos, bovinos zebuínos, medicamentos de temperatura ambiente, amostras biológicas e cosméticos.
+- Cada tipo mostra categoria, limite de referência em °C, o que a fonte diz, a fonte (link) e o tipo de fonte; cosméticos aparecem como **limite derivado**.
+- Critério de entrada: limite ≥ 20 °C e fonte verificável, porque o Feneme considera transporte sem refrigeração.
+- Dados carregados por migração (`catalog/seed.py`); a API não aceita criação, edição nem exclusão (405).
+
 ### Segurança e autorização
 
 - As permissões são verificadas no backend, não apenas na interface.
@@ -116,7 +123,6 @@ As funcionalidades abaixo estão **planejadas, não implementadas**:
 | Funcionalidade | Jira | Sprint |
 | --- | --- | --- |
 | Lista única de cidades no cadastro e na previsão do clima | FT-113 (US-14) | 3 |
-| Catálogo de tipos de carga com limite de temperatura e fonte | FT-114 (US-15) | 3 |
 | Tipo de carga e data/hora de saída na entrega | FT-117 (US-16) | 4 |
 | Até 3 rotas automáticas pela Google Routes API | FT-118 (US-17) | 4 |
 | Mapa das rotas (Maps JavaScript API) | FT-120 (US-18) | 4 |
@@ -340,6 +346,7 @@ As rotas abaixo correspondem à implementação identificada no backend atual.
 | `POST` | `/api/deliveries/` | Gestor | Cadastra uma entrega. |
 | `GET` | `/api/deliveries/{id}/` | Gestor e Motorista | Consulta uma entrega, respeitando o isolamento por Motorista. |
 | `POST` | `/api/deliveries/{id}/update-status/` | Motorista atribuído | Recebe `{"status":"EM_TRANSPORTE"}` ou `{"status":"ENTREGUE"}` e retorna a entrega atualizada. |
+| `GET` | `/api/tipos-carga/` | Gestor e Motorista | Lista os tipos de carga com limite de temperatura, referência e fonte (somente leitura). |
 | `GET` | `/api/deliveries/{id}/status-history/` | Gestor | Retorna `delivery_id`, `current_status` e `history` (eventos em ordem cronológica), sem permitir alteração. |
 | `POST` | `/api/deliveries/{id}/assign-driver/` | Gestor | Atribui ou reatribui um Motorista à entrega. |
 

@@ -74,3 +74,16 @@ export interface DailyForecast {
   source: string;
   notice: string;
 }
+
+/** US-15 / FT-114: tipo de carga com limite de temperatura de referência e fonte. */
+export interface CargoType {
+  id: number;
+  name: string;
+  category: string;
+  limit_c: number;
+  reference: string;
+  source_name: string;
+  source_url: string;
+  source_type: string;
+  is_derived: boolean;
+}
