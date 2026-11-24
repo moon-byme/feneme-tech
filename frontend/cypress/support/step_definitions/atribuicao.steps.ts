@@ -42,7 +42,7 @@ Then("o sistema salva a atribuição", () => {
   });
   cy.get("@qaOrigin").then((origin) => {
     cy.contains("article.delivery-card", String(origin))
-      .should("contain.text", "Motorista: motorista_e2e");
+      .should("contain.text", "Motorista responsável: motorista_e2e");
   });
 });
 

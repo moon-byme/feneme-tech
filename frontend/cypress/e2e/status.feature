@@ -104,7 +104,7 @@ Funcionalidade: Consulta e atualização do status das entregas
 
   @US-12 @CT-24 @regressao
   Cenário: Gestor consulta o andamento atualizado das entregas
-    Dado que estou autenticado como Gestor
+    Dado que o Gestor está autenticado para consultar entregas
     E existem entregas com status atualizados pelos Motoristas
     Quando acesso o acompanhamento das entregas
     Então o sistema exibe o status atual de cada entrega
@@ -112,7 +112,14 @@ Funcionalidade: Consulta e atualização do status das entregas
 
   @US-12 @CT-25 @excecao @regressao
   Cenário: Gestor consulta andamento de entrega inexistente
-    Dado que estou autenticado como Gestor
+    Dado que o Gestor está autenticado para consultar entregas
+    E existe outra entrega cadastrada
     Quando tento consultar o andamento de uma entrega inexistente
     Então o sistema informa que o registro não foi encontrado
     E não apresenta dados de outra entrega
+
+  @US-12 @interface @excecao
+  Cenário: Falha ao consultar o acompanhamento não é apresentada como lista vazia
+    Dado que o Gestor está autenticado para consultar entregas
+    Quando a consulta do acompanhamento falha
+    Então a interface informa a falha sem indicar lista vazia
