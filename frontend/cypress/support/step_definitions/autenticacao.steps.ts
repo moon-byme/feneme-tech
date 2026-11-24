@@ -30,7 +30,7 @@ When("eu entro com o usuário {string} e a senha {string}", (usuario: string, se
 
 Then("vejo a área do Gestor", () => {
   cy.get("[data-cy=role-chip]").should("have.text", "Gestor");
-  cy.contains("h1", "Gerencie suas entregas").should("be.visible");
+  cy.contains("h1", "Acompanhamento das entregas").should("be.visible");
 });
 
 Then("vejo a área do Motorista", () => {
