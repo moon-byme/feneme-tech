@@ -2,6 +2,7 @@ import type {
   DailyForecast,
   Delivery,
   DeliveryStatus,
+  DeliveryStatusHistoryResponse,
   DriverOption,
   LoginResponse,
   ReferenceLocation,
@@ -59,6 +60,11 @@ export const api = {
   },
   listDeliveries(token: string, signal?: AbortSignal) {
     return request<Delivery[]>("/deliveries/", token, { signal });
+  },
+  getDeliveryStatusHistory(token: string, deliveryId: number) {
+    return request<DeliveryStatusHistoryResponse>(
+      `/deliveries/${deliveryId}/status-history/`, token,
+    );
   },
   listDrivers(token: string) {
     return request<DriverOption[]>("/drivers/", token);
