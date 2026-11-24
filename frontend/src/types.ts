@@ -34,8 +34,13 @@ export interface RouteAlternative {
 
 export interface Delivery {
   id: number;
+  /** Texto "Cidade - UF"; nas entregas anteriores à US-14 pode ser texto livre. */
   origin: string;
   destination: string;
+  origin_city: number | null;
+  destination_city: number | null;
+  /** Entrega anterior à lista de cidades cuja origem ou destino não foi reconhecido. */
+  needs_review: boolean;
   cargo_description: string;
   assigned_driver: number | null;
   assigned_driver_username: string | null;
@@ -86,4 +91,15 @@ export interface CargoType {
   source_url: string;
   source_type: string;
   is_derived: boolean;
+}
+
+/** US-14 / FT-113: cidade da lista fechada, a mesma do cadastro e do clima. */
+export interface City {
+  id: number;
+  name: string;
+  uf: string;
+  label: string;
+  slug: string;
+  latitude: number;
+  longitude: number;
 }

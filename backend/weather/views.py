@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 from accounts.permissions import IsGestor
 from weather.client import ForecastUnavailable, fetch_daily_forecast
-from weather.locations import LOCATIONS_BY_SLUG, REFERENCE_LOCATIONS
+from catalog.models import City
 
 UNAVAILABLE_MESSAGE = (
     "Previsão indisponível no momento. O cadastro e a comparação manual continuam disponíveis."
@@ -13,13 +13,16 @@ FORECAST_NOTICE = "Previsão de temperatura ambiente; não é a temperatura medi
 
 
 class ReferenceLocationListView(APIView):
-    """Lista as localidades de demonstração (US-08 / FT-47)."""
+    """Localidades da previsão (US-08 / FT-47).
+
+    Desde a US-14 (FT-113) é a mesma lista fechada de cidades do cadastro de entregas.
+    """
 
     permission_classes = [IsGestor]
 
     def get(self, request):
         return Response(
-            [{"slug": location.slug, "name": location.name} for location in REFERENCE_LOCATIONS]
+            [{"slug": city.slug, "name": city.label} for city in City.objects.all()]
         )
 
 
@@ -30,7 +33,7 @@ class DailyForecastView(APIView):
 
     def get(self, request):
         slug = request.query_params.get("location", "")
-        location = LOCATIONS_BY_SLUG.get(slug)
+        location = City.objects.filter(slug=slug).first() if slug else None
         if location is None:
             return Response(
                 {"location": ["Selecione uma localidade de referência válida."]},
@@ -47,7 +50,7 @@ class DailyForecastView(APIView):
 
         return Response(
             {
-                "location": {"slug": location.slug, "name": location.name},
+                "location": {"slug": location.slug, "name": location.label},
                 "date": forecast.date.isoformat(),
                 "temperature_max": forecast.temperature_max,
                 "temperature_min": forecast.temperature_min,

@@ -1,5 +1,6 @@
 import type {
   CargoType,
+  City,
   DailyForecast,
   Delivery,
   DeliveryStatus,
@@ -79,7 +80,10 @@ export const api = {
       body: JSON.stringify({ status }),
     });
   },
-  createDelivery(token: string, input: { origin: string; destination: string; cargo_description: string }) {
+  listCities(token: string) {
+    return request<City[]>("/cidades/", token);
+  },
+  createDelivery(token: string, input: { origin_city: number; destination_city: number; cargo_description: string }) {
     return request<Delivery>("/deliveries/", token, {
       method: "POST",
       body: JSON.stringify(input),

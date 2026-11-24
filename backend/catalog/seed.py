@@ -1,4 +1,34 @@
-"""Dados iniciais aprovados em FT-112 (decisão D4, 16/11/2026)."""
+"""Dados iniciais aprovados em FT-112 (decisões D4 e D5, 16/11/2026)."""
+
+# (nome, UF, latitude, longitude) — 26 cidades, 13 estados + DF.
+CITIES = [
+    ("João Pessoa", "PB", -7.1195, -34.8450),
+    ("Campina Grande", "PB", -7.2307, -35.8817),
+    ("Patos", "PB", -7.0244, -37.2800),
+    ("Recife", "PE", -8.0476, -34.8770),
+    ("Caruaru", "PE", -8.2835, -35.9761),
+    ("Serra Talhada", "PE", -7.9858, -38.2958),
+    ("Petrolina", "PE", -9.3891, -40.5027),
+    ("Natal", "RN", -5.7945, -35.2110),
+    ("Mossoró", "RN", -5.1878, -37.3442),
+    ("Fortaleza", "CE", -3.7319, -38.5267),
+    ("Juazeiro do Norte", "CE", -7.2131, -39.3151),
+    ("Maceió", "AL", -9.6658, -35.7353),
+    ("Arapiraca", "AL", -9.7525, -36.6611),
+    ("Aracaju", "SE", -10.9472, -37.0731),
+    ("Salvador", "BA", -12.9714, -38.5014),
+    ("Feira de Santana", "BA", -12.2664, -38.9663),
+    ("Juazeiro", "BA", -9.4164, -40.5033),
+    ("Vitória da Conquista", "BA", -14.8619, -40.8444),
+    ("Teresina", "PI", -5.0892, -42.8019),
+    ("São Luís", "MA", -2.5307, -44.3068),
+    ("Montes Claros", "MG", -16.7350, -43.8617),
+    ("Belo Horizonte", "MG", -19.9167, -43.9345),
+    ("São Paulo", "SP", -23.5505, -46.6333),
+    ("Rio de Janeiro", "RJ", -22.9068, -43.1729),
+    ("Brasília", "DF", -15.7939, -47.8828),
+    ("Goiânia", "GO", -16.6869, -49.2648),
+]
 
 # Critério de entrada: limite ≥ 20 °C e fonte verificável (o Feneme considera
 # transporte sem refrigeração). Defensivos agrícolas ficaram fora (decisão do PO).

@@ -188,8 +188,11 @@ class DeliveryStatusTests(StatusFixtures, APITestCase):
 
     def test_creation_cannot_override_initial_status(self):
         self.client.force_authenticate(self.manager)
+        from catalog.models import City
         response = self.client.post("/api/deliveries/", {
-            "origin": "A", "destination": "B", "cargo_description": "Teste",
+            "origin_city": City.objects.get(name="Campina Grande").id,
+            "destination_city": City.objects.get(name="Recife").id,
+            "cargo_description": "Teste",
             "status": "ENTREGUE",
         })
         self.assertEqual(response.status_code, 201)

@@ -2,7 +2,19 @@ from decimal import Decimal
 
 from rest_framework import serializers
 from accounts.models import UserProfile
+from catalog.models import City
 from deliveries.models import Delivery, DeliveryStatusHistory, RouteAlternative
+
+# US-14 (FT-113): origem e destino só por cidade da lista fechada.
+CITY_ERRORS = {
+    field: {
+        "required": f"Selecione a cidade de {label} na lista.",
+        "null": f"Selecione a cidade de {label} na lista.",
+        "does_not_exist": "Cidade inexistente. Selecione uma cidade da lista.",
+        "incorrect_type": "Cidade inválida. Selecione uma cidade da lista.",
+    }
+    for field, label in (("origin", "origem"), ("destination", "destino"))
+}
 
 # Limites de sanidade para valores digitados manualmente (US-06 / FT-46).
 MAX_DISTANCE_KM = Decimal("5000")
@@ -53,32 +65,37 @@ class DeliverySerializer(serializers.ModelSerializer):
         source="created_by.username", read_only=True
     )
     route_alternatives = RouteAlternativeSerializer(many=True, read_only=True)
+    origin_city = serializers.PrimaryKeyRelatedField(
+        queryset=City.objects.all(), error_messages=CITY_ERRORS["origin"],
+    )
+    destination_city = serializers.PrimaryKeyRelatedField(
+        queryset=City.objects.all(), error_messages=CITY_ERRORS["destination"],
+    )
+    needs_review = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Delivery
         fields = [
-            "id", "origin", "destination", "cargo_description",
+            "id", "origin", "destination", "origin_city", "destination_city",
+            "needs_review", "cargo_description",
             "assigned_driver", "assigned_driver_username",
             "created_by_username", "status", "route_alternatives",
             "created_at", "updated_at",
         ]
         read_only_fields = [
-            "id", "assigned_driver", "assigned_driver_username",
+            "id", "origin", "destination", "assigned_driver", "assigned_driver_username",
             "created_by_username", "status", "route_alternatives",
             "created_at", "updated_at",
         ]
 
-    def validate_origin(self, value):
-        value = value.strip()
-        if not value:
-            raise serializers.ValidationError("Informe a origem.")
-        return value
-
-    def validate_destination(self, value):
-        value = value.strip()
-        if not value:
-            raise serializers.ValidationError("Informe o destino.")
-        return value
+    def validate(self, attrs):
+        origin = attrs.get("origin_city", getattr(self.instance, "origin_city", None))
+        destination = attrs.get("destination_city", getattr(self.instance, "destination_city", None))
+        if origin and destination and origin == destination:
+            raise serializers.ValidationError(
+                {"destination_city": ["O destino deve ser diferente da origem."]}
+            )
+        return attrs
 
     def validate_cargo_description(self, value):
         value = value.strip()

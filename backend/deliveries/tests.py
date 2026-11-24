@@ -3,7 +3,13 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 
 from accounts.models import UserProfile
+from catalog.models import City
 from deliveries.models import Delivery
+
+
+def city_id(name):
+    return City.objects.get(name=name).id
+
 
 class FenemeDeliveryFlowTests(APITestCase):
     def setUp(self):
@@ -43,8 +49,8 @@ class FenemeDeliveryFlowTests(APITestCase):
     def test_motorista_cannot_create_delivery(self):
         self.login_as("motorista_teste")
         response = self.client.post(self.deliveries_url, {
-            "origin": "Campina Grande - PB",
-            "destination": "João Pessoa - PB",
+            "origin_city": city_id("Campina Grande"),
+            "destination_city": city_id("João Pessoa"),
             "cargo_description": "Alimentos",
         }, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -54,17 +60,20 @@ class FenemeDeliveryFlowTests(APITestCase):
         """CT-03 / CT-15: cadastro persistido e consulta dos dados pelo Gestor."""
         self.login_as("gestor_teste")
         payload = {
-            "origin": " Campina Grande - PB ",
-            "destination": "João Pessoa - PB",
+            "origin_city": city_id("Campina Grande"),
+            "destination_city": city_id("João Pessoa"),
             "cargo_description": "Alimentos refrigerados",
         }
         created = self.client.post(self.deliveries_url, payload, format="json")
         self.assertEqual(created.status_code, status.HTTP_201_CREATED, created.data)
         self.assertEqual(created.data["origin"], "Campina Grande - PB")
+        self.assertEqual(created.data["destination"], "João Pessoa - PB")
+        self.assertFalse(created.data["needs_review"])
         self.assertEqual(created.data["created_by_username"], "gestor_teste")
         delivery = Delivery.objects.get(pk=created.data["id"])
         self.assertEqual(delivery.origin, "Campina Grande - PB")
-        self.assertEqual(delivery.destination, payload["destination"])
+        self.assertEqual(delivery.origin_city.name, "Campina Grande")
+        self.assertEqual(delivery.destination, "João Pessoa - PB")
         self.assertEqual(delivery.cargo_description, payload["cargo_description"])
         self.assertEqual(delivery.created_by, self.manager)
         self.assertEqual(delivery.status, Delivery.Status.PENDENTE)
@@ -84,12 +93,20 @@ class FenemeDeliveryFlowTests(APITestCase):
     def test_missing_required_fields_are_rejected(self):
         """CT-04: campos ausentes ou em branco são identificados, sem persistir entrega."""
         self.login_as("gestor_teste")
-        required = {"origin", "destination", "cargo_description"}
-        valid = {"origin": "A", "destination": "B", "cargo_description": "Carga teste"}
-        cases = [({}, required), ({"origin": "A"}, {"destination", "cargo_description"})]
+        required = {"origin_city", "destination_city", "cargo_description"}
+        valid = {
+            "origin_city": city_id("Campina Grande"),
+            "destination_city": city_id("João Pessoa"),
+            "cargo_description": "Carga teste",
+        }
+        cases = [
+            ({}, required),
+            ({"origin_city": valid["origin_city"]}, {"destination_city", "cargo_description"}),
+        ]
         for field in sorted(required):
             cases.append(({key: value for key, value in valid.items() if key != field}, {field}))
-            cases.append(({**valid, field: "   "}, {field}))
+            blank = "   " if field == "cargo_description" else None
+            cases.append(({**valid, field: blank}, {field}))
         for payload, expected_fields in cases:
             with self.subTest(payload=payload):
                 response = self.client.post(self.deliveries_url, payload, format="json")
@@ -104,7 +121,9 @@ class FenemeDeliveryFlowTests(APITestCase):
         """CT-05: atribuição persiste e libera lista e detalhe para o Motorista responsável."""
         self.login_as("gestor_teste")
         created = self.client.post(self.deliveries_url, {
-            "origin": "A", "destination": "B", "cargo_description": "Carga teste",
+            "origin_city": city_id("Campina Grande"),
+            "destination_city": city_id("João Pessoa"),
+            "cargo_description": "Carga teste",
         }, format="json")
         response = self.client.post(
             f"{self.deliveries_url}{created.data['id']}/assign-driver/",
@@ -130,7 +149,9 @@ class FenemeDeliveryFlowTests(APITestCase):
         """CT-17: rejeita usuário que não é Motorista e preserva a atribuição anterior."""
         self.login_as("gestor_teste")
         created = self.client.post(self.deliveries_url, {
-            "origin": "A", "destination": "B", "cargo_description": "Carga teste",
+            "origin_city": city_id("Campina Grande"),
+            "destination_city": city_id("João Pessoa"),
+            "cargo_description": "Carga teste",
         }, format="json")
         delivery = Delivery.objects.get(pk=created.data["id"])
         delivery.assigned_driver = self.driver
