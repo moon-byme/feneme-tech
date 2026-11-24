@@ -4,6 +4,8 @@ from django.db import models
 class Delivery(models.Model):
     class Status(models.TextChoices):
         PENDENTE = "PENDENTE", "Pendente"
+        EM_TRANSPORTE = "EM_TRANSPORTE", "Em transporte"
+        ENTREGUE = "ENTREGUE", "Entregue"
 
     origin = models.CharField("Origem", max_length=180)
     destination = models.CharField("Destino", max_length=180)
@@ -37,6 +39,37 @@ class Delivery(models.Model):
 
     def __str__(self):
         return f"Entrega #{self.pk}: {self.origin} → {self.destination}"
+
+
+class DeliveryStatusHistory(models.Model):
+    """Eventos persistentes da US-11; base da consulta cronológica da FT-59."""
+
+    delivery = models.ForeignKey(
+        Delivery, on_delete=models.PROTECT, related_name="status_history",
+    )
+    previous_status = models.CharField(max_length=20, choices=Delivery.Status.choices)
+    new_status = models.CharField(max_length=20, choices=Delivery.Status.choices)
+    changed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
+        related_name="delivery_status_changes",
+    )
+    changed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["changed_at", "id"]
+        indexes = [models.Index(fields=["delivery", "changed_at", "id"], name="delivery_history_chronological")]
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(previous_status="PENDENTE", new_status="EM_TRANSPORTE")
+                    | models.Q(previous_status="EM_TRANSPORTE", new_status="ENTREGUE")
+                ),
+                name="delivery_history_valid_transition",
+            ),
+            models.UniqueConstraint(
+                fields=["delivery", "previous_status"], name="delivery_history_unique_transition",
+            ),
+        ]
 
 
 class RouteAlternative(models.Model):

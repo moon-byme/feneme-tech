@@ -1,16 +1,19 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from accounts.models import UserProfile
-from accounts.permissions import IsGestor, IsGestorOrMotorista
-from deliveries.models import Delivery, RouteAlternative
+from accounts.permissions import IsGestor, IsGestorOrMotorista, IsMotorista
+from deliveries.models import Delivery, DeliveryStatusHistory, RouteAlternative
 from deliveries.serializers import (
     AssignDriverSerializer,
     DeliverySerializer,
     RouteAlternativeSerializer,
+    UpdateDeliveryStatusSerializer,
 )
 
 ROUTE_LIMIT_MESSAGE = (
@@ -43,6 +46,40 @@ class DeliveryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+    @action(
+        detail=True, methods=["post"], url_path="update-status",
+        permission_classes=[IsAuthenticated, IsMotorista],
+    )
+    def update_status(self, request, pk=None):
+        with transaction.atomic():
+            # Bloqueia somente a entrega, sem joins anuláveis. O vínculo e o
+            # estado são relidos sob a trava, inclusive após uma reatribuição.
+            delivery = get_object_or_404(
+                Delivery.objects.select_for_update(),
+                pk=pk, assigned_driver=request.user,
+            )
+            serializer = UpdateDeliveryStatusSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            new_status = serializer.validated_data["status"]
+            next_status = {
+                Delivery.Status.PENDENTE: Delivery.Status.EM_TRANSPORTE,
+                Delivery.Status.EM_TRANSPORTE: Delivery.Status.ENTREGUE,
+            }.get(delivery.status)
+            if new_status != next_status:
+                raise ValidationError({
+                    "status": "Transição não permitida. Siga Pendente → Em transporte → Entregue; Entregue é final.",
+                })
+
+            previous_status = delivery.status
+            delivery.status = new_status
+            delivery.save(update_fields=["status", "updated_at"])
+            DeliveryStatusHistory.objects.create(
+                delivery=delivery, previous_status=previous_status,
+                new_status=new_status, changed_by=request.user,
+            )
+            data = self.get_serializer(delivery).data
+        return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path="assign-driver")
     def assign_driver(self, request, pk=None):

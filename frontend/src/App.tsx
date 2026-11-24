@@ -5,6 +5,7 @@ import MotoristaHome from "./components/MotoristaHome";
 import RouteAlternatives from "./components/RouteAlternatives";
 import TemperatureForecast from "./components/TemperatureForecast";
 import type { AuthUser, Delivery, DriverOption, ReferenceLocation, UserRole } from "./types";
+import { DELIVERY_STATUS_LABELS } from "./types";
 
 type Session = { access: string; refresh: string; user: AuthUser };
 const SESSION_KEY = "feneme-session";
@@ -277,7 +278,7 @@ function App() {
                 <article className="delivery-card" key={delivery.id}>
                   <div className="delivery-card-top">
                     <span className="delivery-id">ENTREGA #{delivery.id}</span>
-                    <span className="status-chip">{delivery.status === "PENDENTE" ? "Pendente" : delivery.status}</span>
+                    <span className="status-chip" data-status={delivery.status}>{DELIVERY_STATUS_LABELS[delivery.status]}</span>
                   </div>
                   <div className="route">
                     <div><span className="route-dot origin-dot" /><div><small>ORIGEM</small><strong>{delivery.origin}</strong></div></div>
