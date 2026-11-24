@@ -90,7 +90,7 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 
 Evidências da FT-48: [PR #41](https://github.com/moon-byme/feneme-tech/pull/41) e [CI #260](https://github.com/moon-byme/feneme-tech/actions/runs/44357992089). A conferência independente de QA, o aceite do PO e a DoD devem ser registrados nas respectivas issues.
 
-### Histórico de status — FT-59 / US-13
+### Histórico de status 
 
 - O Gestor seleciona **Consultar histórico** no cartão de uma entrega; a interface consulta a API e apresenta os eventos existentes em ordem cronológica (data/hora e ID).
 - Cada evento mostra status anterior, novo status, Motorista responsável pela alteração e data/hora; somente transições realmente persistidas pela FT-48 aparecem.
