@@ -88,7 +88,7 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 - O Gestor consulta o status persistido na listagem existente, sem controles de alteração.
 - A FT-49 oferece o acompanhamento do status atual; a FT-59 disponibiliza a consulta cronológica dos eventos efetivamente registrados.
 
-Evidências da FT-48: [PR #41](https://github.com/moon-byme/feneme-tech/pull/41) e [CI #260](https://github.com/moon-byme/feneme-tech/actions/runs/44357992089). A conferência independente de QA, o aceite do PO e a DoD devem ser registrados nas respectivas issues.
+Execução, decisões e evidências da FT-48: [PR #41](https://github.com/moon-byme/feneme-tech/pull/41), com resultados dos testes, e [CI #260](https://github.com/moon-byme/feneme-tech/actions/runs/44357992089) no commit `1b68903`. O roteiro de verificação de persistência após reinício está em [`backend/verify_delivery_status_restart.py`](backend/verify_delivery_status_restart.py).
 
 ### Histórico de status 
 
