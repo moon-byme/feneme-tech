@@ -88,7 +88,7 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 - O Gestor consulta o status persistido na listagem existente, sem controles de alteração.
 - A consulta completa do histórico e a evolução do acompanhamento pertencem à FT-59 e FT-49.
 
-Execução, decisões e evidências: [relatório da FT-48](docs/qa/atualizacao-status-entrega.md). A implementação ainda depende da revisão de QA, aceite do PO e conferência da DoD.
+Execução, decisões e evidências: [PR #41 da FT-48](https://github.com/moon-byme/feneme-tech/pull/41), com resultados dos testes, e [CI #260](https://github.com/moon-byme/feneme-tech/actions/runs/44357992089) no commit `1b68903`. O roteiro de verificação de persistência após reinício está em [`backend/verify_delivery_status_restart.py`](backend/verify_delivery_status_restart.py). A implementação ainda depende da revisão independente do QA, do aceite do PO e da conferência da DoD.
 
 ### Segurança e autorização
 
