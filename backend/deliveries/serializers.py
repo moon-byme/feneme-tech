@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from rest_framework import serializers
 from accounts.models import UserProfile
-from deliveries.models import Delivery, RouteAlternative
+from deliveries.models import Delivery, DeliveryStatusHistory, RouteAlternative
 
 # Limites de sanidade para valores digitados manualmente (US-06 / FT-46).
 MAX_DISTANCE_KM = Decimal("5000")
@@ -85,6 +85,17 @@ class DeliverySerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("Informe a descrição da carga.")
         return value
+
+class DeliveryStatusHistorySerializer(serializers.ModelSerializer):
+    """Exposição somente leitura dos eventos gravados pela FT-48."""
+
+    changed_by_username = serializers.CharField(source="changed_by.username", read_only=True)
+
+    class Meta:
+        model = DeliveryStatusHistory
+        fields = ["id", "previous_status", "new_status", "changed_by_username", "changed_at"]
+        read_only_fields = fields
+
 
 class UpdateDeliveryStatusSerializer(serializers.Serializer):
     status = serializers.ChoiceField(
