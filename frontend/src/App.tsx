@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { api, ApiError } from "./api";
 import MotoristaHome from "./components/MotoristaHome";
+import DeliveryStatusHistory from "./components/DeliveryStatusHistory";
 import RouteAlternatives from "./components/RouteAlternatives";
 import TemperatureForecast from "./components/TemperatureForecast";
 import type { AuthUser, Delivery, DriverOption, ReferenceLocation, UserRole } from "./types";
@@ -339,6 +340,11 @@ function App() {
                       {drivers.length === 0 && <small className="muted">Cadastre um usuário com perfil Motorista no Admin para habilitar a atribuição.</small>}
                     </form>
                   </div>
+                  <DeliveryStatusHistory
+                    deliveryId={delivery.id}
+                    token={session.access}
+                    onSessionExpired={() => logout(SESSION_EXPIRED)}
+                  />
                 </article>
               ))}
             </div>
