@@ -114,6 +114,18 @@ h2 { font-size: 1.35rem; margin-bottom: 0; }
 .forecast-result strong { font-size: .95rem; }
 .forecast-result .muted { font-size: .76rem; }
 .forecast .message { margin-top: 8px; }
+.status-history { margin-top: 14px; border-top: 1px solid #edf1ee; padding-top: 13px; }
+.status-history > button { width: 100%; text-align: center; }
+.history-panel { margin-top: 12px; background: #f7faf8; border: 1px solid #e1eae4; border-radius: 10px; padding: 14px; }
+.history-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 13px; }
+.history-heading > strong { color: var(--green-dark); font-size: .88rem; }
+.history-heading button { padding: 7px 10px; }
+.history-current-status { font-size: .82rem; margin-bottom: 12px; }
+.history-empty { margin: 0; color: var(--muted); font-size: .83rem; line-height: 1.5; }
+.history-list { margin: 0; padding: 0 0 0 14px; list-style: none; border-left: 2px solid #cbded3; display: grid; gap: 15px; }
+.history-list li { position: relative; display: grid; gap: 3px; font-size: .83rem; }
+.history-list li::before { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; left: -19px; top: 5px; background: #428c6c; }
+.history-list .muted { font-size: .76rem; overflow-wrap: anywhere; }
 .break-anywhere { overflow-wrap: anywhere; }
 footer { padding: 28px 0 0; color: #87958e; font-size: .76rem; text-align: center; }
 @media (max-width: 850px) {
