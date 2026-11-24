@@ -12,6 +12,7 @@ from deliveries.models import Delivery, DeliveryStatusHistory, RouteAlternative
 from deliveries.serializers import (
     AssignDriverSerializer,
     DeliverySerializer,
+    DeliveryStatusHistorySerializer,
     RouteAlternativeSerializer,
     UpdateDeliveryStatusSerializer,
 )
@@ -80,6 +81,20 @@ class DeliveryViewSet(viewsets.ModelViewSet):
             )
             data = self.get_serializer(delivery).data
         return Response(data, status=status.HTTP_200_OK)
+
+    @action(
+        detail=True, methods=["get"], url_path="status-history",
+        permission_classes=[IsAuthenticated, IsGestor],
+    )
+    def status_history(self, request, pk=None):
+        """US-13: consulta cronológica dos eventos efetivamente persistidos."""
+        delivery = self.get_object()
+        events = delivery.status_history.select_related("changed_by").order_by("changed_at", "id")
+        return Response({
+            "delivery_id": delivery.pk,
+            "current_status": delivery.status,
+            "history": DeliveryStatusHistorySerializer(events, many=True).data,
+        })
 
     @action(detail=True, methods=["post"], url_path="assign-driver")
     def assign_driver(self, request, pk=None):
