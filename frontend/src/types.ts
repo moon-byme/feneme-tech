@@ -46,6 +46,20 @@ export interface Delivery {
   updated_at: string;
 }
 
+export interface DeliveryStatusChange {
+  id: number;
+  previous_status: DeliveryStatus;
+  new_status: DeliveryStatus;
+  changed_by_username: string;
+  changed_at: string;
+}
+
+export interface DeliveryStatusHistoryResponse {
+  delivery_id: number;
+  current_status: DeliveryStatus;
+  history: DeliveryStatusChange[];
+}
+
 export interface ReferenceLocation {
   slug: string;
   name: string;
