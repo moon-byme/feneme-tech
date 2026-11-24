@@ -86,9 +86,18 @@ As funcionalidades abaixo foram identificadas no código disponível no reposit�
 - Status e histórico são gravados em uma transação com bloqueio da entrega no PostgreSQL.
 - Cada evento registra entrega, estado anterior, novo estado, Motorista e data/hora; ordenação por `changed_at, id`.
 - O Gestor consulta o status persistido na listagem existente, sem controles de alteração.
-- A consulta completa do histórico e a evolução do acompanhamento pertencem à FT-59 e FT-49.
+- A FT-49 oferece o acompanhamento do status atual; a FT-59 disponibiliza a consulta cronológica dos eventos efetivamente registrados.
 
-Execução, decisões e evidências: [relatório da FT-48](docs/qa/atualizacao-status-entrega.md). A implementação ainda depende da revisão de QA, aceite do PO e conferência da DoD.
+Evidências da FT-48: [PR #41](https://github.com/moon-byme/feneme-tech/pull/41) e [CI #260](https://github.com/moon-byme/feneme-tech/actions/runs/44357992089). A conferência independente de QA, o aceite do PO e a DoD devem ser registrados nas respectivas issues.
+
+### Histórico de status — FT-59 / US-13
+
+- O Gestor seleciona **Consultar histórico** no cartão de uma entrega; a interface consulta a API e apresenta os eventos existentes em ordem cronológica (data/hora e ID).
+- Cada evento mostra status anterior, novo status, Motorista responsável pela alteração e data/hora; somente transições realmente persistidas pela FT-48 aparecem.
+- Uma entrega sem transições exibe **Ainda não há mudanças de status registradas para esta entrega** e mostra seu status atual.
+- **Atualizar histórico** busca os dados novamente. Após sair e autenticar-se, os mesmos eventos permanecem disponíveis.
+- Apenas Gestor autenticado consulta o histórico; Motorista recebe 403, anônimo 401 e entrega inexistente 404. A API é somente leitura e não altera transições.
+- Sem GPS, ocorrência detalhada, rota escolhida ou indicadores térmicos (ampliações previstas para a FT-122).
 
 ### Segurança e autorização
 
@@ -108,7 +117,6 @@ As funcionalidades abaixo estão **planejadas, não implementadas**:
 | --- | --- | --- |
 | Lista única de cidades no cadastro e na previsão do clima | FT-113 (US-14) | 3 |
 | Catálogo de tipos de carga com limite de temperatura e fonte | FT-114 (US-15) | 3 |
-| Consulta completa de acompanhamento e histórico (base persistente na FT-48) | FT-49, FT-59 | 3 |
 | Tipo de carga e data/hora de saída na entrega | FT-117 (US-16) | 4 |
 | Até 3 rotas automáticas pela Google Routes API | FT-118 (US-17) | 4 |
 | Mapa das rotas (Maps JavaScript API) | FT-120 (US-18) | 4 |
@@ -332,6 +340,7 @@ As rotas abaixo correspondem à implementação identificada no backend atual.
 | `POST` | `/api/deliveries/` | Gestor | Cadastra uma entrega. |
 | `GET` | `/api/deliveries/{id}/` | Gestor e Motorista | Consulta uma entrega, respeitando o isolamento por Motorista. |
 | `POST` | `/api/deliveries/{id}/update-status/` | Motorista atribuído | Recebe `{"status":"EM_TRANSPORTE"}` ou `{"status":"ENTREGUE"}` e retorna a entrega atualizada. |
+| `GET` | `/api/deliveries/{id}/status-history/` | Gestor | Retorna `delivery_id`, `current_status` e `history` (eventos em ordem cronológica), sem permitir alteração. |
 | `POST` | `/api/deliveries/{id}/assign-driver/` | Gestor | Atribui ou reatribui um Motorista à entrega. |
 
 ### Exemplo de cadastro de entrega
