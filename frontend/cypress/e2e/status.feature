@@ -1,5 +1,5 @@
 # language: pt
-# US-10 (FT-58), US-11 (FT-48), US-12 (FT-49); CT-10, CT-11, CT-22 a CT-25.
+# US-10 (FT-58), US-11 (FT-48), US-12 (FT-49), US-13 (FT-59); CT-10, CT-11, CT-22 a CT-28.
 
 @R2
 Funcionalidade: Consulta e atualização do status das entregas
@@ -104,7 +104,7 @@ Funcionalidade: Consulta e atualização do status das entregas
 
   @US-12 @CT-24 @regressao
   Cenário: Gestor consulta o andamento atualizado das entregas
-    Dado que estou autenticado como Gestor
+    Dado que o Gestor está autenticado para consultar entregas
     E existem entregas com status atualizados pelos Motoristas
     Quando acesso o acompanhamento das entregas
     Então o sistema exibe o status atual de cada entrega
@@ -112,7 +112,33 @@ Funcionalidade: Consulta e atualização do status das entregas
 
   @US-12 @CT-25 @excecao @regressao
   Cenário: Gestor consulta andamento de entrega inexistente
-    Dado que estou autenticado como Gestor
+    Dado que o Gestor está autenticado para consultar entregas
+    E existe outra entrega cadastrada
     Quando tento consultar o andamento de uma entrega inexistente
     Então o sistema informa que o registro não foi encontrado
     E não apresenta dados de outra entrega
+
+  @US-12 @interface @excecao
+  Cenário: Falha ao consultar o acompanhamento não é apresentada como lista vazia
+    Dado que o Gestor está autenticado para consultar entregas
+    Quando a consulta do acompanhamento falha
+    Então a interface informa a falha sem indicar lista vazia
+
+  # FT-59 / US-13: consulta somente dos eventos reais persistidos pela FT-48.
+  @US-13 @CT-26 @regressao @smoke
+  Cenário: Gestor consulta histórico cronológico com mudanças registradas
+    Dado que criei uma entrega com duas alterações reais para consulta do histórico
+    Quando abro o histórico dessa entrega como Gestor
+    Então vejo as duas transições persistidas na ordem correta
+
+  @US-13 @CT-27 @excecao @smoke
+  Cenário: Gestor consulta histórico vazio de uma entrega
+    Dado que criei uma entrega sem alterações para consulta do histórico
+    Quando abro o histórico dessa entrega como Gestor
+    Então vejo mensagem de histórico vazio e o status Pendente
+
+  @US-13 @CT-28 @regressao @smoke
+  Cenário: Histórico persiste após encerramento e nova autenticação
+    Dado que criei uma entrega com duas alterações reais para consulta do histórico
+    Quando consulto o histórico após sair e entrar novamente
+    Então continuo vendo os eventos persistidos

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { api, ApiError } from "./api";
 import MotoristaHome from "./components/MotoristaHome";
+import DeliveryStatusHistory from "./components/DeliveryStatusHistory";
 import RouteAlternatives from "./components/RouteAlternatives";
 import TemperatureForecast from "./components/TemperatureForecast";
 import type { AuthUser, Delivery, DriverOption, ReferenceLocation, UserRole } from "./types";
@@ -53,6 +54,7 @@ function App() {
   const [driverIds, setDriverIds] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [deliveryError, setDeliveryError] = useState("");
   const [notice, setNotice] = useState("");
 
   const logout = useCallback((message = "") => {
@@ -60,6 +62,7 @@ function App() {
     setSession(null);
     setDeliveries([]);
     setDrivers([]);
+    setDeliveryError("");
     setError(message);
     setNotice("");
   }, []);
@@ -75,15 +78,20 @@ function App() {
 
   const loadDeliveries = useCallback(async (token: string) => {
     setLoading(true);
+    setDeliveryError("");
     try {
       setDeliveries(await api.listDeliveries(token));
       setError("");
     } catch (e) {
-      handleApiError(e, "Erro ao consultar entregas.");
+      if (e instanceof ApiError && e.status === 401) {
+        logout(SESSION_EXPIRED);
+        return;
+      }
+      setDeliveryError(e instanceof ApiError ? e.message : "Erro ao consultar entregas.");
     } finally {
       setLoading(false);
     }
-  }, [handleApiError]);
+  }, [logout]);
 
   const loadDrivers = useCallback(async (token: string) => {
     try {
@@ -225,8 +233,8 @@ function App() {
 
       <section className="hero">
         <p className="eyebrow">PAINEL DE OPERAÇÕES</p>
-        <h1>Gerencie suas entregas</h1>
-        <p>Cadastre os dados essenciais da carga, consulte os registros e atribua um motorista responsável.</p>
+        <h1>Acompanhamento das entregas</h1>
+        <p>Consulte o status atual persistido de cada entrega, cadastre cargas e atribua um motorista responsável.</p>
       </section>
 
       {error && <p className="message error global-message" role="alert">{error}</p>}
@@ -257,15 +265,23 @@ function App() {
 
         <section className="panel delivery-panel">
           <div className="panel-heading">
-            <div><p className="eyebrow">REGISTROS</p><h2>Entregas cadastradas</h2></div>
+            <div><p className="eyebrow">ANDAMENTO</p><h2>Entregas e status atuais</h2></div>
             <span className="count-badge">{deliveries.length}</span>
           </div>
           <div className="list-toolbar">
-            <span className="muted">Dados persistidos no sistema</span>
+            <span className="muted" role="status">{loading ? "Consultando dados persistidos..." : "Dados persistidos no sistema"}</span>
             <button className="button-secondary" type="button" disabled={loading} onClick={() => void loadDeliveries(session.access)}>Atualizar</button>
           </div>
+          {deliveryError && (
+            <p className="message error global-message" role="alert">
+              Não foi possível consultar as entregas: {deliveryError}
+              {deliveries.length > 0 && " A lista abaixo mostra os últimos dados carregados."}
+            </p>
+          )}
           {loading && deliveries.length === 0 ? (
             <p className="empty-state">Carregando entregas...</p>
+          ) : deliveryError && deliveries.length === 0 ? (
+            <p className="empty-state">Tente atualizar a consulta para carregar as entregas.</p>
           ) : deliveries.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon" aria-hidden="true">↗</div>
@@ -278,7 +294,7 @@ function App() {
                 <article className="delivery-card" key={delivery.id}>
                   <div className="delivery-card-top">
                     <span className="delivery-id">ENTREGA #{delivery.id}</span>
-                    <span className="status-chip" data-status={delivery.status}>{DELIVERY_STATUS_LABELS[delivery.status]}</span>
+                    <span className="status-chip" data-status={delivery.status} aria-label={`Status atual: ${DELIVERY_STATUS_LABELS[delivery.status]}`}>{DELIVERY_STATUS_LABELS[delivery.status]}</span>
                   </div>
                   <div className="route">
                     <div><span className="route-dot origin-dot" /><div><small>ORIGEM</small><strong>{delivery.origin}</strong></div></div>
@@ -301,7 +317,7 @@ function App() {
                   />
                   <div className="assignment">
                     {delivery.assigned_driver_username ? (
-                      <p className="assigned-label">Motorista: <strong>{delivery.assigned_driver_username}</strong></p>
+                      <p className="assigned-label">Motorista responsável: <strong>{delivery.assigned_driver_username}</strong></p>
                     ) : (
                       <p className="muted">Ainda sem motorista atribuído.</p>
                     )}
@@ -324,6 +340,11 @@ function App() {
                       {drivers.length === 0 && <small className="muted">Cadastre um usuário com perfil Motorista no Admin para habilitar a atribuição.</small>}
                     </form>
                   </div>
+                  <DeliveryStatusHistory
+                    deliveryId={delivery.id}
+                    token={session.access}
+                    onSessionExpired={() => logout(SESSION_EXPIRED)}
+                  />
                 </article>
               ))}
             </div>

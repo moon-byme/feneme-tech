@@ -242,14 +242,55 @@ class DeliveryStatusTests(StatusFixtures, APITestCase):
         self.assertEqual(DeliveryStatusHistory.objects.count(), 20)
 
     def test_manager_reads_latest_persisted_status_in_list_and_detail(self):
-        for new in ["EM_TRANSPORTE", "ENTREGUE"]:
-            self.assertEqual(self.update(new).status_code, 200)
-            manager = self.token_client(self.manager)
-            detail = manager.get(f"/api/deliveries/{self.delivery.pk}/")
-            self.assertEqual(detail.data["status"], new)
-            listed = manager.get("/api/deliveries/")
-            self.assertEqual(listed.status_code, 200)
-            self.assertEqual(next(item for item in listed.data if item["id"] == self.delivery.pk)["status"], new)
+        pending = self.make_delivery()
+        in_transit = self.make_delivery()
+        delivered = self.delivery
+        expected = {
+            pending.pk: "PENDENTE",
+            in_transit.pk: "EM_TRANSPORTE",
+            delivered.pk: "ENTREGUE",
+        }
+
+        for delivery, transitions in [
+            (in_transit, ["EM_TRANSPORTE"]),
+            (delivered, ["EM_TRANSPORTE", "ENTREGUE"]),
+        ]:
+            for new_status in transitions:
+                response = self.update(new_status, delivery)
+                self.assertEqual(response.status_code, 200, response.data)
+
+        manager = self.token_client(self.manager)
+        listed = manager.get("/api/deliveries/")
+        self.assertEqual(listed.status_code, 200)
+        self.assertEqual(
+            {item["id"]: item["status"] for item in listed.data},
+            expected,
+        )
+        for delivery in [pending, in_transit, delivered]:
+            with self.subTest(delivery=delivery.pk):
+                detail = manager.get(f"/api/deliveries/{delivery.pk}/")
+                self.assertEqual(detail.status_code, 200)
+                self.assertEqual(detail.data["status"], expected[delivery.pk])
+                self.assertEqual(Delivery.objects.get(pk=delivery.pk).status, expected[delivery.pk])
+
+    def test_manager_nonexistent_delivery_returns_404_without_other_delivery_data(self):
+        private_delivery = self.make_delivery(
+            origin="Origem registro privado",
+            destination="Destino registro privado",
+            cargo_description="Carga privada sem acesso",
+        )
+        manager = self.token_client(self.manager)
+        response = manager.get("/api/deliveries/9000000000000000/")
+
+        self.assertEqual(response.status_code, 404)
+        body = response.content.decode()
+        for value in [
+            private_delivery.origin,
+            private_delivery.destination,
+            private_delivery.cargo_description,
+            private_delivery.assigned_driver.username,
+        ]:
+            self.assertNotIn(value, body)
 
     def test_reassignment_revokes_previous_driver_permission(self):
         self.assertEqual(self.update("EM_TRANSPORTE").status_code, 200)
