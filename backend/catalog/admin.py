@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from catalog.models import CargoType
+from catalog.models import CargoType, City
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ("name", "uf", "latitude", "longitude")
+    list_filter = ("uf",)
+    search_fields = ("name",)
 
 
 @admin.register(CargoType)

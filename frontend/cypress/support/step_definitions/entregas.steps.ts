@@ -29,7 +29,8 @@ Then("gera uma identificação para ela", () => {
 
 Then("permite recuperar as informações salvas", () => {
   cy.get("@qaDelivery").then((delivery: any) => {
-    cy.contains("article.delivery-card", delivery.origin).within(() => {
+    cy.contains("article.delivery-card", delivery.cargo_description).within(() => {
+      cy.contains("strong", delivery.origin).should("be.visible");
       cy.contains("strong", delivery.destination).should("be.visible");
       cy.contains("p", delivery.cargo_description).should("be.visible");
     });
@@ -42,13 +43,13 @@ Given("estou preenchendo o formulário de cadastro de entrega", () => {
 
 When("tento salvar sem preencher um campo obrigatório", () => {
   cy.intercept("POST", "**/api/deliveries/").as("invalidCreateDelivery");
-  cy.contains("label", "Origem").find("input").clear();
+  cy.contains("label", "Origem").find("select").select("Selecione a cidade de origem");
   cy.contains("button", "Cadastrar entrega").click();
 });
 
 Then("o sistema impede o cadastro", () => {
-  cy.contains("label", "Origem").find("input").should(($input) => {
-    const input = $input[0] as HTMLInputElement;
+  cy.contains("label", "Origem").find("select").should(($input) => {
+    const input = $input[0] as HTMLSelectElement;
     expect(input.validity.valueMissing).to.eq(true);
     expect(input.validity.valid).to.eq(false);
   });
@@ -56,8 +57,8 @@ Then("o sistema impede o cadastro", () => {
 });
 
 Then("indica os dados que precisam de correção", () => {
-  cy.contains("label", "Origem").find("input").should(($input) => {
-    const input = $input[0] as HTMLInputElement;
+  cy.contains("label", "Origem").find("select").should(($input) => {
+    const input = $input[0] as HTMLSelectElement;
     expect(input.validationMessage).not.to.be.empty;
   });
   cy.contains("Entrega cadastrada com sucesso").should("not.exist");
@@ -82,7 +83,8 @@ Then("o sistema lista as entregas registradas", () => {
 
 Then("permite consultar os dados essenciais de cada uma", () => {
   cy.get("@qaDelivery").then((delivery: any) => {
-    cy.contains("article.delivery-card", delivery.origin).within(() => {
+    cy.contains("article.delivery-card", delivery.cargo_description).within(() => {
+      cy.contains("strong", delivery.origin).should("be.visible");
       cy.contains("strong", delivery.destination).should("be.visible");
       cy.contains("p", delivery.cargo_description).should("be.visible");
     });

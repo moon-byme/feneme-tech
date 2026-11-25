@@ -6,7 +6,7 @@ import MotoristaHome from "./components/MotoristaHome";
 import DeliveryStatusHistory from "./components/DeliveryStatusHistory";
 import RouteAlternatives from "./components/RouteAlternatives";
 import TemperatureForecast from "./components/TemperatureForecast";
-import type { AuthUser, Delivery, DriverOption, ReferenceLocation, UserRole } from "./types";
+import type { AuthUser, City, Delivery, DriverOption, ReferenceLocation, UserRole } from "./types";
 import { DELIVERY_STATUS_LABELS } from "./types";
 
 type Session = { access: string; refresh: string; user: AuthUser };
@@ -49,6 +49,7 @@ function App() {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [drivers, setDrivers] = useState<DriverOption[]>([]);
   const [locations, setLocations] = useState<ReferenceLocation[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [cargoDescription, setCargoDescription] = useState("");
@@ -104,6 +105,14 @@ function App() {
     }
   }, [handleApiError]);
 
+  const loadCities = useCallback(async (token: string) => {
+    try {
+      setCities(await api.listCities(token));
+    } catch (e) {
+      handleApiError(e, "Erro ao consultar a lista de cidades.");
+    }
+  }, [handleApiError]);
+
   const loadLocations = useCallback(async (token: string) => {
     try {
       setLocations(await api.listReferenceLocations(token));
@@ -117,8 +126,9 @@ function App() {
       void loadDeliveries(session.access);
       void loadDrivers(session.access);
       void loadLocations(session.access);
+      void loadCities(session.access);
     }
-  }, [session, loadDeliveries, loadDrivers, loadLocations]);
+  }, [session, loadDeliveries, loadDrivers, loadLocations, loadCities]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -146,13 +156,18 @@ function App() {
   async function handleCreateDelivery(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!session) return;
+    if (origin && origin === destination) {
+      setError("O destino deve ser diferente da origem.");
+      setNotice("");
+      return;
+    }
     setLoading(true);
     setError("");
     setNotice("");
     try {
       await api.createDelivery(session.access, {
-        origin: origin.trim(),
-        destination: destination.trim(),
+        origin_city: Number(origin),
+        destination_city: Number(destination),
         cargo_description: cargoDescription.trim(),
       });
       setOrigin("");
@@ -252,11 +267,26 @@ function App() {
           <form className="stack" onSubmit={handleCreateDelivery}>
             <label>
               Origem
-              <input value={origin} onChange={(e) => setOrigin(e.target.value)} placeholder="Ex.: Campina Grande - PB" maxLength={180} required />
+              <select data-cy="delivery-origin" value={origin} onChange={(e) => setOrigin(e.target.value)} required>
+                <option value="">Selecione a cidade de origem</option>
+                {cities.map((city) => <option key={city.id} value={city.id}>{city.label}</option>)}
+              </select>
             </label>
             <label>
               Destino
-              <input value={destination} onChange={(e) => setDestination(e.target.value)} placeholder="Ex.: João Pessoa - PB" maxLength={180} required />
+              <select
+                data-cy="delivery-destination"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                aria-invalid={origin !== "" && origin === destination}
+                required
+              >
+                <option value="">Selecione a cidade de destino</option>
+                {cities.map((city) => <option key={city.id} value={city.id}>{city.label}</option>)}
+              </select>
+              {origin !== "" && origin === destination && (
+                <small className="field-error" role="alert">O destino deve ser diferente da origem.</small>
+              )}
             </label>
             <label>
               Descrição da carga
@@ -297,6 +327,9 @@ function App() {
                 <article className="delivery-card" key={delivery.id}>
                   <div className="delivery-card-top">
                     <span className="delivery-id">ENTREGA #{delivery.id}</span>
+                    {delivery.needs_review && (
+                      <span className="tag" title="Cadastrada antes da lista única de cidades; origem ou destino fora da lista.">revisar cidades</span>
+                    )}
                     <span className="status-chip" data-status={delivery.status} aria-label={`Status atual: ${DELIVERY_STATUS_LABELS[delivery.status]}`}>{DELIVERY_STATUS_LABELS[delivery.status]}</span>
                   </div>
                   <div className="route">

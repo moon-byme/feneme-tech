@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import { autenticarComoGestor, autenticarComoMotorista, senhaE2E } from "../qa-helpers";
+import { autenticarComoGestor, autenticarComoMotorista, cidadesDeTeste, senhaE2E } from "../qa-helpers";
 
 type Delivery = {
   id: number;
@@ -29,16 +29,15 @@ function criarEntregaParaMotorista(
   driverUsername: string,
   marker: string,
 ) {
-  return cy.request({
+  return cidadesDeTeste(managerToken).then((cidades) => cy.request({
     method: "POST",
     url: "/api/deliveries/",
     headers: { Authorization: `Bearer ${managerToken}` },
     body: {
-      origin: `Origem ${marker}`,
-      destination: `Destino ${marker}`,
+      ...cidades,
       cargo_description: `Carga privada ${marker}`,
     },
-  }).then(({ body: delivery }: { body: Delivery }) => {
+  })).then(({ body: delivery }: { body: Delivery }) => {
     return cy.request({
       method: "GET",
       url: "/api/drivers/",
@@ -313,13 +312,13 @@ When("atualizo a lista pela interface", () => {
 Then("a interface deixa de mostrar a entrega reatribuída", () => {
   cy.get<Delivery>("@qaOwnDelivery").then((own: Delivery) => {
     cy.contains(".delivery-id", new RegExp(`^ENTREGA #${own.id}$`)).should("not.exist");
-    cy.get("main").should("not.contain.text", own.origin);
+    cy.get("main").should("not.contain.text", own.cargo_description);
   });
 });
 
 Then("não mostra a entrega atribuída a outro Motorista", () => {
   cy.get<Delivery>("@qaOtherDelivery").then((other: Delivery) => {
-    cy.get("article.delivery-card").should("not.contain.text", other.origin);
+    cy.get("article.delivery-card").should("not.contain.text", other.cargo_description);
   });
 });
 
