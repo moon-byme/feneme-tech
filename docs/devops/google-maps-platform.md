@@ -2,6 +2,30 @@
 
 > Responsável pela conta: **João Paulo de Araujo** (conta pessoal, projeto `feneme` no Google Cloud). Decisão registrada em [FT-112](https://feneme.atlassian.net/browse/FT-112); tarefa de configuração em [FT-115](https://feneme.atlassian.net/browse/FT-115).
 
+## Passo a passo da configuração (FT-115)
+
+Feito uma vez pelo dono da conta. Guardar os prints indicados em `evidencias/ft-115/`, **sempre com a chave oculta**.
+
+1. *Google Cloud Console* → criar o projeto `feneme` e vincular a conta de faturamento (sem faturamento a Routes API não responde; o uso previsto fica na cota gratuita).
+2. *APIs & Services → Library* → ativar **Routes API** e **Maps JavaScript API**.
+3. *APIs & Services → Credentials → Create credentials → API key* → nomear `feneme-routes-backend` → *API restrictions*: só **Routes API**. Repetir para `feneme-maps-frontend` → só **Maps JavaScript API** → *Application restrictions*: **Websites** com `http://localhost:*/*` e o domínio da homologação (`https://feneme-homologacao.onrender.com/*`). Print: lista de chaves com as restrições.
+4. *APIs & Services → Routes API → Quotas* → limitar *Requests per day* a **300**. Print da cota.
+5. *Billing → Budgets & alerts* → orçamento de **US$ 1** com alertas em 50%, 90% e 100%. Print do orçamento.
+6. *IAM & Admin → IAM → Grant access* → José e Lethycia com o papel **Viewer**.
+7. Colar as chaves só no `.env` local (`GOOGLE_MAPS_API_KEY`, `VITE_GOOGLE_MAPS_JS_KEY`) e, quando a US-17/US-18 forem implantadas, nas variáveis do serviço no Render. O job `Segurança - segredos fora do repositório` do CI falha se uma chave `AIza...` for versionada.
+
+### Registro da configuração
+
+| Item | Situação | Evidência |
+| --- | --- | --- |
+| Projeto `feneme` e faturamento | a preencher | print |
+| Routes API e Maps JavaScript API ativas | a preencher | print |
+| Chaves restritas por API e por site | a preencher | print com a chave oculta |
+| Cota diária da Routes API (300/dia) | a preencher | print |
+| Orçamento de US$ 1 com alertas | a preencher | print |
+| Equipe com acesso de leitura | a preencher | print do IAM |
+| Nenhuma chave no repositório | verificado no CI | job `Segurança - segredos fora do repositório` |
+
 ## APIs usadas
 
 | API | Uso no Feneme | Onde é chamada |
