@@ -347,6 +347,7 @@ As rotas abaixo correspondem à implementação identificada no backend atual.
 |---|---|---|---|
 | `POST` | `/api/auth/login/` | Público | Autentica usuário e retorna tokens e dados básicos do perfil. |
 | `POST` | `/api/auth/refresh/` | Conforme configuração JWT | Renova o token de acesso a partir do refresh token. |
+| `GET` | `/api/health/` | Público | Estado da aplicação e do banco e commit implantado (homologação, FT-110). |
 | `GET` | `/api/drivers/` | Gestor | Lista contas ativas com perfil Motorista. |
 | `GET` | `/api/deliveries/` | Gestor e Motorista | Gestor consulta todas; Motorista consulta somente as próprias entregas atribuídas. |
 | `POST` | `/api/deliveries/` | Gestor | Cadastra uma entrega. |
@@ -418,10 +419,14 @@ O workflow `.github/workflows/ci.yml` é executado em pushes para qualquer branc
 | `Backend - Django checks and tests` | Instala dependências, sobe PostgreSQL no runner, executa `manage.py check` e a suíte de testes do Django |
 | `Frontend - build and tests` | Instala dependências e gera o build de produção (`tsc -b && vite build`); não há testes unitários de frontend configurados |
 | `E2E - Cucumber/Cypress (@smoke)` | Sobe backend e frontend integrados e executa os cenários `@smoke`, `@US-07` (comparação de trajetos), `@R1` (regressão da Sprint 1) e `@US-08` (Open-Meteo); publica relatório e capturas de falha como artefato |
+| `Segurança - segredos fora do repositório` | Falha se houver chave do Google, chave privada, `.env` versionado ou URL de banco com senha |
+| `Deploy - homologação (Render)` | Só em push na `main` e só depois que todos os jobs acima passam: dispara o deploy no Render e espera `/api/health/` responder com o commit implantado |
 
 **Proteção da `main` (desde 04/11/2026):** alterações entram apenas por Pull Request, com 1 aprovação de outro integrante e os três jobs acima como checagens obrigatórias; as regras valem também para administradores. Detalhes em [`docs/devops/protecao-main.md`](docs/devops/protecao-main.md).
 
 **Limitação conhecida:** os cenários `@US-06` têm etapas implementadas, mas ainda não estão em nenhuma seleção de tags do CI.
+
+**Homologação (FT-110):** cada integração na `main` com CI verde é implantada automaticamente no Render (plano gratuito). URL, segredos, configuração inicial, reprodução e rollback em [`docs/devops/homologacao.md`](docs/devops/homologacao.md).
 
 O histórico do pipeline da Release 1 está em [`docs/releases/release-1/relatorio-pipeline.md`](docs/releases/release-1/relatorio-pipeline.md).
 
@@ -504,6 +509,7 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [Nova linha do produto (R2 a R4)](docs/produto/escopo-r3-r4.md): funcionalidades novas, catálogo de cargas, lista de cidades e regras RN-01 a RN-10.
 - [Spikes das rotas e da comparação térmica](docs/produto/spikes-rotas-google.md): resultados de 13–14/11/2026 e scripts em [`scripts/spikes/`](scripts/spikes/).
 - [Google Maps Platform](docs/devops/google-maps-platform.md): chaves, cotas, alertas e uso no CI.
+- [Homologação](docs/devops/homologacao.md): deploy automatizado no Render, segredos, rollback e limitações do plano gratuito.
 
 As atas de 09/10 e os dois registros da reunião de 19/10 foram **elaborados retrospectivamente em 10/11/2026**. Os registros de 19/10 descrevem o mesmo encontro, com referências cruzadas: avaliação das pendências da Sprint 0 e preparação da Sprint 1, sem afirmar uma cerimônia independente de Sprint Retrospective.
 

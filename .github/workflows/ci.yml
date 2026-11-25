@@ -227,3 +227,73 @@ jobs:
             django-e2e.log
           if-no-files-found: ignore
           retention-days: 30
+
+  secret-scan:
+    name: Segurança - segredos fora do repositório
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Procurar chaves e credenciais versionadas
+        shell: bash
+        run: |
+          # Chaves do Google (AIza...), chaves privadas e URLs de banco com senha (FT-110, FT-115, R10).
+          pattern='AIza[0-9A-Za-z_-]{35}|-----BEGIN [A-Z ]*PRIVATE KEY-----|postgres(ql)?://[^:/@[:space:]]+:[^@[:space:]]+@[^[:space:]]*render\.com'
+          if git grep -nIE "$pattern" -- . ':!*.lock' ':!package-lock.json'; then
+            echo "::error::Possível segredo versionado encontrado. Remova-o, revogue a chave e registre em FT-103."
+            exit 1
+          fi
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo "::error::O arquivo .env está versionado."
+            exit 1
+          fi
+          echo "Nenhum segredo encontrado nos arquivos versionados."
+
+  deploy-homologacao:
+    name: Deploy - homologação (Render)
+    runs-on: ubuntu-latest
+    # Só depois que todos os testes passarem, e só em push na main (FT-110).
+    needs: [backend, frontend, e2e-smoke, secret-scan]
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    concurrency:
+      group: deploy-homologacao
+      cancel-in-progress: false
+    environment: homologacao
+    steps:
+      - name: Disparar o deploy no Render
+        id: trigger
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        shell: bash
+        run: |
+          if [[ -z "$RENDER_DEPLOY_HOOK_URL" ]]; then
+            echo "::warning::Secret RENDER_DEPLOY_HOOK_URL não configurado; deploy de homologação ignorado. Ver docs/devops/homologacao.md."
+            echo "skipped=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${RENDER_DEPLOY_HOOK_URL}?ref=${GITHUB_SHA}")
+          echo "Render respondeu HTTP ${status} ao Deploy Hook."
+          [[ "$status" =~ ^2 ]] || { echo "::error::O Render recusou o Deploy Hook."; exit 1; }
+
+      - name: Aguardar a nova versão no ar
+        if: ${{ steps.trigger.outputs.skipped != 'true' && vars.HOMOLOGACAO_URL != '' }}
+        env:
+          HOMOLOGACAO_URL: ${{ vars.HOMOLOGACAO_URL }}
+        shell: bash
+        run: |
+          # O plano gratuito compila em alguns minutos e hiberna sem uso; espera até 20 min.
+          for attempt in $(seq 1 40); do
+            body=$(curl -sS --max-time 30 "${HOMOLOGACAO_URL%/}/api/health/" || true)
+            echo "Tentativa ${attempt}: ${body}"
+            if [[ "$body" == *"\"status\":\"ok\""* && "$body" == *"${GITHUB_SHA}"* ]]; then
+              echo "Homologação no ar com o commit ${GITHUB_SHA}: ${HOMOLOGACAO_URL}"
+              echo "### Homologação atualizada" >> "$GITHUB_STEP_SUMMARY"
+              echo "- URL: ${HOMOLOGACAO_URL}" >> "$GITHUB_STEP_SUMMARY"
+              echo "- Commit: \`${GITHUB_SHA}\`" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::A homologação não respondeu com o commit ${GITHUB_SHA} em 20 minutos."
+          exit 1
