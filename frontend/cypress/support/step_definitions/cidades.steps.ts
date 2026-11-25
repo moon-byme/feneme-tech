@@ -1,8 +1,9 @@
 import { When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import { ORIGEM_TESTE } from "../qa-helpers";
+import { ORIGEM_TESTE, preencherEntregaUnica, salvarEntregaPelaInterface } from "../qa-helpers";
 
 function opcoes(selector: string) {
-  return cy.get(`${selector} option`).then(($options) =>
+  // As listas chegam da API depois da renderização: espera além do "Selecione...".
+  return cy.get(`${selector} option`).should("have.length.greaterThan", 1).then(($options) =>
     [...$options].map((option) => option.textContent?.trim() ?? "").filter((text) => !text.startsWith("Selecione")),
   );
 }
@@ -23,9 +24,14 @@ Then("origem e destino são campos de seleção com as 26 cidades da lista", () 
 });
 
 Then("a previsão do clima oferece exatamente as mesmas cidades", () => {
+  // A previsão fica no cartão de cada entrega; cadastra uma para abrir o seletor.
+  preencherEntregaUnica();
+  salvarEntregaPelaInterface();
   opcoes("[data-cy=delivery-origin]").then((origens) => {
-    opcoes("[data-cy=forecast-location]").then((clima) => {
-      expect([...clima].sort()).to.deep.equal([...origens].sort());
+    cy.get("@qaDelivery").then((delivery: any) => {
+      opcoes(`[data-cy=forecast-${delivery.id}] [data-cy=forecast-location]`).then((clima) => {
+        expect([...clima].sort()).to.deep.equal([...origens].sort());
+      });
     });
   });
 });
