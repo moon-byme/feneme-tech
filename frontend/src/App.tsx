@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { api, ApiError } from "./api";
+import CargoCatalog from "./components/CargoCatalog";
 import MotoristaHome from "./components/MotoristaHome";
 import DeliveryStatusHistory from "./components/DeliveryStatusHistory";
 import RouteAlternatives from "./components/RouteAlternatives";
@@ -66,6 +67,8 @@ function App() {
     setError(message);
     setNotice("");
   }, []);
+
+  const expireSession = useCallback(() => logout(SESSION_EXPIRED), [logout]);
 
   // 401 com sessão ativa: token inválido ou expirado, volta ao login.
   const handleApiError = useCallback((e: unknown, fallback: string) => {
@@ -351,6 +354,7 @@ function App() {
           )}
         </section>
       </div>
+      <CargoCatalog token={session.access} onSessionExpired={expireSession} />
       <footer>Feneme · Sprint 1 · Gestão de entregas e cargas</footer>
     </main>
   );

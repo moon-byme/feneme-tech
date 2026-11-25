@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "deliveries",
     "weather.apps.WeatherConfig",
+    "catalog.apps.CatalogConfig",
 ]
 
 MIDDLEWARE = [
