@@ -17,6 +17,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from accounts.models import UserProfile
+from catalog.models import City
 from deliveries.models import Delivery
 
 PASSWORD = "SenhaSegura123!"
@@ -106,15 +107,20 @@ class ForecastApiTests(APITestCase):
         self.login_as("gestor_ft47")
         response = self.client.get("/api/weather/locations/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # US-14 (FT-113): mesma lista fechada do cadastro de entregas; Sousa-PB saiu.
+        cities = self.client.get("/api/cidades/").data
+        self.assertEqual(len(response.data), 26)
         self.assertEqual(
-            [item["slug"] for item in response.data],
-            ["joao-pessoa", "campina-grande", "patos", "sousa", "recife"],
+            [(item["slug"], item["name"]) for item in response.data],
+            [(city["slug"], city["label"]) for city in cities],
         )
+        self.assertNotIn("sousa", [item["slug"] for item in response.data])
+        self.assertIn({"slug": "joao-pessoa", "name": "João Pessoa - PB"}, response.data)
 
     def test_unknown_or_missing_location_is_rejected_without_calling_api(self):
         self.login_as("gestor_ft47")
         with mock.patch(URLOPEN) as fake:
-            for location in ("", "sao-paulo", "../../etc", "https://evil.test"):
+            for location in ("", "sousa", "porto-alegre", "../../etc", "https://evil.test"):
                 with self.subTest(location=location):
                     response = self.get_forecast(location)
                     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -191,8 +197,8 @@ class ForecastApiTests(APITestCase):
                 created = self.client.post(
                     "/api/deliveries/",
                     {
-                        "origin": f"Origem Q13 {index}",
-                        "destination": f"Destino Q13 {index}",
+                        "origin_city": City.objects.get(slug="campina-grande").id,
+                        "destination_city": City.objects.get(slug="joao-pessoa").id,
                         "cargo_description": f"Carga Q13 {index}",
                     },
                     format="json",

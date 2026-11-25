@@ -99,6 +99,13 @@ Execução, decisões e evidências da FT-48: [PR #41](https://github.com/moon-b
 - Apenas Gestor autenticado consulta o histórico; Motorista recebe 403, anônimo 401 e entrega inexistente 404. A API é somente leitura e não altera transições.
 - Sem GPS, ocorrência detalhada, rota escolhida ou indicadores térmicos (ampliações previstas para a FT-122).
 
+### Lista única de cidades — FT-113 / US-14
+
+- Origem e destino da entrega são escolhidos em uma lista fechada de 26 cidades (13 estados + DF, decisão D5 da FT-112), exposta em `GET /api/cidades/` com nome, UF e coordenadas.
+- A previsão do clima (FT-47) usa a mesma lista; a lista própria do clima (`weather/locations.py`) foi removida e Sousa-PB saiu.
+- A API só aceita `origin_city` e `destination_city` (IDs da lista); origem igual ao destino e cidade inexistente são rejeitadas com erro de validação. Os textos `origin`/`destination` passam a ser preenchidos a partir da cidade.
+- Entregas antigas em texto livre foram vinculadas às cidades pela migração `0005`; as não reconhecidas ficam com `needs_review` e aparecem com a etiqueta **revisar cidades**.
+
 ### Catálogo de tipos de carga — FT-114 / US-15
 
 - Catálogo somente leitura com 7 tipos de carga (decisão D4 da FT-112): tomate, frangos de corte, suínos, bovinos zebuínos, medicamentos de temperatura ambiente, amostras biológicas e cosméticos.
@@ -122,7 +129,6 @@ As funcionalidades abaixo estão **planejadas, não implementadas**:
 
 | Funcionalidade | Jira | Sprint |
 | --- | --- | --- |
-| Lista única de cidades no cadastro e na previsão do clima | FT-113 (US-14) | 3 |
 | Tipo de carga e data/hora de saída na entrega | FT-117 (US-16) | 4 |
 | Até 3 rotas automáticas pela Google Routes API | FT-118 (US-17) | 4 |
 | Mapa das rotas (Maps JavaScript API) | FT-120 (US-18) | 4 |
@@ -347,16 +353,19 @@ As rotas abaixo correspondem à implementação identificada no backend atual.
 | `POST` | `/api/deliveries/` | Gestor | Cadastra uma entrega. |
 | `GET` | `/api/deliveries/{id}/` | Gestor e Motorista | Consulta uma entrega, respeitando o isolamento por Motorista. |
 | `POST` | `/api/deliveries/{id}/update-status/` | Motorista atribuído | Recebe `{"status":"EM_TRANSPORTE"}` ou `{"status":"ENTREGUE"}` e retorna a entrega atualizada. |
+| `GET` | `/api/cidades/` | Gestor e Motorista | Lista as 26 cidades da lista única (nome, UF, rótulo, slug e coordenadas), somente leitura. |
 | `GET` | `/api/tipos-carga/` | Gestor e Motorista | Lista os tipos de carga com limite de temperatura, referência e fonte (somente leitura). |
 | `GET` | `/api/deliveries/{id}/status-history/` | Gestor | Retorna `delivery_id`, `current_status` e `history` (eventos em ordem cronológica), sem permitir alteração. |
 | `POST` | `/api/deliveries/{id}/assign-driver/` | Gestor | Atribui ou reatribui um Motorista à entrega. |
 
 ### Exemplo de cadastro de entrega
 
+`origin_city` e `destination_city` são os `id` retornados por `GET /api/cidades/`:
+
 ```json
 {
-  "origin": "Campina Grande - PB",
-  "destination": "João Pessoa - PB",
+  "origin_city": 2,
+  "destination_city": 1,
   "cargo_description": "Alimentos refrigerados"
 }
 ```

@@ -1,10 +1,10 @@
-"""US-15 / FT-114: catálogo de tipos de carga com limite de temperatura e fonte."""
+"""US-14 (FT-113) e US-15 (FT-114): lista única de cidades e catálogo de cargas."""
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from accounts.models import UserProfile
-from catalog.models import CargoType
+from catalog.models import CargoType, City
 
 PASSWORD = "SenhaFicticia_123!"
 
@@ -71,4 +71,51 @@ class CargoCatalogApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_catalog_requires_authentication(self):
+        self.assertEqual(self.client.get(self.url).status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CityListApiTests(APITestCase):
+    url = "/api/cidades/"
+
+    def setUp(self):
+        self.manager = make_user("gestor_cid", UserProfile.Role.GESTOR)
+        self.driver = make_user("motorista_cid", UserProfile.Role.MOTORISTA)
+
+    def login(self, user):
+        response = self.client.post(
+            "/api/auth/login/", {"username": user.username, "password": PASSWORD}, format="json",
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {response.data['access']}")
+
+    def test_seed_has_26_cities_in_13_states_plus_df(self):
+        """Decisão D5 (FT-112): 26 cidades, 13 estados + DF; Sousa-PB fica fora."""
+        self.assertEqual(City.objects.count(), 26)
+        self.assertEqual(City.objects.values("uf").distinct().count(), 14)
+        self.assertFalse(City.objects.filter(name="Sousa").exists())
+        self.assertEqual(City.objects.values("slug").distinct().count(), 26)
+
+    def test_gestor_lists_cities_with_label_and_coordinates(self):
+        self.login(self.manager)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 26)
+        campina = next(item for item in response.data if item["name"] == "Campina Grande")
+        self.assertEqual(campina["label"], "Campina Grande - PB")
+        self.assertEqual(campina["slug"], "campina-grande")
+        self.assertAlmostEqual(campina["latitude"], -7.2307)
+        self.assertAlmostEqual(campina["longitude"], -35.8817)
+
+    def test_city_list_is_read_only(self):
+        self.login(self.manager)
+        first = City.objects.first()
+        attempts = [
+            self.client.post(self.url, {"name": "Sousa", "uf": "PB"}, format="json"),
+            self.client.patch(f"{self.url}{first.id}/", {"name": "X"}, format="json"),
+            self.client.delete(f"{self.url}{first.id}/"),
+        ]
+        for response in attempts:
+            self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(City.objects.count(), 26)
+
+    def test_city_list_requires_authentication(self):
         self.assertEqual(self.client.get(self.url).status_code, status.HTTP_401_UNAUTHORIZED)

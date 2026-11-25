@@ -1,6 +1,6 @@
 # Nova linha do produto — rotas reais e comparação térmica (R2 a R4)
 
-> **Situação:** escopo aprovado pela equipe em 14/11/2026 e detalhado em 16/11/2026. Este documento descreve o que **será construído**; nada aqui está implementado ainda.
+> **Situação:** escopo aprovado pela equipe em 14/11/2026 e detalhado em 16/11/2026. Implementado na Sprint 3: lista única de cidades (FT-113) e catálogo de tipos de carga (FT-114). As demais funcionalidades continuam planejadas.
 > **Registro oficial no Jira:** [FT-112](https://feneme.atlassian.net/browse/FT-112).
 
 ## Em uma frase
@@ -90,7 +90,7 @@ Fora do catálogo inicial por terem limite muito baixo para transporte sem refri
 
 A concentração no Nordeste dá cidades intermediárias para a regra RN-04; os polos de fruticultura (Petrolina, Juazeiro, Mossoró) e os centros consumidores do Sudeste dão cenários coerentes para a demo. As coordenadas ficam gravadas no seed, sem geocodificação em tempo de execução.
 
-**Transição a partir do código atual:** a previsão do clima (FT-47) usa hoje `backend/weather/locations.py`, com 5 localidades (João Pessoa, Campina Grande, Patos, Sousa e Recife). A US-14 substitui essa lista pela lista acima, reaproveitando as coordenadas já conferidas. **Sousa-PB sai da lista**; se a equipe quiser mantê-la, basta incluí-la no seed (a lista passaria a ter 27 cidades). O campo de origem/destino da entrega (`Delivery.origin`/`destination`) deixa de ser texto livre e exige migração dos registros existentes.
+**Transição (concluída na FT-113):** a previsão do clima (FT-47) usava `backend/weather/locations.py`, com 5 localidades (João Pessoa, Campina Grande, Patos, Sousa e Recife). A US-14 substituiu essa lista pela lista acima (`backend/catalog/seed.py`), reaproveitando as coordenadas já conferidas. **Sousa-PB saiu da lista.** Origem e destino da entrega passaram a ser referências às cidades (`origin_city`/`destination_city`); as entregas antigas em texto livre foram vinculadas pela migração `deliveries/0005`, e as não reconhecidas ficam marcadas para revisão (`needs_review`).
 
 ## Regras de negócio
 

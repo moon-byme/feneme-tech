@@ -1,5 +1,30 @@
-"""Catálogos do Feneme. US-15 / FT-114: tipos de carga com limite de temperatura e fonte."""
+"""Fontes únicas do Feneme: cidades (US-14 / FT-113) e tipos de carga (US-15 / FT-114)."""
 from django.db import models
+
+
+class City(models.Model):
+    """Cidade da lista fechada. A mesma lista serve ao cadastro de entregas e ao clima."""
+
+    name = models.CharField("Nome", max_length=80)
+    uf = models.CharField("UF", max_length=2)
+    slug = models.SlugField(unique=True, max_length=90)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
+    class Meta:
+        ordering = ["name", "uf"]
+        verbose_name = "Cidade"
+        verbose_name_plural = "Cidades"
+        constraints = [
+            models.UniqueConstraint(fields=["name", "uf"], name="city_name_uf_unique"),
+        ]
+
+    def __str__(self):
+        return self.label
+
+    @property
+    def label(self) -> str:
+        return f"{self.name} - {self.uf}"
 
 
 class CargoType(models.Model):

@@ -95,8 +95,10 @@ def main():
     process = start_server()
     try:
         manager = login("GESTOR")
+        from catalog.models import City  # US-14 (FT-113): cidades da lista fechada
         delivery = request("/api/deliveries/", {
-            "origin": "Origem reinicio FT-48", "destination": "Destino reinicio FT-48",
+            "origin_city": City.objects.get(slug="campina-grande").pk,
+            "destination_city": City.objects.get(slug="joao-pessoa").pk,
             "cargo_description": "Carga ficticia de verificacao",
         }, manager)
         delivery_id = delivery["id"]
