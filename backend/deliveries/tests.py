@@ -166,3 +166,25 @@ class FenemeDeliveryFlowTests(APITestCase):
         self.assertIn("não possui perfil Motorista", str(response.data["driver_id"]))
         delivery.refresh_from_db()
         self.assertEqual(delivery.assigned_driver, self.driver)
+
+    def test_nonexistent_driver_is_rejected_and_keeps_previous_assignment(self):
+        """FT-45 (US-05), ressalva do aceite de 29/10: Motorista inexistente é rejeitado
+        com o motivo e a atribuição anterior permanece. Cobertura posterior, criada em 25/11/2026."""
+        self.login_as("gestor_teste")
+        created = self.client.post(self.deliveries_url, {
+            "origin_city": city_id("Campina Grande"),
+            "destination_city": city_id("João Pessoa"),
+            "cargo_description": "Carga teste",
+        }, format="json")
+        delivery = Delivery.objects.get(pk=created.data["id"])
+        delivery.assigned_driver = self.driver
+        delivery.save(update_fields=["assigned_driver"])
+        response = self.client.post(
+            f"{self.deliveries_url}{created.data['id']}/assign-driver/",
+            {"driver_id": 999999},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("não existe ou está inativo", str(response.data["driver_id"]))
+        delivery.refresh_from_db()
+        self.assertEqual(delivery.assigned_driver, self.driver)
