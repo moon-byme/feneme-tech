@@ -6,16 +6,16 @@
 **Data de consolidação:** 25/11/2026  
 **Issues acompanhadas:** FT-32, FT-80, FT-81 e FT-91
 
-> **Estado deste documento: PARCIAL.** Registra somente resultados sustentados por evidências disponíveis no Jira, nas PRs e no GitHub Actions. Não substitui a execução dos testes que ainda dependem de integração, a conferência do Plano de Qualidade nem o aceite formal das histórias. Nenhuma medição pendente foi estimada ou preenchida como resultado.
+> **Estado deste documento: PARCIAL (atualizado em 25/11/2026).** Registra somente resultados sustentados por evidências disponíveis no Jira, nas PRs, no GitHub Actions e na versão mais recente do Plano de Qualidade anexada pelo responsável. Q-12 e Q-13 já constam na coluna Resultado R2; ainda faltam validações de outros indicadores aplicáveis, revisão independente de QA, validação das demais entregas da Sprint 3 e fechamento formal. Nenhuma medição pendente foi estimada ou preenchida como resultado.
 
 ## 1. Resumo executivo
 
 | Issue | Verificação | Resultado comprovado | Situação de QA |
 |---|---|---|---|
 | FT-32 | Resiliência à indisponibilidade da Open-Meteo | 10/10 falhas simuladas preservaram cadastro e comparação manual | Parcial: requisito de não recomendar sem dados depende da FT-57, replanejada para Sprint 5/R3 |
-| FT-80 | Q-12 — Persistência de alterações de status | 20/20 alterações válidas persistidas e recuperadas (100%) | Evidência automatizada existente; falta conferência do lançamento na planilha e revisão independente nesta sprint |
-| FT-81 | Q-13 — Continuidade sem resposta da Open-Meteo | 10/10 falhas simuladas preservaram os fluxos manuais | Medição aprovada; falta conferência do resultado registrado e reavaliação do risco residual |
-| FT-91 | Regressão, métricas, DoD e relatório da R2 | Evidências de FT-48, FT-49 e FT-59 disponíveis; regressões documentadas | Em andamento; fechamento depende das validações e entregas listadas na seção 6 |
+| FT-80 | Q-12 — Persistência de alterações de status | 20/20 alterações válidas persistidas e recuperadas (100%); Resultado R2 registrado como 1,0 na planilha | Medição e lançamento documental confirmados; falta conferência formal/revisão independente |
+| FT-81 | Q-13 — Continuidade sem resposta da Open-Meteo | 10/10 falhas simuladas preservaram os fluxos manuais; Resultado R2 registrado como 100% na planilha | Medição e lançamento documental confirmados; falta reavaliação do risco residual e revisão independente |
+| FT-91 | Regressão, métricas, DoD e relatório da R2 | Evidências de FT-48, FT-49 e FT-59; FT-114 integrada e CI pós-merge aprovado | Em andamento; fechamento depende das validações e entregas listadas na seção 6 |
 
 ## 2. FT-80 — Q-12: persistência de alterações de status
 
@@ -34,7 +34,7 @@ Evidências registradas na PR:
 
 A PR #41 foi integrada à `main`. A implementação foi posteriormente reutilizada pela FT-59, sem nova migração.
 
-**Pendência de fechamento:** conferir se o resultado 20/20 está lançado na coluna R2 do Plano de Qualidade e se a equipe/PO conferiu a evidência. A existência dos testes e do CI não comprova, por si só, a atualização da planilha.
+**Atualização de fechamento (25/11):** na versão mais recente da planilha anexada pelo responsável, Q-12 está preenchida em Resultado R2 com o valor numérico `1,0` (100%), e a aba Revisões registra a inclusão do resultado em 25/11. As evidências da PR #41 e do CI #260 estão vinculadas na planilha. O lançamento documental está confirmado; permanece a conferência formal pela equipe/PO e a revisão independente de QA.
 
 ## 3. FT-81 — Q-13: continuidade sem resposta da Open-Meteo
 
@@ -50,7 +50,7 @@ Evidência: [GitHub Actions — PR #24 (run 42844947365)](https://github.com/moo
 
 **Limitação:** os testes usam mocks. Não medem a disponibilidade real da Open-Meteo nem uma chamada externa bem-sucedida.
 
-**Pendência de fechamento:** conferir o lançamento do resultado R2 no Plano de Qualidade e registrar a reavaliação do risco residual. A FT-81 não deve ser interpretada como comprovação de disponibilidade do provedor.
+**Atualização de fechamento (25/11):** na versão mais recente da planilha anexada pelo responsável, Q-13 está preenchida em Resultado R2 com `100% de 10`. O lançamento documental está confirmado. Continua necessária a reavaliação do risco residual (FT-65) e a revisão independente de QA. A FT-81 não deve ser interpretada como comprovação de disponibilidade do provedor.
 
 ## 4. FT-32 — DA-CON-JA-01: isolar falhas da Open-Meteo
 
@@ -83,14 +83,29 @@ A revisão aprovada disponível é do PO (`jpauloaraujo`). O aceite do PO está 
 
 **Limitação de evidência:** os resultados acima são os informados na PR e no CI associado ao commit `f80e290`; não foi realizada uma execução local independente pelo QA nesta consolidação.
 
+
+### 5.3 FT-114 — US-15: catálogo de tipos de carga
+
+A [PR #44](https://github.com/moon-byme/feneme-tech/pull/44) foi integrada à `main` em 25/11/2026 às 14:58 UTC (merge commit `04f3b8e9ba992e1cb522d987706c6fd5c81b28ed`).
+
+A entrega inclui:
+- Catálogo somente leitura com sete tipos de carga, categoria, limite em °C, referência e fonte.
+- Endpoint autenticado `GET /api/tipos-carga/`; tentativas de criação, edição e exclusão retornam 405; acesso anônimo retorna 401.
+- Painel do catálogo no frontend.
+- Testes de backend para os sete registros, limites/fontes, autenticação e permissões; cenário Cypress CT-31 para apresentação dos sete itens e identificação do limite derivado.
+
+**Evidência de CI:** [execução da PR #44](https://github.com/moon-byme/feneme-tech/actions/runs/45637482487) e [execução pós-merge na main](https://github.com/moon-byme/feneme-tech/actions/runs/45639919854). Na execução pós-merge, os quatro jobs — detecção de componentes, testes Django, build/testes do frontend e E2E Cypress (@smoke) — terminaram com sucesso. A descrição da PR registra 178/178 testes backend aprovados na execução local; esse número é evidência informada na PR, não uma contagem extraída do log do CI.
+
+**Limitação:** a validação registrada aqui é baseada na revisão aprovada, nos testes descritos na PR e no pipeline verde. Não foi realizada uma sessão manual independente do QA no ambiente publicado. A validação visual/manual e a conferência de conteúdo/fontes permanecem como parte do fechamento da FT-91.
+
 ## 6. Pendências para concluir a FT-91
 
-1. **Plano de Qualidade (Q-01 a Q-15):** conferir o universo de cada indicador aplicável à R2, meta, resultado, evidência, estado de atendimento e justificativa para itens não medidos/não aplicáveis. Não preencher valores sem evidência.
-2. **Q-12 e Q-13:** conferir os resultados já registrados na planilha e vincular as evidências citadas nas seções 2 e 3.
+1. **Plano de Qualidade (Q-01 a Q-15):** a versão mais recente foi conferida. Resultados R2 registrados: Q-03 (100%, 8/8 US), Q-06 (0 exposições em 20 cenários), Q-07 (5/5 participantes), Q-08 (84%, 142 testes OK, conforme registro da planilha), Q-09 (100%, 22/22 execuções), Q-10 (100%, 20/20), Q-12 (1,0 = 100%, 20 mudanças), Q-13 (100%, 10/10) e Q-04 (100%, 7/7 PRs integradas com aprovação independente antes do merge, conforme conferência do GitHub em 25/11). Indicadores sem Resultado R2 preenchido na planilha-base: Q-01, Q-02, Q-05 e Q-15; confirmar se são aplicáveis à R2 e, se forem, medir ou justificar formalmente a ausência de medição. Q-11 e Q-14 estão programadas para R3; Q-16 permanece proposta, sem aprovação e sem medição. Não preencher valores sem evidência.
+2. **Q-12 e Q-13:** lançamento R2 confirmado na planilha mais recente; manter vinculadas as evidências das seções 2 e 3. Para Q-12, a aba Revisões também registra a atualização de 25/11.
 3. **FT-32:** obter decisão do PO sobre o carryover da parte dependente da FT-57, que está fora da R2.
 4. **Revisão independente:** registrar a revisão de QA das PRs/funcionalidades entregues, em especial FT-48, FT-49 e FT-59. A aprovação do PO não deve ser contada como aprovação de QA.
-5. **Sprint 3 — novas entregas:** a PR #44 da FT-114 (catálogo de tipos de carga) ainda aparece aberta e sem revisão aprovada no momento desta consulta. A validação de QA dessa entrega deve ocorrer depois de CI verde e integração. A lista de cidades (FT-113), a configuração Google Cloud (FT-115) e o risco R10 (FT-116) também precisam ser conferidos quando suas entregas/evidências estiverem disponíveis.
-6. **Smoke e regressão final:** conferir com DevOps a execução atual do `@smoke` após a integração das entregas restantes e registrar o resultado do pipeline da R2. Os resultados históricos de PRs anteriores não substituem a verificação final da versão candidata.
+5. **Sprint 3 — demais entregas:** FT-114 (catálogo) já está integrada e com CI pós-merge verde, conforme seção 5.3; falta validação manual independente e conferência do conteúdo/fontes. A lista de cidades (FT-113), a configuração Google Cloud (FT-115) e o risco R10 (FT-116) continuam dependentes das entregas/evidências dos responsáveis e precisam ser conferidos quando estiverem disponíveis.
+6. **Smoke e regressão final:** o CI pós-merge da FT-114 executou com sucesso os quatro jobs, incluindo E2E `@smoke` (run 45639919854). Repetir/conferir o `@smoke` após as integrações restantes e registrar a execução final da versão candidata; o resultado atual não substitui a regressão da release completa.
 7. **Defeitos:** registrar bugs apenas quando houver reprodução confirmada, com severidade, passos, resultado esperado/observado, evidência e vínculo à US/PR. Não duplicar defeitos já registrados.
 8. **DoD:** revisar os critérios das histórias candidatas ao aceite, documentar cada item não comprovado e comunicar impedimentos ao PO.
 9. **Relatório final:** substituir este documento parcial por uma versão final somente após concluir as verificações acima, consolidando resultados, métricas, defeitos, regressão, limitações e recomendações.
