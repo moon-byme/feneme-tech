@@ -504,6 +504,7 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [Sprint 2](docs/sprints/sprint-2/): [retrospectiva](docs/sprints/sprint-2/fontes/ata-retrospectiva.typ), [Review](docs/sprints/sprint-2/fontes/ata-review.typ) e [métricas e impedimentos](docs/sprints/sprint-2/fontes/metricas-e-impedimentos.typ) em fontes Typst.
 - [Retrospectiva da Release 1](docs/releases/release-1/ata-retrospectiva-release-1-feneme.md): registro retrospectivo da reunião de 03/11/2026, elaborado em 10/11/2026, com avaliação do feedback e encaminhamentos para a Release 2.
 - [Relatório do pipeline da Release 1](docs/releases/release-1/relatorio-pipeline.md): histórico do CI de 06 a 29/10/2026, com execuções, limitações, situação da proteção da `main` e dos PRs, e comparação com a R2.
+- [Release 2](docs/releases/release-2/): [release notes da `v2.0.0`](docs/releases/release-2/release-notes.md), [relatório do pipeline](docs/releases/release-2/relatorio-pipeline.md), [aceite do PO da Sprint 3](docs/releases/release-2/aceite-po-sprint-3.md) e [reavaliação dos riscos](docs/releases/release-2/riscos-residuais.md).
 - [Planilha de Definition of Done](docs/Feneme_Definition_of_Done_Preenchida%20%285%29.xlsx): arquivo preservado, com referência à aba "DoD da Sprint" na conferência da Sprint 1.
 - [`evidencias/`](evidencias/): registros e relatórios de evidências de validação.
 - [Nova linha do produto (R2 a R4)](docs/produto/escopo-r3-r4.md): funcionalidades novas, catálogo de cargas, lista de cidades e regras RN-01 a RN-10.
