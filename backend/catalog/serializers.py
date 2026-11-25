@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from catalog.models import CargoType
+from catalog.models import CargoType, City
+
+
+class CitySerializer(serializers.ModelSerializer):
+    label = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = City
+        fields = ["id", "name", "uf", "label", "slug", "latitude", "longitude"]
 
 
 class CargoTypeSerializer(serializers.ModelSerializer):

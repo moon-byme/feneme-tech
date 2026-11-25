@@ -28,15 +28,33 @@ export function autenticarComoMotorista(): void {
   cy.get("[data-cy=role-chip]").should("have.text", "Motorista");
 }
 
+// US-14 (FT-113): origem e destino vêm da lista fechada de cidades, então não
+// identificam uma entrega. A descrição da carga, única por execução, identifica
+// o cartão; o alias "qaOrigin" foi mantido para os passos existentes.
+export const ORIGEM_TESTE = "Campina Grande - PB";
+export const DESTINO_TESTE = "João Pessoa - PB";
+
 export function preencherEntregaUnica(): void {
-  const origem = `Origem QA ${Date.now()}`;
-  cy.wrap(origem).as("qaOrigin");
-  cy.contains("label", "Origem").find("input").clear().type(origem);
-  cy.contains("label", "Destino").find("input").clear().type("Destino QA - João Pessoa");
-  cy.contains("label", "Descrição da carga")
-    .find("textarea")
-    .clear()
-    .type("Carga de teste automatizado da Sprint 1");
+  const carga = `Carga QA ${Date.now()}`;
+  cy.wrap(carga).as("qaOrigin");
+  cy.contains("label", "Origem").find("select").select(ORIGEM_TESTE);
+  cy.contains("label", "Destino").find("select").select(DESTINO_TESTE);
+  cy.contains("label", "Descrição da carga").find("textarea").clear().type(carga);
+}
+
+/** IDs das cidades usadas nos cadastros feitos pela API nos testes E2E. */
+export function cidadesDeTeste(token: string) {
+  return cy.request({
+    method: "GET",
+    url: "/api/cidades/",
+    headers: { Authorization: `Bearer ${token}` },
+  }).then(({ body }: { body: Array<{ id: number; slug: string }> }) => {
+    const origem = body.find((city) => city.slug === "campina-grande");
+    const destino = body.find((city) => city.slug === "joao-pessoa");
+    expect(origem, "Campina Grande na lista de cidades").to.exist;
+    expect(destino, "João Pessoa na lista de cidades").to.exist;
+    return { origin_city: origem!.id, destination_city: destino!.id };
+  });
 }
 
 export function salvarEntregaPelaInterface(): void {

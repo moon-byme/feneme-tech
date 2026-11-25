@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
-import { autenticarComoGestor, senhaE2E } from "../qa-helpers";
+import { autenticarComoGestor, cidadesDeTeste, senhaE2E } from "../qa-helpers";
 
 // Os testes criam entregas reais na base descartável E2E. Nenhum evento é simulado.
 function prepararEntrega() {
@@ -8,16 +8,15 @@ function prepararEntrega() {
     username: "gestor_e2e", password: senhaE2E(),
   }).then(({ body: authGestor }) => {
     const managerToken = authGestor.access as string;
-    return cy.request({
+    return cidadesDeTeste(managerToken).then((cidades) => cy.request({
       method: "POST",
       url: "/api/deliveries/",
       headers: { Authorization: "Bearer " + managerToken },
       body: {
-        origin: "Origem " + identificador,
-        destination: "Destino " + identificador,
-        cargo_description: "Carga de teste do histórico FT-59",
+        ...cidades,
+        cargo_description: "Carga de teste do histórico FT-59 " + identificador,
       },
-    }).then(({ body: delivery }) => {
+    })).then(({ body: delivery }) => {
       const deliveryId = delivery.id as number;
       return cy.request({
         method: "GET",

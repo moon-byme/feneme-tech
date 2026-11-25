@@ -1,0 +1,46 @@
+# Homologação do Feneme no Render (FT-110). Blueprint: Render → New → Blueprint → este repositório.
+# O deploy NÃO é automático no push: o job "Deploy - homologação" do GitHub Actions chama o
+# Deploy Hook somente depois que backend, frontend e E2E passam na main.
+services:
+  - type: web
+    name: feneme-homologacao
+    runtime: python
+    plan: free
+    region: oregon
+    branch: main
+    autoDeployTrigger: "off"
+    buildCommand: >-
+      cd frontend && npm ci && npm run build &&
+      cd ../backend && pip install --upgrade pip && pip install -r requirements.txt &&
+      python manage.py collectstatic --noinput
+    # O plano gratuito não tem preDeployCommand: migração e contas de demonstração rodam na partida.
+    startCommand: >-
+      cd backend && python manage.py migrate --noinput &&
+      python manage.py seed_homologacao &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60
+    healthCheckPath: /api/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: NODE_VERSION
+        value: "22"
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: feneme-homologacao-db
+          property: connectionString
+      # Senhas das contas gestor_demo e motorista_demo: informadas no painel, nunca no repositório.
+      - key: HOMOLOG_GESTOR_PASSWORD
+        sync: false
+      - key: HOMOLOG_MOTORISTA_PASSWORD
+        sync: false
+
+databases:
+  - name: feneme-homologacao-db
+    plan: free
+    region: oregon
+    databaseName: feneme
+    user: feneme

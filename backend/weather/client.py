@@ -17,7 +17,7 @@ from urllib.request import Request, urlopen
 
 from django.conf import settings
 
-from weather.locations import ReferenceLocation
+from catalog.models import City as ReferenceLocation
 
 logger = logging.getLogger("feneme.weather")
 

@@ -7,8 +7,18 @@ class Delivery(models.Model):
         EM_TRANSPORTE = "EM_TRANSPORTE", "Em transporte"
         ENTREGUE = "ENTREGUE", "Entregue"
 
-    origin = models.CharField("Origem", max_length=180)
-    destination = models.CharField("Destino", max_length=180)
+    # Texto exibido ("Cidade - UF"). Desde a US-14 (FT-113) é preenchido a partir
+    # da cidade escolhida; só guarda texto livre nas entregas anteriores à lista.
+    origin = models.CharField("Origem", max_length=180, blank=True)
+    destination = models.CharField("Destino", max_length=180, blank=True)
+    origin_city = models.ForeignKey(
+        "catalog.City", on_delete=models.PROTECT, null=True, blank=True,
+        related_name="deliveries_from", verbose_name="Cidade de origem",
+    )
+    destination_city = models.ForeignKey(
+        "catalog.City", on_delete=models.PROTECT, null=True, blank=True,
+        related_name="deliveries_to", verbose_name="Cidade de destino",
+    )
     cargo_description = models.CharField("Descrição da carga", max_length=500)
     assigned_driver = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -39,6 +49,21 @@ class Delivery(models.Model):
 
     def __str__(self):
         return f"Entrega #{self.pk}: {self.origin} → {self.destination}"
+
+    def save(self, *args, **kwargs):
+        if self.origin_city_id:
+            self.origin = self.origin_city.label
+        if self.destination_city_id:
+            self.destination = self.destination_city.label
+        update_fields = kwargs.get("update_fields")
+        if update_fields is not None and (self.origin_city_id or self.destination_city_id):
+            kwargs["update_fields"] = set(update_fields) | {"origin", "destination"}
+        super().save(*args, **kwargs)
+
+    @property
+    def needs_review(self) -> bool:
+        """Entrega anterior à lista de cidades cuja origem ou destino não foi reconhecido."""
+        return not (self.origin_city_id and self.destination_city_id)
 
 
 class DeliveryStatusHistory(models.Model):

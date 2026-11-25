@@ -35,3 +35,6 @@ frontend/cypress/downloads/
 scripts/spikes/spike_respostas/
 scripts/spikes/spike2_respostas/
 scripts/spikes/mapa_*.html
+
+# Estáticos coletados para homologação (FT-110)
+backend/staticfiles/

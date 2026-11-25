@@ -99,6 +99,13 @@ Execução, decisões e evidências da FT-48: [PR #41](https://github.com/moon-b
 - Apenas Gestor autenticado consulta o histórico; Motorista recebe 403, anônimo 401 e entrega inexistente 404. A API é somente leitura e não altera transições.
 - Sem GPS, ocorrência detalhada, rota escolhida ou indicadores térmicos (ampliações previstas para a FT-122).
 
+### Lista única de cidades — FT-113 / US-14
+
+- Origem e destino da entrega são escolhidos em uma lista fechada de 26 cidades (13 estados + DF, decisão D5 da FT-112), exposta em `GET /api/cidades/` com nome, UF e coordenadas.
+- A previsão do clima (FT-47) usa a mesma lista; a lista própria do clima (`weather/locations.py`) foi removida e Sousa-PB saiu.
+- A API só aceita `origin_city` e `destination_city` (IDs da lista); origem igual ao destino e cidade inexistente são rejeitadas com erro de validação. Os textos `origin`/`destination` passam a ser preenchidos a partir da cidade.
+- Entregas antigas em texto livre foram vinculadas às cidades pela migração `0005`; as não reconhecidas ficam com `needs_review` e aparecem com a etiqueta **revisar cidades**.
+
 ### Catálogo de tipos de carga — FT-114 / US-15
 
 - Catálogo somente leitura com 7 tipos de carga (decisão D4 da FT-112): tomate, frangos de corte, suínos, bovinos zebuínos, medicamentos de temperatura ambiente, amostras biológicas e cosméticos.
@@ -122,7 +129,6 @@ As funcionalidades abaixo estão **planejadas, não implementadas**:
 
 | Funcionalidade | Jira | Sprint |
 | --- | --- | --- |
-| Lista única de cidades no cadastro e na previsão do clima | FT-113 (US-14) | 3 |
 | Tipo de carga e data/hora de saída na entrega | FT-117 (US-16) | 4 |
 | Até 3 rotas automáticas pela Google Routes API | FT-118 (US-17) | 4 |
 | Mapa das rotas (Maps JavaScript API) | FT-120 (US-18) | 4 |
@@ -341,21 +347,25 @@ As rotas abaixo correspondem à implementação identificada no backend atual.
 |---|---|---|---|
 | `POST` | `/api/auth/login/` | Público | Autentica usuário e retorna tokens e dados básicos do perfil. |
 | `POST` | `/api/auth/refresh/` | Conforme configuração JWT | Renova o token de acesso a partir do refresh token. |
+| `GET` | `/api/health/` | Público | Estado da aplicação e do banco e commit implantado (homologação, FT-110). |
 | `GET` | `/api/drivers/` | Gestor | Lista contas ativas com perfil Motorista. |
 | `GET` | `/api/deliveries/` | Gestor e Motorista | Gestor consulta todas; Motorista consulta somente as próprias entregas atribuídas. |
 | `POST` | `/api/deliveries/` | Gestor | Cadastra uma entrega. |
 | `GET` | `/api/deliveries/{id}/` | Gestor e Motorista | Consulta uma entrega, respeitando o isolamento por Motorista. |
 | `POST` | `/api/deliveries/{id}/update-status/` | Motorista atribuído | Recebe `{"status":"EM_TRANSPORTE"}` ou `{"status":"ENTREGUE"}` e retorna a entrega atualizada. |
+| `GET` | `/api/cidades/` | Gestor e Motorista | Lista as 26 cidades da lista única (nome, UF, rótulo, slug e coordenadas), somente leitura. |
 | `GET` | `/api/tipos-carga/` | Gestor e Motorista | Lista os tipos de carga com limite de temperatura, referência e fonte (somente leitura). |
 | `GET` | `/api/deliveries/{id}/status-history/` | Gestor | Retorna `delivery_id`, `current_status` e `history` (eventos em ordem cronológica), sem permitir alteração. |
 | `POST` | `/api/deliveries/{id}/assign-driver/` | Gestor | Atribui ou reatribui um Motorista à entrega. |
 
 ### Exemplo de cadastro de entrega
 
+`origin_city` e `destination_city` são os `id` retornados por `GET /api/cidades/`:
+
 ```json
 {
-  "origin": "Campina Grande - PB",
-  "destination": "João Pessoa - PB",
+  "origin_city": 2,
+  "destination_city": 1,
   "cargo_description": "Alimentos refrigerados"
 }
 ```
@@ -409,10 +419,14 @@ O workflow `.github/workflows/ci.yml` é executado em pushes para qualquer branc
 | `Backend - Django checks and tests` | Instala dependências, sobe PostgreSQL no runner, executa `manage.py check` e a suíte de testes do Django |
 | `Frontend - build and tests` | Instala dependências e gera o build de produção (`tsc -b && vite build`); não há testes unitários de frontend configurados |
 | `E2E - Cucumber/Cypress (@smoke)` | Sobe backend e frontend integrados e executa os cenários `@smoke`, `@US-07` (comparação de trajetos), `@R1` (regressão da Sprint 1) e `@US-08` (Open-Meteo); publica relatório e capturas de falha como artefato |
+| `Segurança - segredos fora do repositório` | Falha se houver chave do Google, chave privada, `.env` versionado ou URL de banco com senha |
+| `Deploy - homologação (Render)` | Só em push na `main` e só depois que todos os jobs acima passam: dispara o deploy no Render e espera `/api/health/` responder com o commit implantado |
 
 **Proteção da `main` (desde 04/11/2026):** alterações entram apenas por Pull Request, com 1 aprovação de outro integrante e os três jobs acima como checagens obrigatórias; as regras valem também para administradores. Detalhes em [`docs/devops/protecao-main.md`](docs/devops/protecao-main.md).
 
 **Limitação conhecida:** os cenários `@US-06` têm etapas implementadas, mas ainda não estão em nenhuma seleção de tags do CI.
+
+**Homologação (FT-110):** cada integração na `main` com CI verde é implantada automaticamente no Render (plano gratuito). URL, segredos, configuração inicial, reprodução e rollback em [`docs/devops/homologacao.md`](docs/devops/homologacao.md).
 
 O histórico do pipeline da Release 1 está em [`docs/releases/release-1/relatorio-pipeline.md`](docs/releases/release-1/relatorio-pipeline.md).
 
@@ -496,6 +510,7 @@ Todos os integrantes podem colaborar com o desenvolvimento, revisão e validaç�
 - [Nova linha do produto (R2 a R4)](docs/produto/escopo-r3-r4.md): funcionalidades novas, catálogo de cargas, lista de cidades e regras RN-01 a RN-10.
 - [Spikes das rotas e da comparação térmica](docs/produto/spikes-rotas-google.md): resultados de 13–14/11/2026 e scripts em [`scripts/spikes/`](scripts/spikes/).
 - [Google Maps Platform](docs/devops/google-maps-platform.md): chaves, cotas, alertas e uso no CI.
+- [Homologação](docs/devops/homologacao.md): deploy automatizado no Render, segredos, rollback e limitações do plano gratuito.
 
 As atas de 09/10 e os dois registros da reunião de 19/10 foram **elaborados retrospectivamente em 10/11/2026**. Os registros de 19/10 descrevem o mesmo encontro, com referências cruzadas: avaliação das pendências da Sprint 0 e preparação da Sprint 1, sem afirmar uma cerimônia independente de Sprint Retrospective.
 
