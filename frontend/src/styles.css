@@ -57,8 +57,8 @@ h2 { font-size: 1.35rem; margin-bottom: 0; }
 .content-grid { display: grid; grid-template-columns: minmax(280px, .8fr) minmax(0, 1.4fr); align-items: start; gap: 22px; }
 .panel { background: white; border: 1px solid var(--line); border-radius: 17px; padding: 24px; box-shadow: 0 6px 20px #203d2c05; }
 .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
-.step-number, .count-badge { display: grid; place-items: center; min-width: 36px; height: 36px; padding: 0 9px; border-radius: 11px; background: #f0f5f2; color: #4e7766; font-size: .8rem; font-weight: 800; }
-.count-badge { border-radius: 999px; }
+.step-number, .count-badge, .catalog-count { display: grid; place-items: center; min-width: 36px; height: 36px; padding: 0 9px; border-radius: 11px; background: #f0f5f2; color: #4e7766; font-size: .8rem; font-weight: 800; }
+.count-badge, .catalog-count { border-radius: 999px; }
 .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: -7px 0 16px; font-size: .8rem; }
 .empty-state { min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px dashed #dbe5df; border-radius: 13px; padding: 25px; color: #4a6258; }
 .empty-state strong { margin: 8px 0 5px; }

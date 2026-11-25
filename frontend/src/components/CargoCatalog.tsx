@@ -36,7 +36,7 @@ function CargoCatalog({ token, onSessionExpired }: Props) {
     <section className="panel catalog-panel" data-cy="cargo-catalog-panel">
       <div className="panel-heading">
         <div><p className="eyebrow">CATÁLOGO</p><h2>Tipos de carga</h2></div>
-        <span className="count-badge">{cargoTypes.length}</span>
+        <span className="catalog-count" aria-label={`${cargoTypes.length} tipos de carga`}>{cargoTypes.length}</span>
       </div>
       <p className="muted">
         O limite de cada carga é a temperatura contra a qual as rotas serão comparadas. O Feneme considera
