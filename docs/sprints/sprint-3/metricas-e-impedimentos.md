@@ -64,3 +64,17 @@ A linha de trabalho restante inicia em 58 SP, reduz aproximadamente para 53, 50 
 | S3 | 38 | Ativa na captura; 10 SP ainda em andamento |
 
 O Velocity Chart apresenta sprints encerradas ([documentação Atlassian](https://support.atlassian.com/jira-software-cloud/docs/view-and-understand-the-velocity-chart/)). O compromisso é medido na abertura, e o concluído no fechamento, conforme mapeamento de colunas. A comparação definitiva será feita após encerramento real da S3, com Sprint Report, gráfico oficial, itens aceitos pela DoD e eventuais carryovers. Não encerrar a sprint somente para gerar o gráfico nem mover itens para Done sem evidências. Registrar diferenças entre pontos concluídos por status e pontos efetivamente aceitos.
+
+### Atualização de 26/11 — segunda captura do Burndown
+
+A segunda captura oficial enviada pela SM mostra 0 SP restantes, após a conclusão por status das FT-90 (2 SP), FT-91 (3 SP) e FT-92 (5 SP). A nova consulta JQL `project = FT AND sprint = 'FT Sprint 3'` retornou 15/15 issues em Concluído, totalizando 48/48 SP no escopo atual. Preserva-se a fotografia anterior de 38/48 SP como histórico, não como estado atual. As três issues de encerramento ainda apresentam itens de DoD não marcados nas descrições; a revisão de riscos e a confirmação das evidências de encerramento permanecem independentes da contagem por status.
+
+![Velocity operacional — Sprints 1, 2 e 3](velocity-operacional.svg)
+
+| Sprint | Planejamento inicial (registros) | Escopo atual/final | Concluído por status |
+| --- | ---: | ---: | ---: |
+| S1 | 64 | 64 | 64 |
+| S2 | 40 | 36 | 36 |
+| S3 | 58 | 48 | 48 |
+
+S3: 48/48 SP do escopo atualizado, 82,8% do compromisso inicial de 58 SP; crescimento de 33,3% sobre os 36 SP da S2. A diferença de 10 SP decorre de alteração líquida de escopo. Na S2, 40 SP é a reconstrução registrada na Planning/relatório, não valor extraído do gráfico nativo. A SM informou que o menu disponibiliza Burndown, Burnup e Velocity, mas não um Sprint Report separado; a consulta das issues é a fonte alternativa da fotografia. O gráfico comparativo é elaborado a partir dos dados registrados, não exportação do Velocity Chart nativo. Confirmar o gráfico nativo após encerramento da sprint, se disponível; não declarar cumprimento de DoD apenas pelo status. 
