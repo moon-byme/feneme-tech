@@ -1,7 +1,6 @@
 # language: pt
 # US-09 (FT-57); CT-08, CT-21.
 
-@R2
 Funcionalidade: Recomendação indicativa de trajeto
   Como Gestor
   Quero receber uma recomendação de trajeto com justificativa
