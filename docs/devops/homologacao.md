@@ -44,7 +44,11 @@ Em homologação, `DJANGO_DEBUG=False`: cookies só por HTTPS, `ALLOWED_HOSTS` e
 4. Aguardar o primeiro deploy e abrir `https://<serviço>.onrender.com/api/health/`.
 5. No serviço: **Settings → Deploy Hook → copiar** a URL.
 6. No GitHub: criar o secret `RENDER_DEPLOY_HOOK_URL` (Deploy Hook) e a variável `HOMOLOGACAO_URL` (URL pública).
-7. Rodar o workflow `CI` na `main` (**Actions → CI → Run workflow**) e conferir o job `Deploy - homologação (Render)` verde.
+7. Integrar um PR revisado e aprovado na `main`. O evento `push` dispara o CI; `Run workflow` (`workflow_dispatch`) não dispara o deploy.
+8. Na execução do CI correspondente ao push na `main`, conferir que backend, frontend, E2E e segurança passaram. No job `Deploy - homologação (Render)`, verificar resposta HTTP 2xx do Deploy Hook e sucesso da etapa `Aguardar a nova versão no ar`. Um job verde com etapas ignoradas não comprova deploy.
+9. Abrir <https://feneme-homologacao.onrender.com/api/health/> e conferir `status` e `database` iguais a `ok`, além do `commit` igual ao SHA da execução. Registrar o link do run e as evidências na FT-110 e na FT-92.
+
+**URL de homologação:** <https://feneme-homologacao.onrender.com>. A validação de ponta a ponta permanece pendente até a execução bem-sucedida após o merge.
 
 ## Reproduzir localmente o ambiente de homologação
 
