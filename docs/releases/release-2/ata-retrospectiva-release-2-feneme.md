@@ -42,7 +42,19 @@ Os indicadores operacionais finais, conferidos em 26/11, foram de 36/36 SP (11 i
 **Síntese:** evolução importante da cobertura e automação de testes; reforçar a formalização dos resultados e gestão documental da qualidade.  
 **Evidências:** FT-88, FT-91, FT-73, FT-80, FT-81, FT-114/10325, PRs #51 e #58.
 
-A avaliação é coletiva e orientada à melhoria; não substitui eventual formulário individual exigido pelo acordo da equipe. Não são atribuídas notas numéricas ou votos não registrados.
+### 2.1. Ratificação da avaliação entre pares — 26/11/2026
+
+Conforme confirmação da Scrum Master, os três integrantes concordaram com as avaliações qualitativas discutidas na retrospectiva da R2, incluindo as contribuições, os pontos positivos e as oportunidades de melhoria registradas acima para cada integrante nos respectivos papéis.
+
+| Integrante | Participação e concordância |
+| --- | --- |
+| Lethycia Zenaide Queiroz Melo — SM | Confirmada |
+| João Paulo de Araujo — PO/DevOps | Confirmada |
+| José Araújo Agra Neto — QA | Confirmada |
+
+A avaliação coletiva foi ratificada pelos três integrantes, sendo utilizada como evidência do critério 14 da DoD da Release 2. O registro não atribui notas numéricas, falas ou respostas individuais não documentadas, nem afirma que formulários separados foram preenchidos. Caso a disciplina exija um formato específico, este deverá ser observado.
+
+**Rastreabilidade:** [FT-90](https://feneme.atlassian.net/browse/FT-90) · [FT-124](https://feneme.atlassian.net/browse/FT-124) · [DoD — FT-38](https://feneme.atlassian.net/browse/FT-38) · [PR #63](https://github.com/moon-byme/feneme-tech/pull/63).
 
 ## 3. Pontos de melhoria e ações
 
