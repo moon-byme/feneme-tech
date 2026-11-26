@@ -114,6 +114,26 @@ No [CI run #45731598047](https://github.com/moon-byme/feneme-tech/actions/runs/4
 
 ## 6. Pendências para concluir a FT-91
 
+### 6.1 Pré-conferência da DoD sob responsabilidade de QA (FT-38)
+
+A avaliação abaixo é técnica e preliminar; não substitui o preenchimento oficial da planilha DoD nem o aceite do PO/SM.
+
+| Critério DoD da Sprint | Avaliação QA | Evidência / ressalva |
+|---|---|---|
+| 2 — US concluídas atendem à DoD individual | Parcial | FT-48, FT-49, FT-59 e FT-113 têm PR, testes e CI; FT-114 foi aceita pelo PO, mas a validação manual independente continua pendente (FT-110/homologação). |
+| 7 — Bugs encontrados registrados com evidência/severidade | Sem ocorrência registrada no Jira | Consulta `project = FT AND issuetype = Bug` retornou zero issues. Confirmar com a equipe se houve defeito relatado fora do Jira; não inferir ausência de defeitos não reportados. |
+| 8 — Nenhum bug crítico/alto aberto sem plano | Atendido no Jira | Zero issues do tipo Bug; portanto, zero bugs críticos/altos em aberto no rastreador. |
+| 9 — Regressão dos itens afetados executada | Atendido | CI [run 45731598047](https://github.com/moon-byme/feneme-tech/actions/runs/45731598047): @R1 10/10, @R2 29/29, @smoke 18/18, @US-07 3/3 e @US-08 2/2. |
+| 20 — Permissões Gestor/Motorista verificadas | Atendido nos fluxos cobertos | Q-05 20/20 tentativas de atualização cruzada rejeitadas; catálogo somente leitura e acesso anônimo 401 verificados na FT-114. |
+| 21 — Funcionalidades concluídas verificadas, sem falhas críticas conhecidas | Parcial | CI verde nas histórias integradas; FT-114 ainda aguarda validação manual no ambiente publicado. |
+| 22 — Falhas Open-Meteo não bloqueiam fluxos manuais | Atendido | Q-13 10/10 falhas simuladas preservaram cadastro e comparação manual. |
+| 23 — Status e histórico persistem | Atendido | Q-12 20/20; CT-12 e CT-26 do histórico passaram 2/2 na regressão @R2. |
+
+**DoD da Release sob QA:**
+- Critério 4 (ciclo de regressão antes da apresentação): atendido pela execução CI acima.
+- Critério 7 (relatório de qualidade da release): parcial; o relatório foi atualizado, mas permanece parcial até a validação manual da FT-114, conferência formal e fechamento das pendências.
+- Critério 2 (implantação em homologação e demonstração): depende da FT-110; primeiro deploy no Render e URL ainda pendentes.
+
 1. **Indicadores de qualidade R2:** Q-01 = 30/30 CT únicos executados (100%); Q-02 = zero Bugs registrados em aberto no Jira na consulta de 25/11 (snapshot do rastreador, não prova ausência de defeitos não reportados); Q-03 = 100% (8/8 US); Q-04 = 12/12 PRs (#39–#50) com aprovação de pessoa diferente do autor antes do merge (100%); Q-05 = 20/20 tentativas indevidas de alteração de status rejeitadas, zero alterações/eventos indevidos (100%); Q-06 = 0 exposições em 20 cenários; Q-07 = 5/5 participantes; Q-08 = 84% (142 testes OK, conforme registro da planilha); Q-09 = 100% (22/22 execuções); Q-10 = 100% (20/20); Q-12 = 20/20 (100%); Q-13 = 10/10 (100%); Q-15 = 4/4 histórias formalmente concluídas com vínculo de evidência teste/PR no Jira (100%, apuração preliminar aguardando conferência do SM). Q-11 e Q-14 estão programadas para R3; Q-16 permanece proposta, sem aprovação e sem medição. **Atualização necessária na planilha:** substituir o denominador de Q-04 de 7/7 para 12/12; inserir/conferir Q-01, Q-02, Q-05 e Q-15 com as evidências descritas aqui.
 2. **Q-12 e Q-13:** resultados registrados na planilha (20/20 e 10/10). Manter vinculadas as evidências das seções 2 e 3.
 3. **FT-32:** obter decisão do PO sobre o carryover da parte dependente da FT-57, que está fora da R2.
