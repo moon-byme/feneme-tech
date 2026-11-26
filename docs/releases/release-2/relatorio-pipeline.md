@@ -72,7 +72,18 @@ Execuções do mesmo commit (push e pull_request) contam separadamente no total,
 
 ## 5. Homologação (FT-110)
 
-O deploy automatizado no Render foi implementado no PR da FT-110 (seções 1 e [`docs/devops/homologacao.md`](../../devops/homologacao.md)): o job de deploy depende de todos os testes, só roda em push na `main` e espera o `/api/health/` responder com o commit implantado. A primeira execução real depende da criação do serviço no Render e do secret `RENDER_DEPLOY_HOOK_URL`; o link do run e a URL entram na seção 7 quando ocorrerem.
+O deploy automatizado no Render foi implementado no PR da FT-110 (seções 1 e [`docs/devops/homologacao.md`](../../devops/homologacao.md)): o job de deploy depende de todos os testes, só roda em push na `main` e espera o `/api/health/` responder com o commit implantado. A implantação automática foi confirmada em 25/11/2026 no [CI #351](https://github.com/moon-byme/feneme-tech/actions/runs/45738722270), após a correção do Deploy Hook pela [PR #53](https://github.com/moon-byme/feneme-tech/pull/53).
+
+### Evidências complementares da FT-110 (25/11/2026)
+
+- URL: https://feneme-homologacao.onrender.com; Render Live, disparo via Deploy Hook (HTTP 200).
+- Health check: https://feneme-homologacao.onrender.com/api/health/ — `status: ok`, `database: ok`; commit `b017151287a6b9325c690037651c92412aff8a1f`, igual ao SHA da execução.
+- Backend, frontend (build), E2E e segurança aprovados; as duas etapas do deploy concluídas. Não havia script de teste unitário do frontend configurado.
+- [CI #331](https://github.com/moon-byme/feneme-tech/actions/runs/45730929872): falha E2E e deploy ignorado em branch de QA. A condição de branch também impede o deploy; não comprova isoladamente o bloqueio por falha na main. A regra `needs` confirma a dependência dos jobs por inspeção da configuração, sem ensaio de falha na main.
+- [CI #345](https://github.com/moon-byme/feneme-tech/actions/runs/45734971703) e [#348](https://github.com/moon-byme/feneme-tech/actions/runs/45735867289): jobs de teste aprovados, deploy falhou; #348 retornou HTTP 404. A PR #53 corrigiu o parâmetro do hook, com recuperação comprovada pelo #351.
+- Fonte editável do registro: [validacao-homologacao-r2.typ](validacao-homologacao-r2.typ).
+
+Os indicadores das seções 2–4 e 6 mantêm o recorte original indicado no relatório; não representam as execuções posteriores nem o fechamento completo da R2.
 
 ## 6. Comparação com a Release 1
 
@@ -90,7 +101,7 @@ O deploy automatizado no Render foi implementado no PR da FT-110 (seções 1 e [
 
 - [x] Proteção da `main` aplicada (04/11/2026).
 - [x] Indicadores consolidados da R2 (este relatório).
-- [ ] Primeira execução do job `Deploy - homologação (Render)` com link e URL.
+- [x] Primeira implantação automatizada bem-sucedida: [CI #351](https://github.com/moon-byme/feneme-tech/actions/runs/45738722270), [homologação](https://feneme-homologacao.onrender.com), [health check](https://feneme-homologacao.onrender.com/api/health/).
 - [ ] CI da `main` no commit escolhido para a tag `v2.0.0`.
 - [ ] Tag `v2.0.0` e GitHub Release publicadas; link deste relatório na FT-92 e na versão Release 2 do Jira.
 
@@ -100,3 +111,4 @@ O deploy automatizado no Render foi implementado no PR da FT-110 (seções 1 e [
 | --- | --- | --- | --- |
 | 03/11/2026 | 0.1 | Relatório parcial da R2 com linha de base da R1 (rascunho local) | João Paulo de Araujo |
 | 25/11/2026 | 1.0 | Consolidação da R2: 259 execuções, falhas e causas, governança de PRs e homologação | João Paulo de Araujo |
+| 25/11/2026 | 1.1 | Complemento de homologação e evidências dos runs #331, #345, #348 e #351; indicadores originais preservados | Lethycia (SM R2), conferência documental |
