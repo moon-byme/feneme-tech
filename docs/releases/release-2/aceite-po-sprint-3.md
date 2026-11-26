@@ -46,3 +46,19 @@ Ratificado na Planning 3 ([ata](../../sprints/sprint-3/feneme_sprint_planning_3.
 - [x] Repriorização do que não foi concluído, com destino e motivo.
 - [x] Release notes com somente o que tem evidência ([release-notes.md](release-notes.md)).
 - [ ] Confirmação das decisões na Sprint Review de 26/11.
+
+## Complemento de evidências — 26/11/2026 (pré-Review)
+
+O quadro de decisões de 25/11 foi preservado. A documentação posterior permite atualizar o estado das condições técnicas, **sem substituir a ratificação do PO na Review**.
+
+| Item | Conferência atual | Evidência |
+| --- | --- | --- |
+| FT-48, FT-49, FT-59 | DoDs técnicas conferidas no Jira; aceites já constam na decisão de 25/11 | PRs #41, #42 (feature), #43 (main), #51; QA nos comentários 10268–10270 |
+| FT-113 | Condição de merge satisfeita; PO confirmou aceite em 25/11 | [PR #47](https://github.com/moon-byme/feneme-tech/pull/47), [FT-113](https://feneme.atlassian.net/browse/FT-113?focusedCommentId=10252) |
+| FT-110 | Condição de deploy satisfeita; CI #351 e documentação #55 integrados; CI #375 também verde | [CI #351](https://github.com/moon-byme/feneme-tech/actions/runs/45738722270), [#375](https://github.com/moon-byme/feneme-tech/actions/runs/45832088850), [homologação](https://feneme-homologacao.onrender.com) |
+| FT-114 | Aceite do PO e testes automatizados comprovados; verificação manual do catálogo/fontes em homologação pendente | [PR #44](https://github.com/moon-byme/feneme-tech/pull/44), [FT-114](https://feneme.atlassian.net/browse/FT-114?focusedCommentId=10318) |
+| FT-115/116 | Carryover para Sprint 4 conforme decisão do PO; cota de 100/dia comprovada, orçamento/validação local e tratamento do risco ainda pendentes | [FT-115](https://feneme.atlassian.net/browse/FT-115?focusedCommentId=10284), [FT-116](https://feneme.atlassian.net/browse/FT-116?focusedCommentId=10315) |
+
+A [FT-72](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10319) confirma Q-04 de Sprint 3 em 19/19 PRs aprovadas antes do merge (18/18 no recorte estrito main); a [FT-83](https://feneme.atlassian.net/browse/FT-83?focusedCommentId=10320) confirma Q-15 em 5/5 US da Sprint 3 com vínculo teste/PR. Rastreabilidade não equivale ao aceite integral da DoD. A [FT-91](https://feneme.atlassian.net/browse/FT-91?focusedCommentId=10321) acompanha o relatório de qualidade e a verificação restante.
+
+**Não registrar a Review como ocorrida antes da confirmação efetiva de data, participantes, demonstração e decisões.** A tag e a publicação dependem da conclusão acordada pelo time.
