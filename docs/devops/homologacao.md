@@ -48,7 +48,7 @@ Em homologação, `DJANGO_DEBUG=False`: cookies só por HTTPS, `ALLOWED_HOSTS` e
 8. Na execução do CI correspondente ao push na `main`, conferir que backend, frontend, E2E e segurança passaram. No job `Deploy - homologação (Render)`, verificar resposta HTTP 2xx do Deploy Hook e sucesso da etapa `Aguardar a nova versão no ar`. Um job verde com etapas ignoradas não comprova deploy.
 9. Abrir <https://feneme-homologacao.onrender.com/api/health/> e conferir `status` e `database` iguais a `ok`, além do `commit` igual ao SHA da execução. Registrar o link do run e as evidências na FT-110 e na FT-92.
 
-**URL de homologação:** <https://feneme-homologacao.onrender.com>. A validação de ponta a ponta permanece pendente até a execução bem-sucedida após o merge.
+**URL de homologação:** <https://feneme-homologacao.onrender.com>. Validação de ponta a ponta concluída em 25/11/2026: [CI #351](https://github.com/moon-byme/feneme-tech/actions/runs/45738722270), HTTP 200 no hook, `status: ok`, `database: ok` e commit `b017151287a6b9325c690037651c92412aff8a1f`. Ver [relatório do pipeline da R2](../releases/release-2/relatorio-pipeline.md) e [registro complementar em Typst](../releases/release-2/validacao-homologacao-r2.typ).
 
 ## Reproduzir localmente o ambiente de homologação
 
