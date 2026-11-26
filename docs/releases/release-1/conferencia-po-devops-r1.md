@@ -125,3 +125,6 @@ A conferência de 25/11 e os fatos históricos foram preservados. Os registros p
 - R01: evidências e proposta residual P4/S5=10 estão na [FT-60](https://feneme.atlassian.net/browse/FT-60?focusedCommentId=10263); falta decisão coletiva e lançamento. R02 permanece registrado com residual 10.
 
 Pendências documentais devem ficar registradas como tal na DoD; a conferência administrativa não apaga fatos históricos. A homologação na R1 não era obrigatória segundo a orientação da disciplina. 
+
+
+**Reconciliação final de 26/11:** cinco DoDs individuais verificadas e evidências vinculadas; sete dos oito itens documentados como atendidos em cada história, com revisão antes do merge R1 não atendida. Revisões retrospectivas reais de 25/11 preservadas, sem alterar os aceites funcionais. Q-04 histórica 0/10, revisão posterior 10/10; [FT-72/10340](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10340). Atualizar E6 da DoD S1 e I7 da qualidade; conferir versões compartilhadas. A conferência documental não representa reabertura da R1 nem exige repetir testes já comprovados.
