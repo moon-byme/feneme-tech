@@ -10,7 +10,7 @@
 
 A R2 avançou na disciplina de integração, na automação de testes, na rastreabilidade e na entrega de funcionalidades. O fluxo de PR evoluiu em relação à R1 (Q-04 histórica 0/10 no merge; na S3, 19/19 aprovações prévias até #57). Foram incorporados Cypress/Cucumber ao CI, regressão de 29/29 cenários e homologação automatizada. Foram entregues as funcionalidades de status, andamento, histórico, cidades e catálogo de cargas. A mudança de escopo FT-112 organizou a evolução para rotas automáticas e comparação térmica na R3. As regularizações documentais da R1 também avançaram.
 
-Os indicadores operacionais foram de 36 SP por status na S2 e 38 de 48 SP na fotografia da S3 de 26/11, não equivalentes automaticamente à velocity validada pela DoD. As três atividades de fechamento (FT-90/91/92) permaneciam em andamento no momento da consulta.
+Os indicadores operacionais finais, conferidos em 26/11, foram de 36/36 SP (11 issues) na S2 e 48/48 SP (15 issues) na S3, totalizando 84/84 SP e 26/26 issues por status na R2, com zero SP restantes. A fotografia anterior de 38/48 SP da S3 é preservada como histórico; FT-90/91/92 passaram a Concluído. Os pontos por status não equivalem automaticamente à velocity validada pela DoD. Ver [relatório consolidado de métricas da R2](relatorio-metricas.md).
 
 ## 2. Avaliação interna de desempenho por integrante
 
