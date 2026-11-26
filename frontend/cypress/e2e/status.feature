@@ -1,5 +1,5 @@
 # language: pt
-# US-10 (FT-58), US-11 (FT-48), US-12 (FT-49), US-13 (FT-59); CT-10, CT-11, CT-22 a CT-28.
+# US-10 (FT-58), US-11 (FT-48), US-12 (FT-49), US-13 (FT-59); CT-10, CT-11, CT-22 a CT-25. CT-12 e CT-26 estão em historico.feature.
 
 @R2
 Funcionalidade: Consulta e atualização do status das entregas
@@ -125,19 +125,19 @@ Funcionalidade: Consulta e atualização do status das entregas
     Então a interface informa a falha sem indicar lista vazia
 
   # FT-59 / US-13: consulta somente dos eventos reais persistidos pela FT-48.
-  @US-13 @CT-26 @regressao @smoke
+  @US-13 @regressao @smoke
   Cenário: Gestor consulta histórico cronológico com mudanças registradas
     Dado que criei uma entrega com duas alterações reais para consulta do histórico
     Quando abro o histórico dessa entrega como Gestor
     Então vejo as duas transições persistidas na ordem correta
 
-  @US-13 @CT-27 @excecao @smoke
+  @US-13 @excecao @smoke
   Cenário: Gestor consulta histórico vazio de uma entrega
     Dado que criei uma entrega sem alterações para consulta do histórico
     Quando abro o histórico dessa entrega como Gestor
     Então vejo mensagem de histórico vazio e o status Pendente
 
-  @US-13 @CT-28 @regressao @smoke
+  @US-13 @regressao @smoke
   Cenário: Histórico persiste após encerramento e nova autenticação
     Dado que criei uma entrega com duas alterações reais para consulta do histórico
     Quando consulto o histórico após sair e entrar novamente
