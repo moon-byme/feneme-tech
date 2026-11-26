@@ -31,7 +31,7 @@ A diferença entre 58 SP da Planning e a fotografia de 48 SP corresponde à alte
 ## 3. Fechamento a registrar
 
 - [x] Burndown oficial parcial de 26/11 analisado e linkado (seção 4).
-- [ ] Velocity Chart e Sprint Report finais após encerramento; reconciliar com DoD e pendências.
+- [x] Gráfico comparativo de velocity operacional e análise elaborados com dados do Jira; integração da PR #60 pendente. Conferência do gráfico nativo após encerramento, se disponível, é complementar.
 - [x] Review realizada e ata publicada pela PR #59; ver [ata da Review](ata-review.md).
 - [x] Retrospectiva realizada e ata publicada pela PR #59; ver [ata R2](../../releases/release-2/ata-retrospectiva-release-2-feneme.md). Revisão de riscos pendente separadamente.
 - [ ] Revisão final do registro de riscos e links da DoD; publicação formal da versão pelo PO/DevOps.
@@ -63,18 +63,32 @@ A linha de trabalho restante inicia em 58 SP, reduz aproximadamente para 53, 50 
 | S2 | 36 | Encerrada; recorte operacional |
 | S3 | 38 | Ativa na captura; 10 SP ainda em andamento |
 
-O Velocity Chart apresenta sprints encerradas ([documentação Atlassian](https://support.atlassian.com/jira-software-cloud/docs/view-and-understand-the-velocity-chart/)). O compromisso é medido na abertura, e o concluído no fechamento, conforme mapeamento de colunas. A comparação definitiva será feita após encerramento real da S3, com Sprint Report, gráfico oficial, itens aceitos pela DoD e eventuais carryovers. Não encerrar a sprint somente para gerar o gráfico nem mover itens para Done sem evidências. Registrar diferenças entre pontos concluídos por status e pontos efetivamente aceitos.
+O Velocity Chart apresenta sprints encerradas ([documentação Atlassian](https://support.atlassian.com/jira-software-cloud/docs/view-and-understand-the-velocity-chart/)). O compromisso é medido na abertura, e o concluído no fechamento, conforme mapeamento de colunas. O gráfico alternativo compara o escopo final e os pontos concluídos por status; o gráfico nativo, quando disponível após encerramento, poderá complementar a análise do compromisso original. O Sprint Report separado não é exigência da disciplina. Não encerrar a sprint somente para gerar o gráfico nem mover itens para Done sem evidências. Registrar diferenças entre pontos concluídos por status e pontos efetivamente aceitos.
 
 ### Atualização de 26/11 — segunda captura do Burndown
 
 A segunda captura oficial enviada pela SM mostra 0 SP restantes, após a conclusão por status das FT-90 (2 SP), FT-91 (3 SP) e FT-92 (5 SP). A nova consulta JQL `project = FT AND sprint = 'FT Sprint 3'` retornou 15/15 issues em Concluído, totalizando 48/48 SP no escopo atual. Preserva-se a fotografia anterior de 38/48 SP como histórico, não como estado atual. As três issues de encerramento ainda apresentam itens de DoD não marcados nas descrições; a revisão de riscos e a confirmação das evidências de encerramento permanecem independentes da contagem por status.
 
-![Velocity operacional — Sprints 1, 2 e 3](velocity-operacional.svg)
+![Velocity operacional — escopo final e concluído por status](velocity-operacional.svg)
 
-| Sprint | Planejamento inicial (registros) | Escopo atual/final | Concluído por status |
+| Sprint | Escopo final (SP) | Concluído por status (SP) | Conclusão do escopo final |
 | --- | ---: | ---: | ---: |
-| S1 | 64 | 64 | 64 |
-| S2 | 40 | 36 | 36 |
-| S3 | 58 | 48 | 48 |
+| S1 | 64 | 64 | 100% |
+| S2 | 36 | 36 | 100% |
+| S3 | 48 | 48 | 100% |
 
-S3: 48/48 SP do escopo atualizado, 82,8% do compromisso inicial de 58 SP; crescimento de 33,3% sobre os 36 SP da S2. A diferença de 10 SP decorre de alteração líquida de escopo. Na S2, 40 SP é a reconstrução registrada na Planning/relatório, não valor extraído do gráfico nativo. A SM informou que o menu disponibiliza Burndown, Burnup e Velocity, mas não um Sprint Report separado; a consulta das issues é a fonte alternativa da fotografia. O gráfico comparativo é elaborado a partir dos dados registrados, não exportação do Velocity Chart nativo. Confirmar o gráfico nativo após encerramento da sprint, se disponível; não declarar cumprimento de DoD apenas pelo status. 
+S3: 48/48 SP do escopo atualizado (100%), sem pontos restantes no quadro; crescimento de 33,3% sobre os 36 SP da S2. Para comparar a execução do escopo efetivamente mantido, o gráfico usa a mesma base de escopo final para as três sprints. O compromisso inicial e as alterações de escopo permanecem no histórico, não sendo confundidos com trabalho pendente. O gráfico não reproduz o indicador nativo de compromisso inicial do Jira. A SM informou que o menu disponibiliza Burndown, Burnup e Velocity, mas não um Sprint Report separado; a consulta das issues é a fonte alternativa da fotografia. O gráfico comparativo é elaborado a partir dos dados registrados, não exportação do Velocity Chart nativo. Confirmar o gráfico nativo após encerramento da sprint, se disponível; não declarar cumprimento de DoD apenas pelo status. 
+
+### Histórico do replanejamento da S3
+
+A consulta aos históricos das issues confirmou as quatro transferências do escopo inicial de 58 SP para a R3:
+
+| Issue | SP | Alteração no Jira | Destino | Motivo |
+| --- | ---: | --- | --- | --- |
+| [FT-32](https://feneme.atlassian.net/browse/FT-32) | 5 | 25/11, 23h13 | S5 | Verificação restante depende da recomendação climática FT-57; continuidade dos fluxos manuais já comprovada. |
+| [FT-67](https://feneme.atlassian.net/browse/FT-67) | 2 | 26/11, 10h48 | S4 | Tratamento complementar de usabilidade junto à FT-117. |
+| [FT-116](https://feneme.atlassian.net/browse/FT-116) | 1 | 26/11, 10h48 | S4 | Tratamento de cota/custo e falhas das APIs Google, dependente da FT-115. |
+| [FT-115](https://feneme.atlassian.net/browse/FT-115) | 2 | 26/11, 12h01 | S4 | Evidências restantes de configuração do Google Cloud, pré-requisito de FT-118. |
+| Total | 10 | | | |
+
+A alteração de escopo é rastreável; não há itens restantes no escopo final da S3 por status. A revisão dos riscos e as verificações de DoD ainda não comprovadas permanecem distintas desta métrica.
