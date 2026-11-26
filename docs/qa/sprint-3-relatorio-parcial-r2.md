@@ -1,4 +1,4 @@
-# QA — Sprint 3: relatório parcial de qualidade da Release 2
+# QA — Relatório de Qualidade da Sprint 3 e Release 2
 
 **Projeto:** Feneme — Gestão Inteligente de Transporte de Alimentos  
 **Sprint:** FT Sprint 3 (17/11/2026 a 26/11/2026)  
@@ -6,7 +6,7 @@
 **Data de consolidação:** 26/11/2026  
 **Issues acompanhadas:** FT-32, FT-80, FT-81 e FT-91
 
-> **Estado deste documento: PARCIAL (atualizado em 26/11/2026).** Registra resultados sustentados por evidências do Jira, PRs, GitHub Actions e plano de testes. As medições Q-01, Q-02, Q-04, Q-05, Q-12, Q-13 e Q-15 foram apuradas nesta consolidação. A reauditoria de Q-04 (12/12) foi registrada; a conferência formal do PO para Q-12 e Q-13 foi confirmada em 26/11. A homologação foi implantada e validada no CI #351; o QA confirmou em 26/11 a verificação manual da FT-114: sete tipos presentes, campos corretos e links das fontes funcionando. Também faltam confirmação do SM sobre Q-04/Q-15, atualização da planilha e fechamento oficial da DoD. Nenhuma medição foi estimada.
+> **Estado deste documento: PARECER FINAL DE QA (26/11/2026), preparado para publicação.** Consolida evidências do Jira, PRs, GitHub Actions e Plano de Testes. A Scrum Master confirmou Q-04 em 19/19 PRs da Sprint 3 (#39–#57) e Q-15 em 5/5 US da Sprint 3 e 9/9 US funcionais no agregado da R2. O QA concluiu a verificação manual da FT-114 em homologação (sete tipos, campos e links das fontes corretos). A planilha foi atualizada pelo QA; conferir nela os recortes finais de Q-04 e Q-15 indicados neste relatório. O CI #394 passou em todos os jobs, incluindo regressão e deploy. Nenhuma medição foi estimada; ressalvas e itens replanejados permanecem explicitados.
 
 ## 1. Resumo executivo
 
@@ -15,7 +15,7 @@
 | FT-32 | Resiliência à indisponibilidade da Open-Meteo | 10/10 falhas simuladas preservaram cadastro e comparação manual | Replanejada para FT Sprint 5/R3, junto da FT-57; critério restante será validado após sua implementação |
 | FT-80 | Q-12 — Persistência de alterações de status | 20/20 alterações válidas persistidas e recuperadas (100%); Resultado R2 registrado como 1,0 na planilha | Concluída; conferência formal do PO registrada em 26/11 |
 | FT-81 | Q-13 — Continuidade sem resposta da Open-Meteo | 10/10 falhas simuladas preservaram os fluxos manuais (100%); Q-13 consta na planilha | Concluída; conferência formal do PO registrada; R06 residual P4/S4 = 8 lançado na planilha e FT-65 concluída |
-| FT-91 | Regressão, métricas, DoD e relatório da R2 | Q-01 30/30; Q-02 0 Bugs abertos no Jira; Q-04 12/12; Q-05 20/20; Q-15 5/5 (preliminar); regressão @R2 29/29 | Em andamento; PR #51 integrada; deploy de homologação validado; QA manual da FT-114 aprovada e registrada; falta confirmação do SM para Q-04/Q-15, atualização da planilha e fechamento oficial da DoD |
+| FT-91 | Regressão, métricas, DoD e relatório da R2 | Q-01 30/30; Q-02 zero Bugs registrados em aberto; Q-04 19/19 na Sprint 3; Q-05 20/20; Q-15 5/5 na Sprint 3 e 9/9 na R2; regressão @R2 29/29 | Concluída no Jira; PR #58 integrada; validação manual da FT-114 aprovada; métricas confirmadas pela SM; parecer final consolidado nesta atualização |
 
 ## 2. FT-80 — Q-12: persistência de alterações de status
 
@@ -100,7 +100,7 @@ A entrega inclui:
 
 ### 5.4 FT-113 — US-14: lista de cidades
 
-A [PR #47](https://github.com/moon-byme/feneme-tech/pull/47) foi integrada à `main`. A condição de aceite do PO (merge da PR) foi satisfeita e o Jira registra a história como Concluída. A entrega contém a lista única de 26 cidades, compartilhada entre cadastro e clima, e cenários de rejeição de origem igual ao destino. O CI da PR passou, incluindo E2E `@US-14`; o vínculo PR/testes/CI foi acrescentado à issue FT-113. Q-15 inclui FT-113 entre as quatro histórias formalmente concluídas.
+A [PR #47](https://github.com/moon-byme/feneme-tech/pull/47) foi integrada à `main`. A condição de aceite do PO (merge da PR) foi satisfeita e o Jira registra a história como Concluída. A entrega contém a lista única de 26 cidades, compartilhada entre cadastro e clima, e cenários de rejeição de origem igual ao destino. O CI da PR passou, incluindo E2E `@US-14`; o vínculo PR/testes/CI foi acrescentado à issue FT-113. Q-15 inclui FT-113 entre as cinco histórias formalmente concluídas na Sprint 3.
 
 ### 5.5 PRs de preparação de release e risco
 
@@ -131,18 +131,18 @@ A avaliação abaixo é técnica e preliminar; não substitui o preenchimento of
 
 **DoD da Release sob QA:**
 - Critério 4 (ciclo de regressão antes da apresentação): atendido pela execução CI acima.
-- Critério 7 (relatório de qualidade da release): parcial; o relatório foi atualizado, mas permanece parcial até a validação manual da FT-114, confirmação do SM sobre Q-04/Q-15 e fechamento das pendências.
+- Critério 7 (relatório de qualidade da release): parecer final consolidado nesta atualização; a publicação formal depende da integração desta versão do relatório no repositório.
 - Critério 2 (implantação em homologação e demonstração): implantação automatizada e health check concluídos no CI #351; a verificação manual da FT-114 foi concluída pelo QA; a demonstração formal na Review ainda não está documentada.
 
-1. **Indicadores de qualidade R2:** Q-01 = 30/30 CT únicos executados (100%); Q-02 = zero Bugs registrados em aberto no Jira na consulta de 25/11 (snapshot do rastreador, não prova ausência de defeitos não reportados); Q-03 = 100% (8/8 US); Q-04 = 12/12 PRs (#39–#50) com aprovação de pessoa diferente do autor antes do merge (100%); Q-05 = 20/20 tentativas indevidas de alteração de status rejeitadas, zero alterações/eventos indevidos (100%); Q-06 = 0 exposições em 20 cenários; Q-07 = 5/5 participantes; Q-08 = 84% (142 testes OK, conforme registro da planilha); Q-09 = 100% (22/22 execuções); Q-10 = 100% (20/20); Q-12 = 20/20 (100%); Q-13 = 10/10 (100%); Q-15 = 5/5 histórias formalmente concluídas com vínculo de evidência teste/PR no Jira (100%, apuração preliminar após a FT-114 passar a Concluída; aguarda conferência do SM). Q-11 e Q-14 estão programadas para R3; Q-16 permanece proposta, sem aprovação e sem medição. **Conferência da planilha:** Q-04 foi reauditada como 12/12 (PRs #39–#50); o registro oficial deve ser confirmado pelo SM. Conferir/inserir Q-01, Q-02 e Q-05; atualizar Q-15 para 5/5, incluindo a FT-114 já Concluída, com as evidências descritas aqui.
+1. **Indicadores de qualidade da R2:** Q-01 = 30/30 CT únicos aplicáveis executados (100%); Q-02 = zero Bugs registrados em aberto na consulta Jira de 25/11 (snapshot do rastreador, não prova ausência de defeitos não reportados); Q-03 = 8/8 (100%); Q-04 = 19/19 PRs (#39–#57) com aprovação externa anterior ao merge na Sprint 3 (100%; recorte estrito da main: 18/18, pois #42 entrou pela feature e chegou à main via #43); Q-05 = 20/20 tentativas indevidas de alteração de status rejeitadas, sem alterações/eventos indevidos (100%); Q-06 = 0 exposições em 20 cenários; Q-07 = 5/5 participantes; Q-08 = 84% (142 testes OK, conforme planilha); Q-09 = 22/22 (100%, conforme planilha; não confundir com a taxa de sucesso do pipeline na main); Q-10 = 20/20 (100%); Q-12 = 20/20 (100%); Q-13 = 10/10 (100%); Q-15 = 9/9 histórias funcionais concluídas com vínculo de teste/PR no agregado da R2 (100%), sendo 5/5 na Sprint 3. A Scrum Master confirmou os recortes em [FT-72/10319](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10319), [FT-83/10320](https://feneme.atlassian.net/browse/FT-83?focusedCommentId=10320) e [FT-83/10338](https://feneme.atlassian.net/browse/FT-83?focusedCommentId=10338). Q-11 e Q-14 estão programadas para R3; Q-16 permanece proposta, sem aprovação e sem medição. **Planilha:** considerar Q-04 19/19 para a Sprint 3 e Q-15 9/9 para a R2, mantendo 5/5 como recorte da Sprint 3; registrar data, universo e links das confirmações.
 2. **Q-12 e Q-13:** resultados registrados na planilha (20/20 e 10/10). Manter vinculadas as evidências das seções 2 e 3.
 3. **FT-32:** decisão do PO registrada; issue movida para a FT Sprint 5/R3 junto da FT-57. Validar o critério restante após a implementação da dependência.
-4. **Revisão independente e aceite:** a Q-04 foi reauditada em 12/12 PRs com aprovação independente. O PO confirmou a conferência formal de Q-12/FT-80 e Q-13/FT-81, ambas concluídas no Jira. A FT-114 está Concluída no Jira, e a homologação está disponível após o CI #351; o QA confirmou que a tela do catálogo e os links/fontes estão corretos em 26/11. Q-15 passa preliminarmente a 5/5 histórias concluídas com evidência teste/PR (FT-48, FT-49, FT-59, FT-113 e FT-114), aguardando confirmação do SM. O revisor da PR #51 observou duplicidade de cenários de histórico em `historico.feature` e `status.feature` (sem CT na segunda); avaliar a remoção na R3. Também recomendou explicitar que Q-04 12/12 cobre PRs #39–#50, enquanto o relatório do pipeline da release considera #11–#46 (33/35), universos/períodos diferentes.
+4. **Revisão independente e aceite:** a Scrum Master confirmou Q-04 em 19/19 PRs (#39–#57) na Sprint 3, com aprovação externa antes do merge; o recorte estrito da main é 18/18. Q-15 foi confirmado em 5/5 na Sprint 3 e 9/9 no agregado da R2. Q-12/FT-80 e Q-13/FT-81 foram formalmente conferidas pelo PO e concluídas no Jira. A FT-114 está Concluída no Jira; a homologação foi implantada e o QA aprovou manualmente o catálogo e os links/fontes em 26/11. A observação de duplicidade de cenários de histórico em `historico.feature` e `status.feature` (sem CT na segunda) permanece como melhoria a avaliar na R3. O recorte Q-04 19/19 da Sprint 3 não deve ser confundido com o relatório do pipeline da R2 (#11–#46, 33/35), que mede universo e período diferentes.
 5. **Sprint 3 — demais entregas:** FT-113 foi integrada e aceita após merge da PR #47. FT-114 foi aceita pelo PO, integrada pela PR #44 e está Concluída no Jira. O primeiro deploy em homologação foi validado no CI #351 e documentado pela PR #55; a verificação manual de QA do catálogo e das fontes foi aprovada em 26/11. FT-115 e FT-116 foram explicitamente não aceitas na Sprint 3 e replanejadas para Sprint 4; não tratá-las como pendências de implementação da FT-91/R2.
 6. **Smoke e regressão final:** a execução integral do CI na `main`, após integração da PR #51, passou em segurança, backend, frontend, E2E e deploy no [CI #351](https://github.com/moon-byme/feneme-tech/actions/runs/45738722270). O job E2E executou `@smoke`, `@US-07`, `@R1`, `@US-08` e a regressão completa `@R2`; todos os jobs terminaram com sucesso. A evidência anterior detalha 18/18 `@smoke`, 10/10 `@R1`, 3/3 `@US-07`, 2/2 `@US-08` e 29/29 `@R2` no run 45731598047. A implantação em homologação também foi concluída no CI #351.
 7. **Defeitos:** registrar bugs apenas quando houver reprodução confirmada, com severidade, passos, resultado esperado/observado, evidência e vínculo à US/PR. Não duplicar defeitos já registrados.
 8. **DoD:** revisar os critérios das histórias candidatas ao aceite, documentar cada item não comprovado e comunicar impedimentos ao PO.
-9. **Relatório final:** substituir este documento parcial por uma versão final somente após concluir as verificações acima, consolidando resultados, métricas, defeitos, regressão, limitações e recomendações.
+9. **Relatório final:** parecer consolidado nesta versão, com resultados, métricas, defeitos registrados, regressão, limitações e recomendações. A integração da PR que contém este arquivo é a etapa de publicação documental.
 
 ## 7. Referências
 
@@ -156,3 +156,20 @@ A avaliação abaixo é técnica e preliminar; não substitui o preenchimento of
 - [Plano de Qualidade Q-01 a Q-15](https://docs.google.com/spreadsheets/d/1iRGEGUlcYLnbFpMCBW8yy89v-VHCkdEi-gPcPEhxdv8/edit?usp=sharing)
 - [Plano de Testes CT/US e regressão](https://docs.google.com/document/d/1UuZl4kbzAqqMAKdMW1UT53nRWxehrRowU-_2-xOkfOI/edit?usp=sharing)
 - [Planilha DoD — Sprints e Releases](https://docs.google.com/spreadsheets/d/1taP4dEHKtgOcq0IizKQGb_t1NhWtNU2sLdFVvvCQw84/edit?usp=sharing)
+
+
+## 8. Parecer final de QA — 26/11/2026
+
+**Conclusão:** as evidências disponíveis sustentam o encerramento das atividades de QA previstas para a Sprint 3 e a consolidação de qualidade da R2, observadas as limitações e os itens formalmente replanejados abaixo. A FT-91 consta como Concluída no Jira; a PR #58 foi integrada. Esta atualização substitui o caráter parcial do relatório após sua integração à `main`.
+
+### Resultados finais e ressalvas
+
+- **Regressão:** @R2 29/29; @R1 10/10; @smoke 18/18; @US-07 3/3; @US-08 2/2 no CI #45731598047. O CI #394 (run [45849612416](https://github.com/moon-byme/feneme-tech/actions/runs/45849612416)) também concluiu com sucesso os seis jobs: segurança, detecção de componentes, backend, frontend, E2E e deploy em homologação.
+- **Homologação / FT-114:** verificação manual do QA aprovada em 26/11: sete tipos de carga exibidos, campos e limites corretos (incluindo “limite derivado” para cosméticos) e links das fontes funcionando. Não é necessário repetir o teste manual.
+- **Defeitos:** a consulta Jira de 25/11 não encontrou issues do tipo Bug em aberto. Isso significa zero Bugs registrados no universo consultado; não permite afirmar que não houve relatos informais ou defeitos não reportados. Não foram criados Bugs sem reprodução confirmada.
+- **Q-04 e Q-15:** usar os universos confirmados pela SM: Q-04 19/19 na Sprint 3 (#39–#57); Q-15 5/5 na Sprint 3 e 9/9 no agregado da R2. A PR #58 não integra o universo formal confirmado no comentário 10319, que explicitamente encerra o recorte em #57.
+- **Escopo não concluído nesta release:** FT-115/FT-116 foram replanejadas para Sprint 4; FT-57 e o critério restante da FT-32 foram replanejados para Sprint 5/R3. Esses itens não devem ser tratados como bugs nem como bloqueadores de QA da Sprint 3, conforme decisões do PO.
+- **Limitações de evidência:** Q-13 usa falhas simuladas e não mede disponibilidade real da Open-Meteo; Q-02 reflete apenas o rastreador Jira; Q-08 e Q-09 mantêm os universos e valores da planilha, sem equiparar cobertura de testes à estabilidade do pipeline.
+
+**Parecer QA:** aprovado para fechamento das atividades de QA da Sprint 3 / R2, com as ressalvas documentadas. A publicação da versão/tag `v2.0.0`, a GitHub Release e a marcação da versão como lançada no Jira permanecem sob responsabilidade de PO/DevOps, na FT-92; não são declaradas como concluídas por este parecer.
+
