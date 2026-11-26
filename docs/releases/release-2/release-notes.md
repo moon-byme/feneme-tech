@@ -21,10 +21,10 @@ A Release 2 fecha o ciclo da entrega: o Gestor cadastra e acompanha, o Motorista
 
 ## Qualidade e operação
 
-- 194 testes automatizados de backend e cenários Cucumber/Cypress no CI (`@smoke`, regressão da R1, comparação de trajetos e Open-Meteo).
+- Testes automatizados de backend e cenários Cucumber/Cypress no CI (`@smoke`, `@R1`, `@R2`, comparação de trajetos e Open-Meteo). A regressão `@R2` teve 29/29 cenários aprovados no run 45731598047, e o CI #375 concluiu todos os jobs com sucesso; reconferir o commit final da tag.
 - Persistência de status medida: 20 de 20 atualizações válidas recuperadas com o histórico correto (R05, Q-12).
 - Falhas da Open-Meteo: 10 de 10 cenários simulados sem bloquear cadastro e comparação manual (R06, Q-13).
-- `main` protegida desde 04/11: só por PR aprovado e com CI verde; 100% das execuções na `main` passaram.
+- `main` protegida desde 04/11: fluxo por PR e checagens de CI. Até o CI #375, 43/45 execuções na `main` passaram (95,6%); as duas falhas de deploy foram corrigidas e a homologação voltou a ficar verde.
 - Deploy automatizado em homologação (Render) depois do CI verde, com verificação de saúde e varredura de segredos (FT-110).
 
 ## Mudança de escopo
@@ -38,10 +38,12 @@ A Review da Sprint 2 (12/11) levou à nova linha do produto, registrada na [FT-1
 - Tipo de carga e data/hora de saída ainda não fazem parte do cadastro da entrega (US-16, Sprint 4).
 - Entregas cadastradas antes da lista de cidades com texto não reconhecido aparecem com a etiqueta "revisar cidades".
 - A homologação usa o plano gratuito do Render: hiberna sem uso (primeiro acesso leva cerca de 1 minuto) e o banco gratuito expira em 30 dias.
-- A configuração do Google Cloud (FT-115) e o risco R10 (FT-116) ficaram preparados, mas dependem da evidência no console.
+- A configuração do Google Cloud (FT-115) e o risco R10 (FT-116) foram encaminhados à Sprint 4: chaves restritas e cota documentadas, ainda faltam orçamento/alertas, validação local e tratamento do risco no código de rotas.
 
 ## Próximos passos (R3)
 
 Tipo de carga e saída na entrega, até 3 rotas automáticas com mapa, comparação de exposição ao calor por rota e registro da rota escolhida pelo Gestor (FT-117, FT-118, FT-120, FT-57 e FT-122).
+
+**Situação de publicação:** texto preparado para a Review e a versão futura; não comprova que a tag ou GitHub Release já foram publicadas.
 
 **Relatório do pipeline:** [`relatorio-pipeline.md`](relatorio-pipeline.md) · **Aceite do PO:** [`aceite-po-sprint-3.md`](aceite-po-sprint-3.md)

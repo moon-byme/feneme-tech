@@ -111,3 +111,20 @@ Sujeita aos pareceres do QA e da SM:
 - **Conformes com ressalva:** Q-08 (medida só em 25/11, retrospectivamente), FT-45/FT-55 (cobertura posterior ao aceite), R01 (residual proposto, ainda sem aprovação).
 - **Não conformes:** revisão de PR antes do merge nas cinco US (I-03) e commits diretos na `main`.
 - **Não aplicáveis à R1:** homologação/deploy e testes E2E no CI.
+
+
+## 11. Complemento documental de 26/11/2026
+
+A conferência de 25/11 e os fatos históricos foram preservados. Os registros posteriores permitem localizar os seguintes desdobramentos:
+
+- As cinco US têm conferências documentais na FT-124 e evidências de testes e integração. O PO da R2 formalizou os aceites vigentes sem ressalva da [FT-55](https://feneme.atlassian.net/browse/FT-55?focusedCommentId=10293) e da [FT-45](https://feneme.atlassian.net/browse/FT-45?focusedCommentId=10294), após a integração dos testes complementares (PR #50 para FT-45). Os registros originais permanecem preservados.
+- A [PR #57](https://github.com/moon-byme/feneme-tech/pull/57) foi aprovada e integrada: [relatório de qualidade R1](relatorio-qualidade.md). A [PR #56](https://github.com/moon-byme/feneme-tech/pull/56) consolidou o acompanhamento da retrospectiva da Sprint 0.
+- A [FT-71](https://feneme.atlassian.net/browse/FT-71), [FT-76](https://feneme.atlassian.net/browse/FT-76) e [FT-77](https://feneme.atlassian.net/browse/FT-77) incorporaram os resultados e os links desta conferência. A Q-08 foi medida retrospectivamente (84%); a Q-09 da R1 é 21/21 (100%), incluindo duas execuções sem os jobs de código.
+- A [FT-124](https://feneme.atlassian.net/browse/FT-124?focusedCommentId=10311) consolida a repriorização decorrente do feedback da R1, e a [avaliação interna por papel](https://feneme.atlassian.net/browse/FT-124?focusedCommentId=10312) está documentada como formato coletivo proposto para o critério 14.
+- A revisão técnica adicional pelo QA da release seguinte é uma possibilidade de regularização interna, não uma nova exigência da disciplina: a verificação de QA já exercida na R1 e a conferência documental posterior pelo PO/DevOps são registros distintos. Caso se mantenha uma exigência específica de parecer independente, não atribuir esse parecer a quem não o emitiu.
+- R01: evidências e proposta residual P4/S5=10 estão na [FT-60](https://feneme.atlassian.net/browse/FT-60?focusedCommentId=10263); falta decisão coletiva e lançamento. R02 permanece registrado com residual 10.
+
+Pendências documentais devem ficar registradas como tal na DoD; a conferência administrativa não apaga fatos históricos. A homologação na R1 não era obrigatória segundo a orientação da disciplina. 
+
+
+**Reconciliação final de 26/11:** cinco DoDs individuais verificadas e evidências vinculadas; sete dos oito itens documentados como atendidos em cada história, com revisão antes do merge R1 não atendida. Revisões retrospectivas reais de 25/11 preservadas, sem alterar os aceites funcionais. Q-04 histórica 0/10, revisão posterior 10/10; [FT-72/10340](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10340). Atualizar E6 da DoD S1 e I7 da qualidade; conferir versões compartilhadas. A conferência documental não representa reabertura da R1 nem exige repetir testes já comprovados.

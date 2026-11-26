@@ -12,13 +12,13 @@ Este documento consolida os indicadores observados durante a Sprint 1 e os imped
 
 Story points restantes ao fim de cada dia:
 
-| Dia | 21/10 | 22/10 | 23/10 | 24/10 | 25/10 | 26/10 | 27/10 | 28/10 | 29/10 (20h10) |
+| Dia | 21/10 | 22/10 | 23/10 | 24/10 | 25/10 | 26/10 | 27/10 | 28/10 | 29/10 (estado final, após 20h10) |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Sprint completa (64 SP) | 64 | 64 | 64 | 64 | 64 | 51 | 51 | 49 | **0** |
 | Ideal | 64 | 56 | 48 | 40 | 32 | 24 | 16 | 8 | 0 |
 | Histórias de usuário (15 SP) | 15 | 15 | 15 | 15 | 15 | 2 | 2 | 0 | **0** |
 
-**Nota documental — 10/11/2026:** o cabeçalho histórico da última coluna indica 20h10, mas o texto registra 36 SP pendentes nessa consulta intermediária e 0 SP no encerramento posterior. Os valores e o cabeçalho foram preservados; a equipe deve confirmar o horário correspondente ao estado final da tabela.
+**Retificação documental — 26/11/2026:** a consulta intermediária de 29/10 às 20h10 tinha 36 SP pendentes (13 itens). A coluna final corresponde a consulta posterior, com 0 SP pendentes; seu horário exato não foi localizado. Corrigido apenas o rótulo, sem alterar valores, data ou gráfico histórico.
 
 ### Análise do burndown
 
@@ -34,7 +34,7 @@ A equipe avaliou que a distribuição do trabalho ao longo da sprint precisa mel
 |---|---:|
 | Comprometido na sprint | 23 itens / 64 SP |
 | Concluído (Done) | **23 itens / 64 SP** |
-| **Velocity da sprint** | **64 SP** (100% do comprometido) |
+| **Velocity observada por status Done** | **64 SP** (100% do comprometido) |
 | Velocity funcional (US) | 15 SP de 15 SP (100%) |
 | Em andamento ao final da sprint | **0 itens / 0 SP** |
 
@@ -50,7 +50,7 @@ A velocity observada foi de **64 SP**. Esse resultado deve ser considerado como 
 |---|---|---|---|---|---|
 | I-01 | 26/10/2026 | Desvio do fluxo de Pull Request: o código das US-01, US-03, US-04 e US-05 foi commitado diretamente na `main` (`de2b3d9`) e removido em seguida (`c48007d`). | A `main` ficou sem o código entre 26/10 às 19h22 e 27/10 às 14h38, aproximadamente 19 horas. As quatro US foram marcadas Done nesse intervalo. | **Resolvido** | O código foi reintegrado pelo PR #1 (revert `86d9eba`, merge `8496e3a` em 27/10/2026). Na retrospectiva, a equipe definiu como ação reforçar a proteção da branch `main` e exigir revisão antes dos merges. |
 | I-02 | 29/10/2026 | Ambiente Docker substituído por execução local (PR #3). | A alteração do procedimento de execução ocorreu no último dia da sprint e exigiu atualização das instruções para evitar divergência entre os integrantes. | **Resolvido** | As instruções foram atualizadas em [README_IMPLEMENTACAO_SPRINT1.md](../../../README_IMPLEMENTACAO_SPRINT1.md). A equipe deverá manter o procedimento documentado e comunicar alterações de ambiente durante a sprint. |
-| I-03 | 29/10/2026 | Nenhum PR recebeu revisão de outra pessoa antes do merge (0 de 8). | Q-04 ficou em 0%; o critério de revisão de código da DoD das US não foi atendido. | **Aberto** | A equipe definiu que todo PR deverá receber revisão de outro integrante antes do merge. Também foi estabelecida a ação de configurar proteção da `main`, com acompanhamento pelo SM durante a Sprint 2. |
+| I-03 | 29/10/2026 | Nenhum PR recebeu revisão de outra pessoa antes do merge (0 de 8 na Review; 0 de 10 no universo final da R1). | Q-04 ficou em 0%; o critério de revisão de código da DoD das US não foi atendido. | **Aberto na R1; tratado na R2** | A equipe definiu que todo PR deverá receber revisão de outro integrante antes do merge. Também foi estabelecida a ação de configurar proteção da `main`, com acompanhamento pelo SM durante a Sprint 2. |
 
 ## 4. Decisões e encaminhamentos da reunião
 
@@ -68,3 +68,10 @@ Os responsáveis, prazos e critérios de verificação dessas ações estão det
 ## 5. Referência para a Sprint 2
 
 A principal conclusão das métricas foi que todo o escopo comprometido (64 SP) foi concluído até o fechamento da sprint. A consulta intermediária das 20h10 ainda mostrava 36 SP em aberto, mas os 13 itens restantes foram posteriormente movidos para Done. A Sprint 2 deverá ser planejada com base na capacidade efetivamente disponível e no refinamento do backlog, usando os 64 SP apenas como referência histórica, não como meta automática.
+
+
+## 6. Conferência retrospectiva de 26/11/2026
+
+A consulta do Jira e os registros de encerramento sustentam 23/23 issues e 64/64 SP por status, dos quais 15 SP das cinco histórias funcionais. Não equivalem à comprovação de DoD integral no encerramento. A consulta intermediária tinha 13 itens/36 SP em aberto; por diferença, 10 itens/28 SP em Done. A última coluna representa o estado final posterior a 20h10, não a própria consulta de 20h10. A visualização nativa Sprint Report/Burndown/Velocity não está disponível nesta conferência; comparar com os gráficos do Jira, sem inventar timestamp ou trajetória diária.
+
+Q-04: 0/10 PRs com aprovação externa anterior ao merge (meta 100% não atingida na R1); 10/10 revisões registradas retrospectivamente em 25/11. I-03 tratado na R2, com proteção da main em 04/11 e acompanhamento FT-87/FT-72. [Parecer PO/DevOps](https://feneme.atlassian.net/browse/FT-124?focusedCommentId=10332). Os 0/8 registrados na reunião são um recorte intermediário, não o universo final.
