@@ -75,7 +75,7 @@ A [PR #43](https://github.com/moon-byme/feneme-tech/pull/43) foi integrada à `m
 A descrição e a revisão aprovada registram:
 - Backend: 173/173 testes aprovados.
 - Build do frontend aprovado.
-- Cypress smoke: 15/15 aprovados, incluindo CT-26, CT-27 e CT-28 da FT-59 (3/3).
+- Cypress smoke: 15/15 aprovados na execução descrita na PR. A auditoria posterior identificou que `status.feature` reutilizava CT-27/CT-28 para cenários de histórico, em conflito com a matriz v2.3; a correção está na PR #51. Após a correção, a regressão completa executou `historico.feature` com CT-12 e CT-26: 2/2 aprovados no CI #45731598047.
 - Regressão `@US-07`: 3/3; `@R1`: 10/10; `@US-08`: 2/2.
 - Cobertura do histórico cronológico, estado vazio, nova autenticação, autorização e respostas 401/403/404.
 
