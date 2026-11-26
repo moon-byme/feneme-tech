@@ -66,6 +66,19 @@ No encerramento da Sprint 1, não havia sido localizada uma ata da retrospectiva
 
 Ficou definido que o acompanhamento das sete ações desta retrospectiva será realizado no início da retrospectiva da Sprint 2. O Scrum Master ficará responsável por atualizar o status de cada ação e reunir as evidências correspondentes.
 
+### 5.1. Complemento documental — acompanhamento dos encaminhamentos da Sprint 0 (26/11/2026)
+
+Na conferência documental da [FT-124](https://feneme.atlassian.net/browse/FT-124), foram cruzados os quatro encaminhamentos da reunião de 19/10, registrados na [avaliação da Sprint 0](../sprint-0/ata-retrospectiva-19-10-2026.md), com as atividades e os resultados efetivamente registrados na Sprint 1.
+
+| Encaminhamento da Sprint 0 | Atividades e resultados identificados na Sprint 1 | Evidências | Situação |
+|---|---|---|---|
+| Dar continuidade ao refinamento da proposta e dos requisitos, considerando o feedback da professora | Escopo do incremento concentrado nos perfis Gestor e Motorista; cinco US demonstradas na Review; prioridades das 13 US confirmadas pelo PO em 29/10. | [FT-50](https://feneme.atlassian.net/browse/FT-50), [FT-53 — decisão do PO](https://feneme.atlassian.net/browse/FT-53?focusedCommentId=10026), [Review](ata-review.md), [PR #1](https://github.com/moon-byme/feneme-tech/pull/1) e [PR #2](https://github.com/moon-byme/feneme-tech/pull/2). | Continuidade evidenciada |
+| Consolidar a documentação de qualidade, DoD e testes | Plano de Qualidade de referência registrado no Jira em 20/10; critérios da DoD validados pelo PO em 29/10; plano de testes e resultados funcionais documentados. | [FT-9](https://feneme.atlassian.net/browse/FT-9), [FT-38](https://feneme.atlassian.net/browse/FT-38?focusedCommentId=10025), [FT-10](https://feneme.atlassian.net/browse/FT-10), [FT-69](https://feneme.atlassian.net/browse/FT-69), [CI final da R1](https://github.com/moon-byme/feneme-tech/actions/runs/40990301407). | Continuidade evidenciada; manutenção dos documentos prossegue |
+| Prosseguir com as tarefas distribuídas e preparar a execução da Sprint 1 | Cinco histórias funcionais (15 SP) demonstradas; 23 issues/64 SP registradas como Done no encerramento. | [Métricas e impedimentos](metricas-e-impedimentos.md), [Review](ata-review.md), [tag v1.0.0](https://github.com/moon-byme/feneme-tech/tree/v1.0.0). | Continuidade evidenciada |
+| Utilizar Jira e GitHub para registrar andamento, decisões e evidências | Links de PR e evidências organizados no encerramento; Q-15 chegou a 5/5 histórias rastreáveis; métricas e impedimentos registrados. | [FT-83](https://feneme.atlassian.net/browse/FT-83), [métricas e impedimentos](metricas-e-impedimentos.md), [PR #9](https://github.com/moon-byme/feneme-tech/pull/9), [PR #10](https://github.com/moon-byme/feneme-tech/pull/10). | Continuidade evidenciada; registro tempestivo permanece ação de melhoria |
+
+**Resultado da conferência:** os quatro encaminhamentos possuem evidências de continuidade na Sprint 1. O acompanhamento documental foi consolidado em 26/11/2026 e registrado na FT-124. Para o critério 14 da DoD, a evidência sustenta a confirmação do acompanhamento dos encaminhamentos, sujeita à ratificação da equipe quanto à equivalência com as ações de retrospectiva. O complemento não afirma que houve uma cerimônia independente de Retrospectiva da Sprint 0 nem que a tabela foi apresentada em 29/10; preserva o registro histórico acima.
+
 ## 6. Encerramento
 
 A equipe concluiu que o principal resultado positivo da Sprint 1 foi a entrega das funcionalidades centrais previstas para o incremento. Como principal ponto de melhoria, ficou estabelecida a necessidade de fortalecer o fluxo de Pull Requests e tornar a aplicação da DoD parte efetiva do trabalho diário, e não apenas uma conferência no encerramento.
