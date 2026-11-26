@@ -15,6 +15,8 @@ Na Planning de 17/11, 19 issues/58 SP foram ratificados conforme [FT-90](https:/
 
 FT-115 (2 SP) foi corrigida para Sprint 4/R3 e Em andamento conforme decisão do PO de 25/11: não integra a entrega aceita da R2. Após essa correção, mantidos os demais estados, o escopo fica em 15 issues/48 SP, sendo 33 SP em Done por status. A FT-114 ainda exige validação manual de QA. As cinco US funcionais da S3 somam 19 SP e possuem evidências e decisão de aceite do PO, sujeitas à ratificação da Review; não confundir esse subtotal com velocity aceita.
 
+Após a conferência QA/PO já registrada na FT-80, o driver FT-34 (5 SP) foi atualizado para Concluído. Mantidos os demais estados, a fotografia subsequente é de 12 issues/38 SP em Done e 3 issues/10 SP em andamento, dentro de 15 issues/48 SP. Não equivale à velocity final.
+
 A diferença entre 58 SP da Planning e a fotografia de 48 SP corresponde à alteração líquida de escopo (-10 SP); a trajetória diária e cada mudança devem ser confirmadas no relatório do Jira, sem inventar pontos de burndown. Ao término, registrar a velocity apenas com itens que cumpram a DoD acordada, discriminando as ressalvas e carryovers.
 
 ## 2. Impedimentos e qualidade
