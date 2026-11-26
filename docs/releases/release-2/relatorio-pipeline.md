@@ -105,6 +105,31 @@ Os indicadores das seções 2–4 e 6 mantêm o recorte original indicado no rel
 - [ ] CI da `main` no commit escolhido para a tag `v2.0.0`.
 - [ ] Tag `v2.0.0` e GitHub Release publicadas; link deste relatório na FT-92 e na versão Release 2 do Jira.
 
+## 8. Complemento de fechamento — recorte até o CI #375 (26/11/2026)
+
+Os números das seções 2–4 e 6 são o recorte histórico até #310. A consulta adicional ao histórico de CI recuperou **todas as 65 execuções #311–#375**, sem lacunas, até o [run #375](https://github.com/moon-byme/feneme-tech/actions/runs/45832088850) na main (commit `5894f6251b08c46f4caf2fa3888758f53110890e`). O recorte ainda deve ser atualizado caso haja novos merges antes da tag.
+
+| Indicador | #52–#310 (recorte original) | #311–#375 (complemento) | #52–#375 (acumulado) |
+| --- | ---: | ---: | ---: |
+| Execuções | 259 | 65 | **324** |
+| Sucesso | 236 | 60 | **296 (91,4%)** |
+| Falhas | 23 | 5 | **28** |
+| Pushes na main | 34 | 11 | **45** |
+| Sucesso na main (Q-09) | 34/34 | 9/11 | **43/45 (95,6%)** |
+
+A meta proposta da Q-09 (≥90%) permanece atingida no recorte da R2; não se deve usar 100% como taxa final. Não foram recalculadas as durações medianas e máximas do período completo; as do quadro original permanecem restritas a #52–#310.
+
+| Novas falhas | Local | Causa / encaminhamento |
+| --- | --- | --- |
+| [#331](https://github.com/moon-byme/feneme-tech/actions/runs/45730929872), [#332](https://github.com/moon-byme/feneme-tech/actions/runs/45730935425), [#333](https://github.com/moon-byme/feneme-tech/actions/runs/45731594912) | branch QA | Ajuste de cenários/etiquetas CT e seleção da regressão integral; QA documentou 27/31 inicialmente e 29/29 após revisão do universo aplicável e correção das etapas (PR #51; [CI aprovado](https://github.com/moon-byme/feneme-tech/actions/runs/45731598047)). |
+| [#345](https://github.com/moon-byme/feneme-tech/actions/runs/45734971703), [#348](https://github.com/moon-byme/feneme-tech/actions/runs/45735867289) | main | Testes passaram; deploy falhou. #348 retornou HTTP 404; PR #53 corrigiu o parâmetro do hook e #351 confirmou recuperação. |
+
+As duas falhas na main foram de implantação, não regressão funcional do backend/E2E. A regra de deploy continua restrita à main com dependências verdes. A última execução consultada (#375) teve sucesso em todos os seis jobs: detecção, backend, frontend (build), E2E (inclui @R2), segurança e deploy. Não é ainda um commit ratificado para a tag.
+
+**Governança — Sprint 3:** conferência dos registros de aprovação e horários de merge das PRs #39–#57: **19/19 (100%)** com aprovação externa prévia. Excluindo #42, cuja base era uma feature, o recorte estrito da main é **18/18 (100%)**. A #42 teve aprovação antes de ser integrada na feature e seu conteúdo entrou na main pela #43. A PR #58 ainda aberta não integra o denominador. [Q-04 / FT-72](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10319). As contagens históricas da seção 4 não foram sobrescritas.
+
+**Pendente para o lançamento:** ratificação da Review, fechamento da QA, verificação do CI e da implantação do commit final escolhido, tag, publicação e versão Jira.
+
 ## Histórico do documento
 
 | Data | Versão | Descrição | Autor |
