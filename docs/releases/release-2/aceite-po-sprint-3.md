@@ -62,3 +62,7 @@ O quadro de decisões de 25/11 foi preservado. A documentação posterior permit
 A [FT-72](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10319) confirma Q-04 de Sprint 3 em 19/19 PRs aprovadas antes do merge (18/18 no recorte estrito main); a [FT-83](https://feneme.atlassian.net/browse/FT-83?focusedCommentId=10320) confirma Q-15 em 5/5 US da Sprint 3 com vínculo teste/PR. Rastreabilidade não equivale ao aceite integral da DoD. A [FT-91](https://feneme.atlassian.net/browse/FT-91?focusedCommentId=10321) acompanha o relatório de qualidade e a verificação restante.
 
 **Não registrar a Review como ocorrida antes da confirmação efetiva de data, participantes, demonstração e decisões.** A tag e a publicação dependem da conclusão acordada pelo time.
+
+## Registro da Review — 26/11/2026
+
+A Scrum Master confirmou que a equipe realizou a Review e tratou os tópicos da pauta na tarde de 26/11, por Meet e WhatsApp. A [ata da Review](../../sprints/sprint-3/ata-review.md) consolida as decisões anteriores do PO, as condições de merge/deploy satisfeitas e os encaminhamentos de escopo. A [retrospectiva da R2](ata-retrospectiva-release-2-feneme.md) registra a avaliação por papel e as ações da R3. A revisão R01–R10 foi delegada a José Neto e João Paulo e permanece pendente. Não constitui transcrição de fala individual ou nova assinatura do PO; conferir eventuais ressalvas e ratificação específica na revisão da PR. CI #394 concluído com sucesso; a escolha da tag e publicação ainda dependem do fechamento formal.
