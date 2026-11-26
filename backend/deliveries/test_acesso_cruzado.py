@@ -4,9 +4,10 @@ Arquivo: backend/deliveries/test_acesso_cruzado.py
 Executar na raiz: python backend/manage.py test deliveries.test_acesso_cruzado -v 2
 
 20 métodos test_ft29_*: vinte tentativas CONTRA entregas pertencentes a
-outro Motorista. Quatro controles extras não entram no denominador.
-A alteração de status da FT-48 ainda não existe na versão inspecionada;
-precisará de regressão específica quando a US estiver implementada.
+outro Motorista, preservadas como cobertura histórica da R1. Quatro controles
+extras não entram no denominador. A medição R2 acrescenta 20 tentativas
+contra o endpoint de atualização de status, com dois Motoristas e entregas
+cruzadas, verificando resposta 404, ausência de vazamento e nenhuma alteração.
 
 As requisições usam JWT e os dados ficam isolados no banco de testes.
 Registrar resultados no Jira somente com a evidência da execução correspondente.
@@ -17,7 +18,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import AccessToken
 
 from accounts.models import UserProfile
-from deliveries.models import Delivery
+from deliveries.models import Delivery, DeliveryStatusHistory
 
 User = get_user_model()
 
@@ -167,6 +168,54 @@ class DriverCrossAccessFT29Tests(APITestCase):
     def test_ft29_20_b_assign_other_a2(self):
         """Tentativa 20/20: b contra entrega de outro Motorista (a2)."""
         self.attempt(self.b, self.a2, "assign_other")
+
+    def test_ft29_r2_20_cross_driver_status_update_attempts(self):
+        """Q-05 R2: 20 tentativas de alterar status de entregas alheias."""
+        combinations = [
+            (self.a, self.b1),
+            (self.a, self.b2),
+            (self.b, self.a1),
+            (self.b, self.a2),
+        ]
+        payloads = [
+            {"status": "EM_TRANSPORTE"},
+            {"status": "ENTREGUE"},
+            {"status": "PENDENTE"},
+            {"status": "INVALIDO"},
+            {
+                "status": "EM_TRANSPORTE",
+                "assigned_driver": 999999,
+                "changed_by": 999999,
+                "previous_status": "ENTREGUE",
+            },
+        ]
+        attempts = 0
+        for actor, foreign_delivery in combinations:
+            for payload in payloads:
+                with self.subTest(actor=actor.username, delivery=foreign_delivery.pk, payload=payload):
+                    self.authenticate(actor)
+                    before = self.snapshot()
+                    history_before = DeliveryStatusHistory.objects.count()
+                    response = self.client.post(
+                        f"{self.url}{foreign_delivery.id}/update-status/",
+                        payload,
+                        format="json",
+                    )
+                    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+                    self.assertEqual(before, self.snapshot(), "A tentativa indevida alterou uma entrega!")
+                    self.assertEqual(
+                        history_before,
+                        DeliveryStatusHistory.objects.count(),
+                        "A tentativa indevida criou um evento de histórico!",
+                    )
+                    for value in (
+                        foreign_delivery.origin,
+                        foreign_delivery.destination,
+                        foreign_delivery.cargo_description,
+                    ):
+                        self.assertNotIn(value, response.content.decode("utf-8"))
+                    attempts += 1
+        self.assertEqual(attempts, 20)
 
     def test_controle_01_motoristas_veem_somente_entregas_proprias(self):
         for user, own_ids in [(self.a, {self.a1.id, self.a2.id}),
