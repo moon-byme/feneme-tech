@@ -6,16 +6,16 @@
 **Data de consolidação:** 26/11/2026  
 **Issues acompanhadas:** FT-32, FT-80, FT-81 e FT-91
 
-> **Estado deste documento: PARCIAL (atualizado em 26/11/2026).** Registra resultados sustentados por evidências do Jira, PRs, GitHub Actions e plano de testes. As medições Q-01, Q-02, Q-04, Q-05, Q-12, Q-13 e Q-15 foram apuradas nesta consolidação. A planilha deve refletir a reauditoria de Q-04 (12/12, não mais 7/7) e receber/conferir os resultados de Q-01, Q-02, Q-05 e Q-15. Ainda faltam revisão independente, validação manual no ambiente publicado, conferência formal do PO/SM e fechamento da DoD. Nenhuma medição foi estimada.
+> **Estado deste documento: PARCIAL (atualizado em 26/11/2026).** Registra resultados sustentados por evidências do Jira, PRs, GitHub Actions e plano de testes. As medições Q-01, Q-02, Q-04, Q-05, Q-12, Q-13 e Q-15 foram apuradas nesta consolidação. A reauditoria de Q-04 (12/12) foi registrada; a conferência formal do PO para Q-12 e Q-13 foi confirmada em 26/11. Ainda faltam validação manual da FT-114 no ambiente publicado, confirmação do SM sobre Q-04/Q-15 e fechamento da DoD. Nenhuma medição foi estimada.
 
 ## 1. Resumo executivo
 
 | Issue | Verificação | Resultado comprovado | Situação de QA |
 |---|---|---|---|
-| FT-32 | Resiliência à indisponibilidade da Open-Meteo | 10/10 falhas simuladas preservaram cadastro e comparação manual | Parcial: requisito de não recomendar sem dados depende da FT-57, replanejada para Sprint 5/R3 |
-| FT-80 | Q-12 — Persistência de alterações de status | 20/20 alterações válidas persistidas e recuperadas (100%); Resultado R2 registrado como 1,0 na planilha | Medição e lançamento documental confirmados; falta conferência formal/revisão independente |
-| FT-81 | Q-13 — Continuidade sem resposta da Open-Meteo | 10/10 falhas simuladas preservaram os fluxos manuais (100%); Q-13 consta na planilha | Medição comprovada; R06/FT-65 reavaliado e concluído; falta conferência formal e revisão independente |
-| FT-91 | Regressão, métricas, DoD e relatório da R2 | Q-01 30/30; Q-02 0 Bugs abertos no Jira; Q-04 12/12; Q-05 20/20; Q-15 4/4; regressão @R2 29/29 | Em andamento; PR #51 aberta, validação manual da FT-114, conferência formal e DoD ainda pendentes |
+| FT-32 | Resiliência à indisponibilidade da Open-Meteo | 10/10 falhas simuladas preservaram cadastro e comparação manual | Replanejada para FT Sprint 5/R3, junto da FT-57; critério restante será validado após sua implementação |
+| FT-80 | Q-12 — Persistência de alterações de status | 20/20 alterações válidas persistidas e recuperadas (100%); Resultado R2 registrado como 1,0 na planilha | Concluída; conferência formal do PO registrada em 26/11 |
+| FT-81 | Q-13 — Continuidade sem resposta da Open-Meteo | 10/10 falhas simuladas preservaram os fluxos manuais (100%); Q-13 consta na planilha | Concluída; conferência formal do PO registrada; R06 residual P4/S4 = 8 lançado na planilha e FT-65 concluída |
+| FT-91 | Regressão, métricas, DoD e relatório da R2 | Q-01 30/30; Q-02 0 Bugs abertos no Jira; Q-04 12/12; Q-05 20/20; Q-15 4/4; regressão @R2 29/29 | Em andamento; PR #51 integrada; validação manual da FT-114, confirmação do SM para Q-04/Q-15 e fechamento da DoD ainda pendentes |
 
 ## 2. FT-80 — Q-12: persistência de alterações de status
 
@@ -34,7 +34,7 @@ Evidências registradas na PR:
 
 A PR #41 foi integrada à `main`. A implementação foi posteriormente reutilizada pela FT-59, sem nova migração.
 
-**Atualização de fechamento (25/11):** na versão mais recente da planilha anexada pelo responsável, Q-12 está preenchida em Resultado R2 com o valor numérico `1,0` (100%), e a aba Revisões registra a inclusão do resultado em 25/11. As evidências da PR #41 e do CI #260 estão vinculadas na planilha. O lançamento documental está confirmado; permanece a conferência formal pela equipe/PO e a revisão independente de QA.
+**Atualização de fechamento (26/11):** a conferência formal do PO foi confirmada e registrada em comentário na FT-80. Q-12 está preenchida em Resultado R2 com o valor numérico `1,0` (100%); as evidências da PR #41 e do CI #260 estão vinculadas na planilha. A FT-80 foi movida para Concluído no Jira.
 
 ## 3. FT-81 — Q-13: continuidade sem resposta da Open-Meteo
 
@@ -50,7 +50,7 @@ Evidência: [GitHub Actions — PR #24 (run 42844947365)](https://github.com/moo
 
 **Limitação:** os testes usam mocks. Não medem a disponibilidade real da Open-Meteo nem uma chamada externa bem-sucedida.
 
-**Atualização de fechamento (26/11):** Q-13 está registrada em Resultado R2 com `100% de 10`. O risco residual R06 foi reavaliado em `docs/releases/release-2/riscos-residuais.md`: índice residual 8 (P=4, S=4), tratado para os fluxos atuais; a recomendação climática permanece vinculada à FT-57 (Sprint 5/R3). A FT-65 aparece como Concluída no Jira. Falta a conferência formal/revisão independente. Q-13 não comprova disponibilidade real do provedor.
+**Atualização de fechamento (26/11):** Q-13 está registrada em Resultado R2 com `100% de 10`. O PO confirmou a conferência formal da FT-81 e a reavaliação do risco residual R06 para P4/S4 = 8, já lançada na planilha de riscos e registrada na FT-65. A FT-81 foi movida para Concluído no Jira. Q-13 não comprova disponibilidade real do provedor.
 
 ## 4. FT-32 — DA-CON-JA-01: isolar falhas da Open-Meteo
 
@@ -60,7 +60,7 @@ Entretanto, o critério original também menciona não confirmar recomendação 
 
 **Resultado de QA:** atendimento parcial, restrito ao isolamento das falhas e à continuidade manual. Não declarar o driver integralmente concluído com base apenas nos 10/10 casos.
 
-**Ação necessária:** PO/equipe devem confirmar se a FT-32 será mantida como carryover com a parte de recomendação explicitamente pendente, ou se o critério/escopo do driver será formalmente revisado. Não alterar o critério de aceite unilateralmente.
+**Decisão do PO (26/11):** a FT-32 foi replanejada para a FT Sprint 5 (R3), junto da dependência FT-57. A parte já verificada (continuidade manual, Q-13 10/10) permanece registrada; a validação do critério restante — não confirmar recomendação climática sem dados — será feita após a implementação da FT-57. A justificativa foi registrada no Jira e a descrição do driver atualizada. A FT-32 não é bloqueadora do fechamento da Sprint 3/R2.
 
 ## 5. Regressão e evidências da Sprint 3
 
@@ -108,9 +108,9 @@ As PRs [#48](https://github.com/moon-byme/feneme-tech/pull/48) e [#49](https://g
 
 ### 5.6 Regressão integrada e Q-01/Q-05
 
-A PR [#51](https://github.com/moon-byme/feneme-tech/pull/51) acrescentou 20 tentativas R2 de atualização de status de entregas alheias para Q-05, corrigiu a rastreabilidade de CT-12/CT-26 em `historico.feature`, removeu a tag `@R2` de `recomendacao.feature` (CT-08/CT-21 foram movidos para Sprint 5/R3 pela FT-112) e incluiu a execução integral de `@R2` no CI.
+A PR [#51](https://github.com/moon-byme/feneme-tech/pull/51) foi aprovada pelos dois revisores e integrada à `main` em 26/11/2026 (merge commit `7acb133c5a9a6302ef876252dd9e68b13328d16d`). Ela acrescentou 20 tentativas R2 de atualização de status de entregas alheias para Q-05, corrigiu a rastreabilidade de CT-12/CT-26 em `historico.feature`, removeu a tag `@R2` de `recomendacao.feature` (CT-08/CT-21 foram movidos para Sprint 5/R3 pela FT-112) e incluiu a execução integral de `@R2` no CI.
 
-No [CI run #45731598047](https://github.com/moon-byme/feneme-tech/actions/runs/45731598047), todos os jobs passaram: backend 196/196; `@smoke` 18/18; comparação de trajetos 3/3; `@R1` 10/10; `@US-08` 2/2; regressão `@R2` 29/29. A matriz aplicável à R2 contém 30 CT únicos (10 da regressão R1 e 20 específicos da R2, incluindo CT-32 coberto pelo backend): **Q-01 = 30/30 (100%)**. Para Q-05, as 20 tentativas de acesso cruzado ao endpoint de status foram rejeitadas (404), sem vazamento, alteração de entrega ou evento de histórico: **20/20 (100%), zero alterações indevidas**. A PR #51 ainda aguarda revisão/merge; o resultado técnico está comprovado no CI, mas a integração da PR não deve ser presumida.
+No [CI run #45731598047](https://github.com/moon-byme/feneme-tech/actions/runs/45731598047), todos os jobs passaram: backend 196/196; `@smoke` 18/18; comparação de trajetos 3/3; `@R1` 10/10; `@US-08` 2/2; regressão `@R2` 29/29. A matriz aplicável à R2 contém 30 CT únicos (10 da regressão R1 e 20 específicos da R2, incluindo CT-32 coberto pelo backend): **Q-01 = 30/30 (100%)**. Para Q-05, as 20 tentativas de acesso cruzado ao endpoint de status foram rejeitadas (404), sem vazamento, alteração de entrega ou evento de histórico: **20/20 (100%), zero alterações indevidas**. O resultado técnico e a integração da PR #51 estão confirmados; o CI completo da PR passou no run #45731598047.
 
 ## 6. Pendências para concluir a FT-91
 
@@ -136,10 +136,10 @@ A avaliação abaixo é técnica e preliminar; não substitui o preenchimento of
 
 1. **Indicadores de qualidade R2:** Q-01 = 30/30 CT únicos executados (100%); Q-02 = zero Bugs registrados em aberto no Jira na consulta de 25/11 (snapshot do rastreador, não prova ausência de defeitos não reportados); Q-03 = 100% (8/8 US); Q-04 = 12/12 PRs (#39–#50) com aprovação de pessoa diferente do autor antes do merge (100%); Q-05 = 20/20 tentativas indevidas de alteração de status rejeitadas, zero alterações/eventos indevidos (100%); Q-06 = 0 exposições em 20 cenários; Q-07 = 5/5 participantes; Q-08 = 84% (142 testes OK, conforme registro da planilha); Q-09 = 100% (22/22 execuções); Q-10 = 100% (20/20); Q-12 = 20/20 (100%); Q-13 = 10/10 (100%); Q-15 = 4/4 histórias formalmente concluídas com vínculo de evidência teste/PR no Jira (100%, apuração preliminar aguardando conferência do SM). Q-11 e Q-14 estão programadas para R3; Q-16 permanece proposta, sem aprovação e sem medição. **Atualização necessária na planilha:** substituir o denominador de Q-04 de 7/7 para 12/12; inserir/conferir Q-01, Q-02, Q-05 e Q-15 com as evidências descritas aqui.
 2. **Q-12 e Q-13:** resultados registrados na planilha (20/20 e 10/10). Manter vinculadas as evidências das seções 2 e 3.
-3. **FT-32:** obter decisão do PO sobre o carryover da parte dependente da FT-57, que está fora da R2.
-4. **Revisão independente e aceite:** a Q-04 foi reauditada em 12/12 PRs com aprovação independente. A revisão estática da FT-114 foi registrada, mas falta validação manual no ambiente publicado. A PR #51 aguarda revisão/merge. A aprovação do PO não substitui a validação manual do QA.
+3. **FT-32:** decisão do PO registrada; issue movida para a FT Sprint 5/R3 junto da FT-57. Validar o critério restante após a implementação da dependência.
+4. **Revisão independente e aceite:** a Q-04 foi reauditada em 12/12 PRs com aprovação independente. O PO confirmou a conferência formal de Q-12/FT-80 e Q-13/FT-81, ambas concluídas no Jira. A FT-114 ainda aguarda validação manual no ambiente publicado. O revisor da PR #51 observou que os cenários de histórico estão duplicados em `historico.feature` e `status.feature` (sem CT na segunda); avaliar a remoção da duplicata na R3. Também recomendou explicitar que Q-04 12/12 cobre PRs #39–#50, enquanto o relatório do pipeline da release considera #11–#46 (33/35), universos/períodos diferentes.
 5. **Sprint 3 — demais entregas:** FT-113 foi integrada e aceita após merge da PR #47. FT-114 foi aceita pelo PO e integrada pela PR #44, mas a validação manual de QA permanece pendente até a primeira homologação/deploy (FT-110). FT-115 e FT-116 foram explicitamente não aceitas na Sprint 3 e replanejadas para Sprint 4; não tratá-las como pendências de implementação da FT-91/R2.
-6. **Smoke e regressão final:** a execução integral do CI na PR #51 passou em `@smoke` (18/18), `@R1` (10/10), `@US-07` (3/3), `@US-08` (2/2) e `@R2` (29/29), run 45731598047. A PR #51 ainda aguarda revisão/merge; repetir a conferência após a integração na `main`.
+6. **Smoke e regressão final:** a execução integral do CI na PR #51 passou em `@smoke` (18/18), `@R1` (10/10), `@US-07` (3/3), `@US-08` (2/2) e `@R2` (29/29), run 45731598047. A PR #51 foi aprovada e integrada à `main`; os resultados estão confirmados no commit integrado.
 7. **Defeitos:** registrar bugs apenas quando houver reprodução confirmada, com severidade, passos, resultado esperado/observado, evidência e vínculo à US/PR. Não duplicar defeitos já registrados.
 8. **DoD:** revisar os critérios das histórias candidatas ao aceite, documentar cada item não comprovado e comunicar impedimentos ao PO.
 9. **Relatório final:** substituir este documento parcial por uma versão final somente após concluir as verificações acima, consolidando resultados, métricas, defeitos, regressão, limitações e recomendações.
