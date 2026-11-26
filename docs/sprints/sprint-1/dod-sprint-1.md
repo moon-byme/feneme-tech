@@ -71,3 +71,21 @@ A equipe identificou que o objetivo funcional da Sprint 1 foi implementado, mas 
 Entre os critérios sob responsabilidade direta do SM (4, 10, 11, 12, 13, 14, 15, 16 e 18), oito foram considerados atendidos e um não atendido (critério 14), resultando em **8/9 = 89%**. O critério 11 foi considerado parcialmente documentado, mas registrado como atendido quanto à realização e ao planejamento identificável da sprint.
 
 **Encaminhamento:** o SM manterá o acompanhamento das pendências no Jira; QA e PO deverão concluir as verificações atribuídas aos seus papéis antes de considerar as histórias integralmente conformes à DoD.
+
+
+## Conferência documental complementar — 26/11/2026
+
+A tabela histórica de 29/10 acima permanece intacta. A conferência posterior, no escopo dos papéis QA da R1 e SM da R2, distingue o estado original das evidências recuperadas e complementações.
+
+| Critério | Conferência atual | Evidência / ressalva |
+|---|---|---|
+| 2 | Cinco DoDs conferidas, sete dos oito itens documentados como atendidos em cada história; Não para cumprimento integral do critério histórico de revisão antes do merge | [FT-124](https://feneme.atlassian.net/browse/FT-124), [FT-72/10340](https://feneme.atlassian.net/browse/FT-72?focusedCommentId=10340). Revisões de 25/11 permanecem vinculadas, sem alterar o histórico. |
+| 5 | Sim para registro dos aceites | FT-43/44/54 aceitas em 29/10; FT-45/55 aceitas com ressalva em 29/10, aceite integral vigente em 25/11 (10294/10293). |
+| 9 | Sim para regressão backend/API | CI da versão demonstrada, 102 testes, às 19h25; CI final 103 testes, [run 40990301407](https://github.com/moon-byme/feneme-tech/actions/runs/40990301407). E2E da R1 executado na S2. |
+| 11 | Preparação comprovada; formalidade da Planning a ratificar | [Registro retrospectivo de 19/10](ata-planejamento-retrospectiva-sprint-1.md), [declaração da SM/participante em 26/11](https://feneme.atlassian.net/browse/FT-124?focusedCommentId=10309). Não afirmar data de aprovação coletiva não registrada. |
+| 14 | Encaminhamentos acompanhados documentalmente | [PR #56](https://github.com/moon-byme/feneme-tech/pull/56) integrada e seção 5.1 da retrospectiva. A interpretação do critério como acompanhamento da reunião de preparação permanece a ratificar se exigida formalidade distinta. |
+| 16 | Métricas documentadas; gráficos nativos do Jira a conferir | [Métricas e impedimentos](metricas-e-impedimentos.md): 23/23, 64/64 SP por status, 15/15 SP funcionais. Rótulo final corrigido, horário exato não localizado. |
+| 17 | Prioridades revisadas pelo PO | [FT-53/10026](https://feneme.atlassian.net/browse/FT-53?focusedCommentId=10026); manter distinta a atualização da R2 após feedback (FT-50). |
+| 18 | Riscos R01/R02 regularizados documentalmente | [FT-8/10328](https://feneme.atlassian.net/browse/FT-8?focusedCommentId=10328), [FT-60/10327](https://feneme.atlassian.net/browse/FT-60?focusedCommentId=10327). |
+
+**Encaminhamento para a planilha oficial:** E6 deve refletir a não conformidade histórica de revisão; E9/E14/E24 com evidências acima, E7 N/A se não houve itens por retornar (estado final 23/23 Done), sem confundir status com DoD. O relatório e o parecer documental não substituem avaliação docente nem novas deliberações da equipe.
