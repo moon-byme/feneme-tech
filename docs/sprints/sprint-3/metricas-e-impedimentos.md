@@ -67,6 +67,10 @@ O Velocity Chart apresenta sprints encerradas ([documentação Atlassian](https:
 
 ### Atualização de 26/11 — segunda captura do Burndown
 
+![Burndown da Sprint 3 — reprodução visual da captura final de 26/11, com zero SP restantes](burndown-sprint-3.svg)
+
+*Figura: reprodução visual da segunda captura fornecida pela SM, com posições intermediárias aproximadas. O PNG original não foi anexado pelo conector; a fonte oficial é o [gráfico do Jira](https://feneme.atlassian.net/jira/software/projects/FT/boards/1/reports/burndown?source=overview), selecionando FT Sprint 3.*
+
 A segunda captura oficial enviada pela SM mostra 0 SP restantes, após a conclusão por status das FT-90 (2 SP), FT-91 (3 SP) e FT-92 (5 SP). A nova consulta JQL `project = FT AND sprint = 'FT Sprint 3'` retornou 15/15 issues em Concluído, totalizando 48/48 SP no escopo atual. Preserva-se a fotografia anterior de 38/48 SP como histórico, não como estado atual. As três issues de encerramento ainda apresentam itens de DoD não marcados nas descrições; a revisão de riscos e a confirmação das evidências de encerramento permanecem independentes da contagem por status.
 
 ![Velocity operacional — escopo final e concluído por status](velocity-operacional.svg)
