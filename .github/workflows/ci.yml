@@ -216,6 +216,10 @@ jobs:
         working-directory: frontend
         run: npm run e2e:weather
 
+      - name: Run complete Release 2 regression (@R2)
+        working-directory: frontend
+        run: npm run e2e -- --env tags="@R2"
+
       - name: Upload Cucumber report and failure screenshots
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
