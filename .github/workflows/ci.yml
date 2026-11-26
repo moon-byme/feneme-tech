@@ -276,7 +276,7 @@ jobs:
             echo "skipped=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${RENDER_DEPLOY_HOOK_URL}?ref=${GITHUB_SHA}")
+          status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST "${RENDER_DEPLOY_HOOK_URL}&ref=${GITHUB_SHA}")
           echo "Render respondeu HTTP ${status} ao Deploy Hook."
           [[ "$status" =~ ^2 ]] || { echo "::error::O Render recusou o Deploy Hook."; exit 1; }
 
